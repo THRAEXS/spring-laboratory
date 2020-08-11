@@ -9,6 +9,13 @@ buildNumber.properties
 # https://github.com/takari/maven-wrapper#usage-without-binary-jar
 .mvn/wrapper/maven-wrapper.jar
 
+# Gradle
+.gradle
+/build/
+
+# Cache of project
+.gradletasknamecache
+
 # Compiled class file
 *.class
 
@@ -43,3 +50,6 @@ hs_err_pid*
 
 .DS_Store
 tmp/
+
+# Avoid ignoring Gradle wrapper jar file (.jar files are usually ignored)
+!gradle-wrapper.jar
