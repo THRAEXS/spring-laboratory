@@ -10,3 +10,5 @@ spring:
       password: admin
       roles:
         - ADMIN
+  thymeleaf:
+    cache: false # Production environment enabled
