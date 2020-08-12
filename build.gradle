@@ -2,10 +2,10 @@ plugins {
     id 'java'
 
     id 'org.springframework.boot' version '2.3.2.RELEASE'
-//    id 'io.spring.dependency-management' version '1.0.9.RELEASE'
+    id 'io.spring.dependency-management' version '1.0.9.RELEASE'
 }
 
-apply plugin: 'io.spring.dependency-management'
+//apply plugin: 'io.spring.dependency-management'
 
 group = 'org.thraex'
 version = '1.0.0'
@@ -29,7 +29,10 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-security'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
 
+    implementation 'io.springfox:springfox-boot-starter:3.0.0'
+
     implementation 'com.google.guava:guava:29.0-jre'
+
     compileOnly 'org.projectlombok:lombok:1.18.12'
     annotationProcessor 'org.projectlombok:lombok:1.18.12'
     testCompileOnly 'org.projectlombok:lombok:1.18.12'
