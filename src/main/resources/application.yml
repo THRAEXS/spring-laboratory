@@ -12,3 +12,4 @@ spring:
         - ADMIN
   thymeleaf:
     cache: false # Production environment enabled
+    prefix: classpath:/templates/views/
