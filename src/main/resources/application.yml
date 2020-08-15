@@ -11,5 +11,5 @@ spring:
       roles:
         - ADMIN
   thymeleaf:
-    cache: false # Production environment enabled
     prefix: classpath:/templates/views/
+    cache: false # Production environment enabled

@@ -1,56 +1,22 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="https://www.thymeleaf.org">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport"/>
-    <title>THRAEX</title>
+    <title>Spring Laboratory</title>
 
-    <script type="text/javascript" th:src="@{/webjars/vue/2.6.11/vue.js}"></script>
-    <script type="text/javascript" th:src="@{/webjars/element-ui/2.13.2/lib/index.js}"></script>
-    <link rel="stylesheet" th:href="@{/webjars/element-ui/2.13.2/lib/theme-chalk/index.css}"/>
+    <div th:replace="head"/>
 </head>
 <body>
-    <div id="container">
-        <el-row>
-            <el-button>默认按钮</el-button>
-            <el-button type="primary">主要按钮</el-button>
-            <el-button type="success">成功按钮</el-button>
-            <el-button type="info">信息按钮</el-button>
-            <el-button type="warning">警告按钮</el-button>
-            <el-button type="danger">危险按钮</el-button>
-        </el-row>
-
-        <el-row>
-            <el-button plain>朴素按钮</el-button>
-            <el-button type="primary" plain>主要按钮</el-button>
-            <el-button type="success" plain>成功按钮</el-button>
-            <el-button type="info" plain>信息按钮</el-button>
-            <el-button type="warning" plain>警告按钮</el-button>
-            <el-button type="danger" plain>危险按钮</el-button>
-        </el-row>
-
-        <el-row>
-            <el-button round>圆角按钮</el-button>
-            <el-button type="primary" round>主要按钮</el-button>
-            <el-button type="success" round>成功按钮</el-button>
-            <el-button type="info" round>信息按钮</el-button>
-            <el-button type="warning" round>警告按钮</el-button>
-            <el-button type="danger" round>危险按钮</el-button>
-        </el-row>
-
-        <el-row>
-            <el-button icon="el-icon-search" circle></el-button>
-            <el-button type="primary" icon="el-icon-edit" circle></el-button>
-            <el-button type="success" icon="el-icon-check" circle></el-button>
-            <el-button type="info" icon="el-icon-message" circle></el-button>
-            <el-button type="warning" icon="el-icon-star-off" circle></el-button>
-            <el-button type="danger" icon="el-icon-delete" circle></el-button>
-        </el-row>
+    <div id="app">
+        <el-container>
+            <el-header class="br-a">Header</el-header>
+            <el-container>
+                <el-aside  class="br-a" width="200px">Aside</el-aside>
+                <el-main class="br-a">Main</el-main>
+            </el-container>
+        </el-container>
     </div>
     <script type="text/javascript">
-        new Vue({ el: '#container' });
+        new Vue({ el: '#app' });
     </script>
 </body>
 </html>
