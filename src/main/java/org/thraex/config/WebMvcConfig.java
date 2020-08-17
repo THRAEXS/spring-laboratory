@@ -16,8 +16,8 @@ public class WebMvcConfig implements WebMvcConfigurer {
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         /*registry.addResourceHandler("/webjars/**")
                 .addResourceLocations("classpath:/META-INF/resources/webjars/");*/
-        registry.addResourceHandler("/style/**")
-                .addResourceLocations("classpath:/templates/style/");
+        registry.addResourceHandler("/assets/**")
+                .addResourceLocations("classpath:/templates/assets/");
     }
 
     @Override
