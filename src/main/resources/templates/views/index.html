@@ -16,7 +16,7 @@
     <!-- Google Font: Source Sans Pro -->
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
 </head>
-<body class="hold-transition sidebar-mini layout-fixed layout-navbar-fixed">
+<body class="hold-transition sidebar-mini layout-fixed layout-navbar-fixed overflow-hidden">
     <div id="app" class="wrapper">
         <!-- Navbar -->
         <nav class="main-header navbar navbar-expand navbar-dark navbar-secondary">
@@ -26,7 +26,7 @@
                     <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
                 </li>
                 <li class="nav-item d-none d-sm-inline-block">
-                    <a href="/" class="nav-link">Home</a>
+                    <a href="index3.html" class="nav-link">Home</a>
                 </li>
                 <li class="nav-item d-none d-sm-inline-block">
                     <a href="#" class="nav-link">Contact</a>
@@ -144,7 +144,8 @@
         <aside class="main-sidebar sidebar-dark-primary elevation-4">
             <!-- Brand Logo -->
             <a href="index3.html" class="brand-link">
-                <img :src="site.logo" alt="Logo" class="brand-image img-circle elevation-3" style="opacity: .8"/>
+                <img :src="site.logo" alt="Logo" class="brand-image img-circle elevation-3"
+                     style="opacity: .8"/>
                 <span class="brand-text font-weight-light">{{ site.title }}</span>
             </a>
 
@@ -166,7 +167,7 @@
                         <template v-for="(item, ind) in menu">
                             <li v-if="item.children && item.children.length > 0" class="nav-item has-treeview">
                                 <a href="#" class="nav-link">
-                                    <i class="fas fa-gavel nav-icon"></i>
+                                    <i class="fas fa-circle nav-icon"></i>
                                     <p>
                                         {{ item.name }}<i class="fas fa-angle-left right"></i>
                                     </p>
@@ -174,15 +175,15 @@
                                 <ul class="nav nav-treeview">
                                     <li v-for="sub in item.children" :key="sub.id">
                                         <a :href="sub.url" class="nav-link">
-                                            <i class="far fa-circle nav-icon"></i>
+                                            <i class="far fa-circle nav-icon text-info"></i>
                                             <p>{{ sub.name }}</p>
                                         </a>
                                     </li>
                                 </ul>
                             </li>
                             <li v-else class="nav-item">
-                                <a :href="item.url" class="nav-link">
-                                    <i class="nav-icon fas fa-file"></i>
+                                <a href="https://adminlte.io/docs/3.0" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
                                     <p>{{ item.name }}</p>
                                 </a>
                             </li>
@@ -197,16 +198,13 @@
         <!-- Content Wrapper. Contains page content -->
         <div class="content-wrapper">
             <!-- Main content -->
-            <div class="content">
-                <div class="container-fluid">
-                    <div class="row">
-                        <div class="col-lg-12 mb-2 mt-3">
-                            <iframe src="https://cn.vuejs.org/" width="100%" scrolling="no" class="border-0"></iframe>
-                        </div>
-                        <!-- /.col-md-12 -->
-                    </div>
-                    <!-- /.row -->
-                </div><!-- /.container-fluid -->
+            <div class="content px-0">
+                <iframe
+                        id="page-container"
+                        src="https://cn.vuejs.org/v2/guide/list.html#%E5%9C%A8-lt-template-gt-%E4%B8%8A%E4%BD%BF%E7%94%A8-v-for"
+                        width="100%"
+                        class="border-0"
+                ></iframe>
             </div>
             <!-- /.content -->
         </div>
@@ -221,16 +219,6 @@
             </div>
         </aside>
         <!-- /.control-sidebar -->
-
-        <!-- Main Footer -->
-        <footer class="main-footer">
-            <!-- To the right -->
-            <div class="float-right d-none d-sm-inline">
-                Anything you want
-            </div>
-            <!-- Default to the left -->
-            <strong>Copyright &copy; 2020-present <a :href="org.url">{{ org.name }}</a>.</strong> All rights reserved.
-        </footer>
     </div>
     <!-- ./wrapper -->
 
@@ -242,48 +230,57 @@
     <!-- overlayScrollbars -->
     <script src="/webjars/AdminLTE/3.0.5/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
     <!-- AdminLTE App -->
-    <script src="/webjars/AdminLTE/3.0.5/dist/js/adminlte.min.js"></script>
+    <script src="/webjars/AdminLTE/3.0.5/dist/js/adminlte.js"></script>
     <!-- Vue.js -->
     <script src="/webjars/vue/2.6.11/vue.js"></script>
     <script type="text/javascript">
-        const vm = new Vue({
-            el: '#app',
-            data() {
-                const name = 'THRAEX';
-                return {
-                    site: {
-                        title: name,
-                        logo: '/webjars/AdminLTE/3.0.5/dist/img/AdminLTELogo.png'
-                    },
-                    org: {
-                        name, url: 'https://github.com/THRAEX-70'
-                    },
-                    user: {
-                        name: 'Swan Black',
-                        avatar: '/webjars/AdminLTE/3.0.5/dist/img/user4-128x128.jpg'
-                    },
-                    menu: [
-                        {
-                            name: 'Business',
-                            children: [
-                                { name: 'Business-01', url: '#' }
-                            ]
+        ($ => {
+            const fixHeight = () => $('#page-container').height($(window).height() - $('.main-header').outerHeight());
+            window.onresize = fixHeight;
+
+            new Vue({
+                el: '#app',
+                data() {
+                    return {
+                        site: {
+                            title: 'THRAEX',
+                            logo: '/webjars/AdminLTE/3.0.5/dist/img/AdminLTELogo.png'
                         },
-                        { name: 'Business-02', url: '#' },
-                        { name: 'Business-03', url: '#' },
-                        {
-                            name: '系统设置',
-                            children: [
-                                { name: '菜单维护', url: '#' },
-                                { name: '角色维护', url: '#' },
-                                { name: '用户维护', url: '#' },
-                                { name: '字典维护', url: '#' }
-                            ]
-                        }
-                    ]
+                        user: {
+                            name: 'Swan Black',
+                            avatar: '/webjars/AdminLTE/3.0.5/dist/img/user4-128x128.jpg'
+                        },
+                        menu: [
+                            {
+                                name: 'Business',
+                                children: [
+                                    { name: 'Business-01', url: '#' }
+                                ]
+                            },
+                            { name: 'Business-02', url: '#' },
+                            { name: 'Business-03', url: '#' },
+                            {
+                                name: '系统设置',
+                                children: [
+                                    { name: '菜单维护', url: '#' },
+                                    { name: '角色维护', url: '#' },
+                                    { name: '用户维护', url: '#' },
+                                    { name: '字典维护', url: '#' }
+                                ]
+                            }
+                        ]
+                    }
+                },
+                created() {
+                    for (let i = 0; i < 100; i++) {
+                        this.menu.push({ name: `Business-X-${i}`, url: '#' })
+                    }
+                },
+                mounted() {
+                    fixHeight()
                 }
-            }
-        });
+            });
+        })(jQuery)
     </script>
 </body>
 </html>
