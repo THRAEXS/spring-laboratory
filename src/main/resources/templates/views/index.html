@@ -174,7 +174,7 @@
                                 </a>
                                 <ul class="nav nav-treeview">
                                     <li v-for="sub in item.children" :key="sub.id">
-                                        <a :href="sub.url" class="nav-link">
+                                        <a href="#" class="nav-link" :data-url="sub.url" onclick="openURL(this)">
                                             <i class="far fa-circle nav-icon text-info"></i>
                                             <p>{{ sub.name }}</p>
                                         </a>
@@ -182,7 +182,7 @@
                                 </ul>
                             </li>
                             <li v-else class="nav-item">
-                                <a href="https://adminlte.io/docs/3.0" class="nav-link">
+                                <a :href="item.url" class="nav-link">
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>{{ item.name }}</p>
                                 </a>
@@ -201,7 +201,6 @@
             <div class="content px-0">
                 <iframe
                         id="page-container"
-                        src="https://cn.vuejs.org/v2/guide/list.html#%E5%9C%A8-lt-template-gt-%E4%B8%8A%E4%BD%BF%E7%94%A8-v-for"
                         width="100%"
                         class="border-0"
                 ></iframe>
@@ -232,10 +231,15 @@
     <!-- AdminLTE App -->
     <script src="/webjars/AdminLTE/3.0.5/dist/js/adminlte.js"></script>
     <!-- Vue.js -->
-    <script src="/webjars/vue/2.6.11/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script type="text/javascript">
+        function openURL(el) {
+            $('#page-container').attr('src', $(el).data('url'));
+        }
         ($ => {
             const fixHeight = () => $('#page-container').height($(window).height() - $('.main-header').outerHeight());
+
+            fixHeight();
             window.onresize = fixHeight;
 
             new Vue({
@@ -262,9 +266,9 @@
                             {
                                 name: '系统设置',
                                 children: [
-                                    { name: '菜单维护', url: '#' },
-                                    { name: '角色维护', url: '#' },
-                                    { name: '用户维护', url: '#' },
+                                    { name: '菜单维护', url: '/menu' },
+                                    { name: '角色维护', url: '/role' },
+                                    { name: '用户维护', url: '/user' },
                                     { name: '字典维护', url: '#' }
                                 ]
                             }
@@ -275,9 +279,6 @@
                     for (let i = 0; i < 100; i++) {
                         this.menu.push({ name: `Business-X-${i}`, url: '#' })
                     }
-                },
-                mounted() {
-                    fixHeight()
                 }
             });
         })(jQuery)
