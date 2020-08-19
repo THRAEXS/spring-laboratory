@@ -13,3 +13,9 @@ spring:
   thymeleaf:
     prefix: classpath:/templates/views/
     cache: false # Production environment enabled
+
+thraex:
+  site:
+    title: THRAEX | Dashboard
+    logo: /webjars/AdminLTE/3.0.5/dist/img/AdminLTELogo.png
+    brand: THRAEX
