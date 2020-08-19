@@ -1,11 +1,12 @@
 <!DOCTYPE html>
-<html xmlns:th="https://www.thymeleaf.org">
+<html xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
 
-    <title>THRAEX | Dashboard</title>
+    <title th:text="${site.title}">THRAEX</title>
 
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="/webjars/AdminLTE/3.0.5/plugins/fontawesome-free/css/all.min.css">
@@ -17,7 +18,7 @@
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
 </head>
 <body class="hold-transition sidebar-mini layout-fixed layout-navbar-fixed overflow-hidden">
-    <div id="app" class="wrapper">
+    <div class="wrapper">
         <!-- Navbar -->
         <nav class="main-header navbar navbar-expand navbar-dark navbar-secondary">
             <!-- Left navbar links -->
@@ -25,25 +26,7 @@
                 <li class="nav-item">
                     <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
                 </li>
-                <li class="nav-item d-none d-sm-inline-block">
-                    <a href="index3.html" class="nav-link">Home</a>
-                </li>
-                <li class="nav-item d-none d-sm-inline-block">
-                    <a href="#" class="nav-link">Contact</a>
-                </li>
             </ul>
-
-            <!-- SEARCH FORM -->
-            <form class="form-inline ml-3">
-                <div class="input-group input-group-sm">
-                    <input class="form-control form-control-navbar" type="search" placeholder="Search" aria-label="Search">
-                    <div class="input-group-append">
-                        <button class="btn btn-navbar" type="submit">
-                            <i class="fas fa-search"></i>
-                        </button>
-                    </div>
-                </div>
-            </form>
 
             <!-- Right navbar links -->
             <ul class="navbar-nav ml-auto">
@@ -132,10 +115,6 @@
                         <a href="#" class="dropdown-item dropdown-footer">See All Notifications</a>
                     </div>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" data-widget="control-sidebar" data-slide="true" href="#" role="button"><i
-                            class="fas fa-th-large"></i></a>
-                </li>
             </ul>
         </nav>
         <!-- /.navbar -->
@@ -143,10 +122,9 @@
         <!-- Main Sidebar Container -->
         <aside class="main-sidebar sidebar-dark-primary elevation-4">
             <!-- Brand Logo -->
-            <a href="index3.html" class="brand-link">
-                <img :src="site.logo" alt="Logo" class="brand-image img-circle elevation-3"
-                     style="opacity: .8"/>
-                <span class="brand-text font-weight-light">{{ site.title }}</span>
+            <a href="/" class="brand-link">
+                <img th:src="${site.logo}" alt="Logo" class="brand-image img-circle elevation-3" style="opacity: .8"/>
+                <span class="brand-text font-weight-light" th:text="${site.brand}"></span>
             </a>
 
             <!-- Sidebar -->
@@ -154,10 +132,11 @@
                 <!-- Sidebar user panel (optional) -->
                 <div class="user-panel mt-3 pb-3 mb-3 d-flex">
                     <div class="image">
-                        <img :src="user.avatar" class="img-circle elevation-2" alt="User Image">
+                        <img src="/webjars/AdminLTE/3.0.5/dist/img/user4-128x128.jpg"
+                             class="img-circle elevation-2" alt="User Image">
                     </div>
                     <div class="info">
-                        <a href="#" class="d-block">{{ user.name }}</a>
+                        <a href="#" class="d-block" sec:authentication="name">UNKNOWN</a>
                     </div>
                 </div>
 
@@ -204,16 +183,6 @@
             <!-- /.content -->
         </div>
         <!-- /.content-wrapper -->
-
-        <!-- Control Sidebar -->
-        <aside class="control-sidebar control-sidebar-dark">
-            <!-- Control sidebar content goes here -->
-            <div class="p-3">
-                <h5>Title</h5>
-                <p>Sidebar content</p>
-            </div>
-        </aside>
-        <!-- /.control-sidebar -->
     </div>
     <!-- ./wrapper -->
 
@@ -227,7 +196,7 @@
     <!-- AdminLTE App -->
     <script src="/webjars/AdminLTE/3.0.5/dist/js/adminlte.js"></script>
     <!-- Vue.js -->
-    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<!--    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>-->
     <script type="text/javascript">
         function openURL(el) {
             $('#page-container').attr('src', $(el).data('url'));
@@ -238,7 +207,7 @@
             fixHeight();
             window.onresize = fixHeight;
 
-            new Vue({
+            /*new Vue({
                 el: '#app',
                 data() {
                     return {
@@ -271,7 +240,7 @@
                         ]
                     }
                 }
-            });
+            });*/
         })(jQuery)
     </script>
 </body>

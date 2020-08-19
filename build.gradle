@@ -29,6 +29,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-security'
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
+    implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5'
 
     implementation 'io.springfox:springfox-boot-starter:3.0.0'
 

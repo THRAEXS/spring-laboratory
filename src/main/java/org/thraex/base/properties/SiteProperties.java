@@ -1,4 +1,4 @@
-package org.thraex.properties;
+package org.thraex.base.properties;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
