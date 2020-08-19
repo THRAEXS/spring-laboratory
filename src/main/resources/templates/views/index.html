@@ -167,6 +167,12 @@
                                 </a>
                             </li>
                         </template>
+                        <li th:each="item : ${menus}">
+                            <a th:href="${item.url}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>[[${item.name}]]</p>
+                            </a>
+                        </li>
                     </ul>
                 </nav>
                 <!-- /.sidebar-menu -->
@@ -195,8 +201,7 @@
     <script th:src="|${site.adminLTE}/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js|"></script>
     <!-- AdminLTE App -->
     <script th:src="|${site.adminLTE}/dist/js/adminlte.js|"></script>
-    <!-- Vue.js -->
-<!--    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>-->
+
     <script type="text/javascript">
         function openURL(el) {
             $('#page-container').attr('src', $(el).data('url'));
@@ -206,41 +211,6 @@
 
             fixHeight();
             window.onresize = fixHeight;
-
-            /*new Vue({
-                el: '#app',
-                data() {
-                    return {
-                        site: {
-                            title: 'THRAEX',
-                            logo: '/webjars/AdminLTE/3.0.5/dist/img/AdminLTELogo.png'
-                        },
-                        user: {
-                            name: 'Swan Black',
-                            avatar: '/webjars/AdminLTE/3.0.5/dist/img/user4-128x128.jpg'
-                        },
-                        menu: [
-                            {
-                                name: 'Business',
-                                children: [
-                                    { name: 'Business-01', url: '#' }
-                                ]
-                            },
-                            { name: 'Business-02', url: '#' },
-                            { name: 'Business-03', url: '#' },
-                            {
-                                name: '系统设置',
-                                children: [
-                                    { name: '菜单维护', url: '/menu' },
-                                    { name: '角色维护', url: '/role' },
-                                    { name: '用户维护', url: '/user' },
-                                    { name: '字典维护', url: '#' }
-                                ]
-                            }
-                        ]
-                    }
-                }
-            });*/
         })(jQuery)
     </script>
 </body>

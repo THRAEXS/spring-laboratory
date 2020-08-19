@@ -6,6 +6,9 @@ import lombok.ToString;
 import lombok.experimental.Accessors;
 import org.thraex.base.entity.Entity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @author 鬼王
  * @date 2020/08/19 10:21
@@ -32,5 +35,17 @@ public class Menu extends Entity<Menu> {
     private String remark;
 
     private boolean disabled;
+
+    private List<Menu> children = new ArrayList<>();
+
+    public Menu() { }
+
+    public Menu(String id, String name, String code, String url, String pid) {
+        super(id);
+        this.name = name;
+        this.code = code;
+        this.url = url;
+        this.pid = pid;
+    }
 
 }

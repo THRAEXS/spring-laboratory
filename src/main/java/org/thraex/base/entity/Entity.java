@@ -49,4 +49,10 @@ public class Entity<C extends Entity<?>> implements Serializable {
         return (C) this;
     }
 
+    public Entity() { }
+
+    public Entity(String id) {
+        this.id = id;
+    }
+
 }
