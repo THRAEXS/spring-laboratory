@@ -9,11 +9,11 @@
     <title th:text="${site.title}">THRAEX</title>
 
     <!-- Font Awesome Icons -->
-    <link rel="stylesheet" href="/webjars/AdminLTE/3.0.5/plugins/fontawesome-free/css/all.min.css">
+    <link rel="stylesheet" th:href="|${site.adminLTE}/plugins/fontawesome-free/css/all.min.css|">
     <!-- overlayScrollbars -->
-    <link rel="stylesheet" href="/webjars/AdminLTE/3.0.5/plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
+    <link rel="stylesheet" th:href="|${site.adminLTE}/plugins/overlayScrollbars/css/OverlayScrollbars.min.css|">
     <!-- Theme style -->
-    <link rel="stylesheet" href="/webjars/AdminLTE/3.0.5/dist/css/adminlte.min.css">
+    <link rel="stylesheet" th:href="|${site.adminLTE}/dist/css/adminlte.min.css|">
     <!-- Google Font: Source Sans Pro -->
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
 </head>
@@ -188,13 +188,13 @@
 
     <!-- REQUIRED SCRIPTS -->
     <!-- jQuery -->
-    <script src="/webjars/AdminLTE/3.0.5/plugins/jquery/jquery.min.js"></script>
+    <script th:src="|${site.adminLTE}/plugins/jquery/jquery.min.js|"></script>
     <!-- Bootstrap 4 -->
-    <script src="/webjars/AdminLTE/3.0.5/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script th:src="|${site.adminLTE}/plugins/bootstrap/js/bootstrap.bundle.min.js|"></script>
     <!-- overlayScrollbars -->
-    <script src="/webjars/AdminLTE/3.0.5/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
+    <script th:src="|${site.adminLTE}/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js|"></script>
     <!-- AdminLTE App -->
-    <script src="/webjars/AdminLTE/3.0.5/dist/js/adminlte.js"></script>
+    <script th:src="|${site.adminLTE}/dist/js/adminlte.js|"></script>
     <!-- Vue.js -->
 <!--    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>-->
     <script type="text/javascript">

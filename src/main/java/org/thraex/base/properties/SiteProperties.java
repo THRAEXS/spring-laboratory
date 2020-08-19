@@ -26,4 +26,9 @@ public class SiteProperties {
      */
     private String brand;
 
+    /**
+     * AdminLTE directory
+     */
+    private String adminLTE;
+
 }
