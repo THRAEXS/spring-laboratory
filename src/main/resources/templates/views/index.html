@@ -123,7 +123,7 @@
         <aside class="main-sidebar sidebar-dark-primary elevation-4">
             <!-- Brand Logo -->
             <a href="/" class="brand-link">
-                <img th:src="${site.logo}" alt="Logo" class="brand-image img-circle elevation-3" style="opacity: .8"/>
+                <img alt="Logo" class="brand-image img-circle elevation-3" style="opacity: .8" th:src="${site.logo}"/>
                 <span class="brand-text font-weight-light" th:text="${site.brand}"></span>
             </a>
 
@@ -143,35 +143,25 @@
                 <!-- Sidebar Menu -->
                 <nav class="mt-2">
                     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-                        <template v-for="(item, ind) in menu">
-                            <li v-if="item.children && item.children.length > 0" class="nav-item has-treeview">
-                                <a href="#" class="nav-link">
-                                    <i class="fas fa-circle nav-icon"></i>
-                                    <p>
-                                        {{ item.name }}<i class="fas fa-angle-left right"></i>
-                                    </p>
-                                </a>
-                                <ul class="nav nav-treeview">
-                                    <li v-for="sub in item.children" :key="sub.id">
-                                        <a href="#" class="nav-link" :data-url="sub.url" onclick="openURL(this)">
-                                            <i class="far fa-circle nav-icon text-info"></i>
-                                            <p>{{ sub.name }}</p>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li v-else class="nav-item">
-                                <a :href="item.url" class="nav-link">
-                                    <i class="far fa-circle nav-icon"></i>
-                                    <p>{{ item.name }}</p>
-                                </a>
-                            </li>
-                        </template>
-                        <li th:each="item : ${menus}">
-                            <a th:href="${item.url}" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>[[${item.name}]]</p>
+                        <li class="nav-item"
+                            th:each="item : ${menus}"
+                            th:with="hasChild = ${item.children.size() > 0}"
+                            th:classappend="${hasChild} ? 'has-treeview'">
+                            <a href="#" class="nav-link" onclick="openURL(this)" th:data-url="${item.url}">
+                                <i class="far fa-circle nav-icon"
+                                   th:classappend="${hasChild} ? 'fas' : 'far'"></i>
+                                <p>
+                                    [[${item.name}]]<i class="fas fa-angle-left right" th:if="${hasChild}"></i>
+                                </p>
                             </a>
+                            <ul class="nav nav-treeview" th:if="${hasChild}">
+                                <li class="nav-item" th:each="child : ${item.children}">
+                                    <a href="#" class="nav-link" onclick="openURL(this)" th:data-url="${child.url}">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>[[${child.name}]]</p>
+                                    </a>
+                                </li>
+                            </ul>
                         </li>
                     </ul>
                 </nav>
@@ -203,14 +193,22 @@
     <script th:src="|${site.adminLTE}/dist/js/adminlte.js|"></script>
 
     <script type="text/javascript">
-        function openURL(el) {
-            $('#page-container').attr('src', $(el).data('url'));
-        }
+        let openURL;
         ($ => {
-            const fixHeight = () => $('#page-container').height($(window).height() - $('.main-header').outerHeight());
+            const container = $('#page-container');
+
+            const fixHeight = () => container.height($(window).height() - $('.main-header').outerHeight());
 
             fixHeight();
             window.onresize = fixHeight;
+
+            openURL = el => {
+                console.log(el, $(el).data('url'))
+                const oldURL = container.attr('src'), newURL = $(el).data('url');
+                console.log(oldURL, newURL)
+
+                newURL && oldURL !== newURL && container.attr('src', newURL);
+            };
         })(jQuery)
     </script>
 </body>
