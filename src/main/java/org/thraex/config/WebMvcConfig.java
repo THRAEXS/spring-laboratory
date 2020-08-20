@@ -18,12 +18,13 @@ public class WebMvcConfig implements WebMvcConfigurer {
                 .addResourceLocations("classpath:/META-INF/resources/webjars/");*/
         registry.addResourceHandler("/favicon.ico", "/assets/**")
                 .addResourceLocations("classpath:/templates/assets/");
+        registry.addResourceHandler("/AdminLTE/**")
+                .addResourceLocations("classpath:/META-INF/resources/webjars/AdminLTE/3.0.5/");
     }
 
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
         //registry.addViewController("/login").setViewName("login");
-        registry.addViewController("/menu").setViewName("menu/index");
         registry.addViewController("/role").setViewName("role/index");
         registry.addViewController("/user").setViewName("user/index");
     }

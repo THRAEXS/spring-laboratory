@@ -17,6 +17,5 @@ spring:
 thraex:
   site:
     title: THRAEX | Dashboard
-    logo: ${thraex.site.admin-lte}/dist/img/AdminLTELogo.png
+    logo: /AdminLTE/dist/img/AdminLTELogo.png
     brand: THRAEX
-    admin-lte: /webjars/AdminLTE/3.0.5
