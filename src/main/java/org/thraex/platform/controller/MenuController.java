@@ -1,6 +1,7 @@
 package org.thraex.platform.controller;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
@@ -10,5 +11,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @RequestMapping("menu")
 public class MenuController {
+
+    @GetMapping
+    public String index() {
+        // TODO: menu tree
+        return "menu/index";
+    }
+
+    @GetMapping("edit")
+    public String edit() {
+        return "menu/edit";
+    }
 
 }
