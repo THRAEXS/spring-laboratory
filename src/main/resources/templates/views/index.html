@@ -12,6 +12,8 @@
     <link rel="stylesheet" th:href="|${site.adminLTE}/plugins/fontawesome-free/css/all.min.css|">
     <!-- overlayScrollbars -->
     <link rel="stylesheet" th:href="|${site.adminLTE}/plugins/overlayScrollbars/css/OverlayScrollbars.min.css|">
+    <!-- SweetAlert2 -->
+    <link rel="stylesheet" th:href="|${site.adminLTE}/plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css|">
     <!-- Theme style -->
     <link rel="stylesheet" th:href="|${site.adminLTE}/dist/css/adminlte.min.css|">
     <!-- Google Font: Source Sans Pro -->
@@ -147,21 +149,27 @@
                             th:each="item : ${menus}"
                             th:with="hasChild = ${item.children.size() > 0}"
                             th:classappend="${hasChild} ? 'has-treeview'">
-                            <a href="#" class="nav-link" onclick="openURL(this)" th:data-url="${item.url}">
-                                <i class="far fa-circle nav-icon"
-                                   th:classappend="${hasChild} ? 'fas' : 'far'"></i>
-                                <p>
-                                    [[${item.name}]]<i class="fas fa-angle-left right" th:if="${hasChild}"></i>
-                                </p>
+                            <!-- Single Node -->
+                            <a href="#" class="nav-link" th:if="${!hasChild}" onclick="handleMenuClick(this)" th:data-url="${item.url}">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>[[${item.name}]]</p>
+                            </a>
+                            <!-- ./Single Node -->
+
+                            <!-- Multiple Nodes-->
+                            <a href="#" class="nav-link" th:if="${hasChild}">
+                                <i class="fas fa-circle nav-icon"></i>
+                                <p>[[${item.name}]]<i class="fas fa-angle-left right"></i></p>
                             </a>
                             <ul class="nav nav-treeview" th:if="${hasChild}">
                                 <li class="nav-item" th:each="child : ${item.children}">
-                                    <a href="#" class="nav-link" onclick="openURL(this)" th:data-url="${child.url}">
-                                        <i class="far fa-circle nav-icon"></i>
+                                    <a href="#" class="nav-link" onclick="handleMenuClick(this)" th:data-url="${child.url}">
+                                        <i class="far fa-circle nav-icon text-info"></i>
                                         <p>[[${child.name}]]</p>
                                     </a>
                                 </li>
                             </ul>
+                            <!-- /Multiple Nodes-->
                         </li>
                     </ul>
                 </nav>
@@ -189,11 +197,14 @@
     <script th:src="|${site.adminLTE}/plugins/bootstrap/js/bootstrap.bundle.min.js|"></script>
     <!-- overlayScrollbars -->
     <script th:src="|${site.adminLTE}/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js|"></script>
+    <!-- SweetAlert2 -->
+    <script th:src="|${site.adminLTE}/plugins/sweetalert2/sweetalert2.min.js|"></script>
     <!-- AdminLTE App -->
     <script th:src="|${site.adminLTE}/dist/js/adminlte.js|"></script>
 
+    <script src="/assets/js/util.js"></script>
     <script type="text/javascript">
-        let openURL;
+        let handleMenuClick;
         ($ => {
             const container = $('#page-container');
 
@@ -202,12 +213,11 @@
             fixHeight();
             window.onresize = fixHeight;
 
-            openURL = el => {
-                console.log(el, $(el).data('url'))
+            handleMenuClick = el => {
                 const oldURL = container.attr('src'), newURL = $(el).data('url');
-                console.log(oldURL, newURL)
 
-                newURL && oldURL !== newURL && container.attr('src', newURL);
+                (newURL ? () => oldURL !== newURL && container.attr('src', newURL)
+                    : () => Util.toast.fire({ icon: 'warning', title: 'Please check the menu url.' }))();
             };
         })(jQuery)
     </script>
