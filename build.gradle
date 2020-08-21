@@ -41,6 +41,6 @@ dependencies {
     testAnnotationProcessor 'org.projectlombok:lombok:1.18.12'
 
     implementation 'org.webjars:vue:2.6.11'
-//    implementation 'org.webjars.npm:element-ui:2.13.2'
+    implementation 'org.webjars.npm:element-ui:2.13.2'
     implementation 'org.webjars:AdminLTE:3.0.5'
 }

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:fragment="app_template(title, contents, scripts)">
+<head>
+    <title th:replace="${title}">Page Title</title>
+
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
+
+    <link rel="stylesheet" href="/element-ui/lib/theme-chalk/index.css">
+</head>
+<body>
+    <div id="app">
+        <th:block th:replace="${contents}"/>
+    </div>
+
+    <script type="text/javascript" src="/vue/vue.js"></script>
+    <script type="text/javascript" src="/element-ui/lib/index.js"></script>
+
+    <th:block th:replace="${scripts}"/>
+</body>
+</html>

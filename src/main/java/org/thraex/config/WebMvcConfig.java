@@ -5,6 +5,8 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import java.util.stream.Stream;
+
 /**
  * @author 鬼王
  * @date 2020/08/11 17:35
@@ -14,19 +16,21 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        /*registry.addResourceHandler("/webjars/**")
-                .addResourceLocations("classpath:/META-INF/resources/webjars/");*/
         registry.addResourceHandler("/favicon.ico", "/assets/**")
                 .addResourceLocations("classpath:/templates/assets/");
+        registry.addResourceHandler("/vue/**")
+                .addResourceLocations("classpath:/META-INF/resources/webjars/vue/2.6.11/");
         registry.addResourceHandler("/AdminLTE/**")
                 .addResourceLocations("classpath:/META-INF/resources/webjars/AdminLTE/3.0.5/");
+        registry.addResourceHandler("/element-ui/**")
+                .addResourceLocations("classpath:/META-INF/resources/webjars/element-ui/2.13.2/");
     }
 
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
         //registry.addViewController("/login").setViewName("login");
-        registry.addViewController("/role").setViewName("role/index");
-        registry.addViewController("/user").setViewName("user/index");
+        Stream.of("menu", "role", "user").forEach(it ->
+                registry.addViewController(String.format("/%s", it)).setViewName(it));
     }
 
 }

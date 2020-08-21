@@ -28,7 +28,7 @@ public class MenuServiceImpl implements MenuService {
                 new Menu().setId("id-X-1").setName("Business-02"),
                 new Menu().setId("id-X-3").setName("Business-03"),
                 new Menu("id-0", "系统设置", "MENU_SETTING", null, null),
-                new Menu("id-0-0", "菜单维护", "MENU_MENU", "/menu/edit", "id-0"),
+                new Menu("id-0-0", "菜单维护", "MENU_MENU", "/menu", "id-0"),
                 new Menu("id-0-1", "角色维护", "MENU_ROLE", "/role", "id-0"),
                 new Menu("id-0-2", "用户维护", "MENU_USER", "/user", "id-0")).collect(Collectors.toList());
     }

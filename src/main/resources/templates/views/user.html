@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="template :: app_template(~{::title}, ~{::div.content-wrapper}, ~{::script})">
+<head>
+    <title>User</title>
+</head>
+<body>
+    <div class="content-wrapper">
+        User Page...
+    </div>
+
+    <script type="text/javascript">
+        console.log('Execute the script');
+    </script>
+</body>
+</html>
