@@ -6,11 +6,18 @@
 </head>
 <body>
     <div class="content-wrapper">
-        678
+        <el-tag type="error">THRAEX</el-tag>
+        <el-tag type="success">{{name}}</el-tag>
     </div>
 
     <script type="text/javascript">
-        console.log('Execute the script');
+        VueFactory.create({
+            data() {
+                return {
+                    name: 'THRAEX'
+                }
+            }
+        });
     </script>
 </body>
 </html>
