@@ -24,10 +24,7 @@ const Factory = {};
 
             this.axios = axios.create(Object.assign({ timeout: 5000 }, config));
             this.axios.interceptors.response.use(
-                response => {
-                    console.log(response)
-                    return response.data;
-                },
+                response => response.data,
                 error => {
                     console.error('axios request error.', error);
                     return Promise.reject(error);

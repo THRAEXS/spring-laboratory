@@ -8,12 +8,15 @@
     <div class="content-wrapper">
         <el-row :gutter="15">
             <el-col :span="6">
-                <el-card>
-                    <el-tree :data="data" :props="defaultProps"/>
+                <el-card style="min-height: 400px;">
+                    <el-tree :data="data"
+                             :props="defaultProps"
+                             accordion
+                             @node-click="handleNodeClick"/>
                 </el-card>
             </el-col>
             <el-col :span="18">
-                <el-card>
+                <el-card style="min-height: 400px;">
                     <div v-for="o in 4" :key="o" class="text item">
                         {{'right- 列表内容 ' + o }}
                     </div>
@@ -33,9 +36,12 @@
                 }
             },
             created() {
-                Factory.Request.get('/menu/tree').then(res => {
-                    console.log(res);
-                });
+                Factory.Request.get('/menu/tree').then(data => { this.data = data; });
+            },
+            methods: {
+                handleNodeClick(data) {
+                    console.log(data);
+                }
             }
         });
     </script>
