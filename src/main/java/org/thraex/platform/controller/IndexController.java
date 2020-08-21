@@ -24,6 +24,7 @@ public class IndexController {
     public String index(Model model) {
         model.addAttribute("site", siteProperties);
         model.addAttribute("menus", menuService.tree());
+        model.addAttribute("dashboard", "/menu");
         return "index";
     }
 

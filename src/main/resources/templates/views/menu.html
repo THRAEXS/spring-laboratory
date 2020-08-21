@@ -6,16 +6,36 @@
 </head>
 <body>
     <div class="content-wrapper">
-        <el-tag type="error">THRAEX</el-tag>
-        <el-tag type="success">{{name}}</el-tag>
+        <el-row :gutter="15">
+            <el-col :span="6">
+                <el-card>
+                    <el-tree :data="data" :props="defaultProps"/>
+                </el-card>
+            </el-col>
+            <el-col :span="18">
+                <el-card>
+                    <div v-for="o in 4" :key="o" class="text item">
+                        {{'right- 列表内容 ' + o }}
+                    </div>
+                </el-card>
+            </el-col>
+        </el-row>
     </div>
 
     <script type="text/javascript">
-        VueFactory.create({
+        Factory.Vue.build({
             data() {
                 return {
-                    name: 'THRAEX'
+                    data: [],
+                    defaultProps: {
+                        label: 'name'
+                    }
                 }
+            },
+            created() {
+                Factory.Request.get('/menu/tree').then(res => {
+                    console.log(res);
+                });
             }
         });
     </script>

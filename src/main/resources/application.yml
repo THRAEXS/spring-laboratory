@@ -16,6 +16,6 @@ spring:
 
 thraex:
   site:
-    title: THRAEX | Dashboard
+    title: THRAEX | Admin
     logo: /AdminLTE/dist/img/AdminLTELogo.png
     brand: THRAEX

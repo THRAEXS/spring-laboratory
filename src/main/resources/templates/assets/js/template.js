@@ -1,11 +1,47 @@
-class VueFactory {
+const Factory = {};
 
-    constructor(property = {}) {
-        this.vm = new Vue(Object.assign({ el: '#app' }, property));
+(() => {
+    'use strict';
+
+    class VueFactory {
+
+        constructor(property = {}) {
+            if (!Vue) throw new Error('Vue is not defined');
+
+            this.vue = new Vue(Object.assign({ el: '#app' }, property));
+        }
+
+        static build(property = {}) {
+            return new VueFactory(property).vue;
+        }
+
     }
 
-    static create(property = {}) {
-        return new VueFactory(property)
+    class AxiosFactory {
+
+        constructor(config = {}) {
+            if (!axios) throw new Error('axios is not defined');
+
+            this.axios = axios.create(Object.assign({ timeout: 5000 }, config));
+            this.axios.interceptors.response.use(
+                response => {
+                    console.log(response)
+                    return response.data;
+                },
+                error => {
+                    console.error('axios request error.', error);
+                    return Promise.reject(error);
+                }
+            );
+        }
+
+        static build(config = {}) {
+            return new AxiosFactory(config).axios;
+        }
+
     }
 
-}
+    Factory.Vue = VueFactory;
+    Factory.Axios = AxiosFactory;
+    Factory.Request = AxiosFactory.build();
+})();

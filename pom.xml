@@ -89,6 +89,11 @@
             <artifactId>AdminLTE</artifactId>
             <version>3.0.5</version>
         </dependency>
+        <dependency>
+            <groupId>org.webjars.npm</groupId>
+            <artifactId>axios</artifactId>
+            <version>0.19.2</version>
+        </dependency>
     </dependencies>
 
     <build>

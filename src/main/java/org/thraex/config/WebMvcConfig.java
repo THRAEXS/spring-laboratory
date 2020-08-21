@@ -24,6 +24,8 @@ public class WebMvcConfig implements WebMvcConfigurer {
                 .addResourceLocations("classpath:/META-INF/resources/webjars/AdminLTE/3.0.5/");
         registry.addResourceHandler("/element-ui/**")
                 .addResourceLocations("classpath:/META-INF/resources/webjars/element-ui/2.13.2/");
+        registry.addResourceHandler("/axios/**")
+                .addResourceLocations("classpath:/META-INF/resources/webjars/axios/0.19.2/");
     }
 
     @Override
