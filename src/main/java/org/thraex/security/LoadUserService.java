@@ -5,7 +5,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -13,6 +12,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+import org.thraex.platform.entity.User;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -44,7 +44,8 @@ public class LoadUserService implements UserDetailsService {
         SecurityProperties.User user = properties.getUser();
         return Optional.of(username)
                 .filter(u -> u.equals(user.getName()))
-                .map(u -> User.withUsername(u).password(passwordEncoder.encode(user.getPassword()))
+                .map(u -> User.withId(u).nickname(u.toUpperCase()).username(u)
+                        .password(user.getPassword()).passwordEncoder(p -> passwordEncoder.encode(p))
                         .roles(StringUtils.toStringArray(user.getRoles())).build())
                 .orElseGet(() -> {
                     // TODO: query db

@@ -19,6 +19,8 @@ import java.util.List;
 @Accessors(chain = true)
 public class Menu extends Entity<Menu> {
 
+    private static final long serialVersionUID = 1L;
+
     private String name;
 
     private String code;
@@ -41,7 +43,7 @@ public class Menu extends Entity<Menu> {
     public Menu() { }
 
     public Menu(String id, String name, String code, String url, String pid) {
-        super(id);
+        this.id = id;
         this.name = name;
         this.code = code;
         this.url = url;
