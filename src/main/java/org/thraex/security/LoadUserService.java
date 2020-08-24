@@ -9,13 +9,18 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.Optional;
+
 /**
+ * {@link UsernamePasswordAuthenticationFilter#attemptAuthentication(HttpServletRequest, HttpServletResponse)}
+ * 
  * @author 鬼王
  * @date 2020/08/21 16:12
  */
@@ -25,7 +30,8 @@ public class LoadUserService implements UserDetailsService {
     /**
      * Reference {@link DaoAuthenticationProvider#DaoAuthenticationProvider()}
      */
-    //private final static PasswordEncoder passwordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     /**
      * Reference {@link UserDetailsServiceAutoConfiguration#inMemoryUserDetailsManager(SecurityProperties, ObjectProvider)}
@@ -36,12 +42,14 @@ public class LoadUserService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         SecurityProperties.User user = properties.getUser();
-        UserDetails build = User.withUsername(user.getName())
-                //.password("{bcrypt}" + user.getPassword())
-                .password("{bcrypt}" + new BCryptPasswordEncoder().encode(user.getPassword()))
-                .roles(StringUtils.toStringArray(user.getRoles())).build();
-        //return new User(user.getName(), user.getPassword(), user.getRoles());
-        return build;
+        return Optional.of(username)
+                .filter(u -> u.equals(user.getName()))
+                .map(u -> User.withUsername(u).password(passwordEncoder.encode(user.getPassword()))
+                        .roles(StringUtils.toStringArray(user.getRoles())).build())
+                .orElseGet(() -> {
+                    // TODO: query db
+                    return null;
+                });
     }
 
 }
