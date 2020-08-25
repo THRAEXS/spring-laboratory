@@ -4,3 +4,5 @@ body {
 
 .min-h-1 { min-height: 400px; }
 .max-h-1 { min-height: 600px; }
+
+.txt-r { text-align: right; }
