@@ -67,4 +67,12 @@ public class Query implements Serializable {
         });
     }
 
+    public Object getValue() {
+        return getValue("keywords");
+    }
+
+    public Object getValue(String key) {
+        return Optional.ofNullable(params).map(it -> it.get(key)).orElse(null);
+    }
+
 }

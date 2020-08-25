@@ -22,7 +22,7 @@ const Factory = {};
         constructor(config = {}) {
             if (!axios) throw new Error('axios is not defined');
 
-            this.axios = axios.create(Object.assign({ timeout: 5000 }, config));
+            this.axios = axios.create(Object.assign({ timeout: 8000 }, config));
             this.axios.interceptors.response.use(
                 response => response.data,
                 error => {

@@ -40,6 +40,8 @@ public class User extends Entity<User> implements UserDetails {
 
     private Set<GrantedAuthority> authorities;
 
+    public User() {}
+
     public User(String id, String nickname, String username, String password, boolean enabled,
                 Collection<? extends GrantedAuthority> authorities) {
         Assert.noNullElements(Arrays.asList(username, password),

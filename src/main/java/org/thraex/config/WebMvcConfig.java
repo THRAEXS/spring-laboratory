@@ -26,6 +26,8 @@ public class WebMvcConfig implements WebMvcConfigurer {
                 .addResourceLocations("classpath:/META-INF/resources/webjars/element-ui/2.13.2/");
         registry.addResourceHandler("/axios/**")
                 .addResourceLocations("classpath:/META-INF/resources/webjars/axios/0.19.2/");
+        registry.addResourceHandler("/qs/**")
+                .addResourceLocations("classpath:/META-INF/resources/webjars/qs/6.9.4/");
     }
 
     @Override

@@ -11,7 +11,10 @@
                 <el-card>
                     <el-row :gutter="page.gutter">
                         <el-col :span="22">
-                            <el-input placeholder="请输入关键字"/>
+                            <el-input
+                                v-model="list.query.params.keywords"
+                                suffix-icon="el-icon-search"
+                                placeholder="请输入关键字"/>
                         </el-col>
                         <el-col :span="2" class="txt-r">
                             <el-button type="primary" @click="dialog.visible = true">新增</el-button>
@@ -55,7 +58,10 @@
                         :page-sizes="[10, 20, 50, 100, 500]"
                         :page-size="list.query.size"
                         :current-page.sync="list.query.page"
-                        :total="list.total"></el-pagination>
+                        :total="list.total"
+                        @size-change="handleSizeChange"
+                        @current-change="handleCurrentChange">
+                    </el-pagination>
                 </el-card>
             </el-col>
         </el-row>
@@ -79,8 +85,7 @@
                 return {
                     page: {
                         gutter,
-                        rowStyle: { marginBottom: `${gutter}px` },
-                        drawer: false
+                        rowStyle: { marginBottom: `${gutter}px` }
                     },
                     dialog: {
                         visible: false
@@ -91,22 +96,37 @@
                         loading: false,
                         query: {
                             page: 1,
-                            size: 10
+                            size: 10,
+                            params: {
+                                keywords: ''
+                            }
                         }
                     }
                 }
             },
             created() {
-                this.initList();
+                this.search();
             },
             methods: {
-                initList() {
+                search() {
                     this.list.loading = true;
-                    Factory.Request.get('/api/user').then(data => {
-                        this.list.data = data.slice(0, 10);
-                        this.list.total = data.length;
+                    Factory.Request.get('/api/user', {
+                        params: this.list.query,
+                        paramsSerializer: params => Qs.stringify(params, { allowDots: false })
+                    }).then(({ data, total }) => {
+                        this.list.data = data;
+                        this.list.total = total;
+                    }).finally(() => {
                         this.list.loading = false;
                     });
+                },
+                handleSizeChange(val) {
+                    this.list.query.size = val;
+                    this.search();
+                },
+                handleCurrentChange(val) {
+                    this.list.query.page = val;
+                    this.search();
                 },
                 handleClosed(done) {
                     console.log('closed', done);

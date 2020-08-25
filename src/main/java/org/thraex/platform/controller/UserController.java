@@ -4,10 +4,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.thraex.base.page.Query;
 import org.thraex.platform.entity.User;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.IntStream;
 
 /**
@@ -19,13 +22,25 @@ import java.util.stream.IntStream;
 public class UserController {
 
     @GetMapping
-    public ResponseEntity<List<User>> list() {
-        int size = 123;
-        List<User> list = new ArrayList<>(size);
-        IntStream.range(0, size).forEach(i -> list.add(User.withId("id" + i).nickname("THRAEX-" + i)
-                .username("thraex_" + i).password("111111").roles("admin").disabled(false).build()));
+    public ResponseEntity<Map<String, Object>> list(Query query) {
+        final int total = 123;
+        Object value = query.getValue();
+        int page = Math.toIntExact(query.getPage());
+        int size = Math.toIntExact(query.getSize());
 
-        return ResponseEntity.ok(list);
+        List<User> list = new ArrayList<>(size);
+        IntStream.range(0, size > total ? total : size).forEach(i -> {
+            int index = (page - 1) * size + (i + 1);
+            list.add(User.withId("id" + index).nickname("THRAEX-" + index)
+                    .username("thraex_" + index).password("111111")
+                    .roles("ADMIN").disabled(false).build());
+        });
+
+        Map<String, Object> result = new HashMap<>(2);
+        result.put("total", total);
+        result.put("data", list);
+
+        return ResponseEntity.ok(result);
     }
 
 }

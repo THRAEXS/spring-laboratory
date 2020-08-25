@@ -45,4 +45,5 @@ dependencies {
     implementation 'org.webjars.npm:element-ui:2.13.2'
     implementation 'org.webjars:AdminLTE:3.0.5'
     implementation 'org.webjars.npm:axios:0.19.2'
+    implementation 'org.webjars.npm:qs:6.9.4'
 }
