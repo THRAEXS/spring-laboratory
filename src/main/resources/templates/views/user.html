@@ -13,8 +13,11 @@
                         <el-col :span="22">
                             <el-input
                                 v-model="list.query.params.keywords"
+                                @input="search"
+                                clearable
                                 suffix-icon="el-icon-search"
                                 placeholder="请输入关键字"/>
+                            <input  type = “hidden”  name = “${_csrf.parameterName}”  value = “${_csrf.token}” />
                         </el-col>
                         <el-col :span="2" class="txt-r">
                             <el-button type="primary" @click="dialog.visible = true">新增</el-button>
@@ -34,15 +37,36 @@
                         border
                         highlight-current-row
                         :max-height="600">
-                        <el-table-column type="index" width="50" align="center"></el-table-column>
-                        <el-table-column prop="nickname" label="昵称" align="center"></el-table-column>
-                        <el-table-column prop="username" label="用户名" align="center"></el-table-column>
-                        <el-table-column label="是否启用" width="100" align="center">
+                        <el-table-column :index="indexCalc" type="index" width="50" align="center"></el-table-column>
+                        <el-table-column prop="nickname" label="昵称" align="center" width="800"></el-table-column>
+                        <el-table-column prop="username" label="用户名" align="center"  width="1800"></el-table-column>
+                        <el-table-column label="是否启用" width="100" align="center" fixed="right">
                             <template slot-scope="scope">
                                 <el-switch
                                     v-model="scope.row.enabled"
                                     active-color="#13ce66"
-                                    inactive-color="#ff4949"></el-switch>
+                                    inactive-color="#ff4949"
+                                    @change="handleEnable"></el-switch>
+                            </template>
+                        </el-table-column>
+                        <el-table-column
+                            fixed="right"
+                            label="操作"
+                            width="100"
+                            align="center">
+                            <template slot-scope="scope">
+                                <el-button
+                                    type="primary"
+                                    icon="el-icon-edit"
+                                    size="small"
+                                    circle
+                                    @click="handleEdit(scope.row)"></el-button>
+                                <el-button
+                                    type="danger"
+                                    icon="el-icon-delete"
+                                    size="small"
+                                    circle
+                                    @click="handleDelete(scope.row.id)"></el-button>
                             </template>
                         </el-table-column>
                     </el-table>
@@ -73,7 +97,7 @@
             <span>这是一段信息</span>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="dialog.visible = false">取 消</el-button>
-                <el-button type="primary" @click="dialog.visible = false">保 存</el-button>
+                <el-button type="primary" @click="handleSave">保 存</el-button>
             </span>
         </el-dialog>
     </div>
@@ -83,6 +107,8 @@
             data() {
                 const gutter = 15;
                 return {
+                    axios: Factory.Request,
+                    api: '/api/user',
                     page: {
                         gutter,
                         rowStyle: { marginBottom: `${gutter}px` }
@@ -110,7 +136,7 @@
             methods: {
                 search() {
                     this.list.loading = true;
-                    Factory.Request.get('/api/user', {
+                    this.axios.get(this.api, {
                         params: this.list.query,
                         paramsSerializer: params => Qs.stringify(params, { allowDots: false })
                     }).then(({ data, total }) => {
@@ -120,6 +146,10 @@
                         this.list.loading = false;
                     });
                 },
+                indexCalc(ind) {
+                    const { page, size } = this.list.query;
+                    return (page - 1) * size + (ind + 1);
+                },
                 handleSizeChange(val) {
                     this.list.query.size = val;
                     this.search();
@@ -128,9 +158,23 @@
                     this.list.query.page = val;
                     this.search();
                 },
+                handleEnable(val) {
+                    console.log(val);
+                    this.axios.put(`${this.api}/${val}`).then(data => console.log('Enable:', data));
+                },
+                handleEdit(row) {
+                    console.log(row);
+                },
+                handleDelete(id) {
+                    console.log(id);
+                    this.axios.delete(`${this.api}/${id}`).then(data => console.log('Delete:', data));
+                },
+                handleSave() {
+                    this.axios.post(this.api, { data: { id: '1', nickname: 'THRAEX' } }).finally(() => this.dialog.visible = false);
+                },
                 handleClosed(done) {
                     console.log('closed', done);
-                },
+                }
             }
         });
     </script>

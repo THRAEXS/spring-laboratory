@@ -1,7 +1,11 @@
 package org.thraex.platform.controller;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.thraex.base.page.Query;
@@ -41,6 +45,21 @@ public class UserController {
         result.put("data", list);
 
         return ResponseEntity.ok(result);
+    }
+
+    @PostMapping
+    public ResponseEntity<User> save(User user) {
+        return ResponseEntity.ok(user);
+    }
+
+    @PutMapping("{enable}")
+    public ResponseEntity<Boolean> enabled(@PathVariable boolean enable) {
+        return ResponseEntity.ok(true);
+    }
+
+    @DeleteMapping("{id}")
+    public ResponseEntity<Boolean> delete(@PathVariable String id) {
+        return ResponseEntity.ok(true);
     }
 
 }

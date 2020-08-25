@@ -14,6 +14,8 @@ public class Query implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    private final String DEFAULT_KEY = "keywords";
+
     private long page;
     private long size;
     private Map<String, Object> params;
@@ -68,7 +70,7 @@ public class Query implements Serializable {
     }
 
     public Object getValue() {
-        return getValue("keywords");
+        return getValue(DEFAULT_KEY);
     }
 
     public Object getValue(String key) {
