@@ -215,7 +215,7 @@ public class User extends Entity<User> implements UserDetails {
             return this;
         }
 
-        public UserDetails build() {
+        public User build() {
             String encodedPassword = this.passwordEncoder.apply(password);
             return new User(id, nickname, username, encodedPassword, !disabled, authorities);
         }

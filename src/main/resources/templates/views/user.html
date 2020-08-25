@@ -6,11 +6,88 @@
 </head>
 <body>
     <div class="content-wrapper">
-        User Page...
+        <el-row :gutter="page.gutter" :style="page.rowStyle">
+            <el-col :span="24">
+                <el-card>
+                    <el-input></el-input>
+                </el-card>
+            </el-col>
+        </el-row>
+        <el-row :gutter="page.gutter" :style="page.rowStyle">
+            <el-col :span="24">
+                <el-card class="min-h-1">
+                    <el-table
+                        :data="list.data"
+                        v-loading.body="list.loading"
+                        fit
+                        stripe
+                        border
+                        highlight-current-row
+                        :max-height="600">
+                        <el-table-column type="index" width="50" align="center"></el-table-column>
+                        <el-table-column prop="nickname" label="昵称" align="center"></el-table-column>
+                        <el-table-column prop="username" label="用户名" align="center"></el-table-column>
+                        <el-table-column label="是否启用" width="100" align="center">
+                            <template slot-scope="scope">
+                                <el-switch
+                                    v-model="scope.row.enabled"
+                                    active-color="#13ce66"
+                                    inactive-color="#ff4949"></el-switch>
+                            </template>
+                        </el-table-column>
+                    </el-table>
+                </el-card>
+            </el-col>
+        </el-row>
+        <el-row :gutter="page.gutter">
+            <el-col :span="24">
+                <el-card>
+                    <el-pagination
+                        background
+                        layout="total, sizes, prev, pager, next, jumper"
+                        :page-sizes="[10, 20, 50, 100, 500]"
+                        :page-size="list.query.size"
+                        :current-page.sync="list.query.page"
+                        :total="list.total"></el-pagination>
+                </el-card>
+            </el-col>
+        </el-row>
     </div>
 
     <script type="text/javascript">
-        console.log('Execute the script');
+        Factory.Vue.build({
+            data() {
+                const gutter = 15;
+                return {
+                    page: {
+                        gutter,
+                        rowStyle: { marginBottom: `${gutter}px` }
+                    },
+                    list: {
+                        data: [],
+                        total: 0,
+                        loading: false,
+                        query: {
+                            page: 1,
+                            size: 10
+                        }
+                    }
+                }
+            },
+            created() {
+                this.initList();
+            },
+            methods: {
+                initList() {
+                    this.list.loading = true;
+                    Factory.Request.get('/api/user').then(data => {
+                        this.list.data = data.slice(0, 10);
+                        this.list.total = data.length;
+                        this.list.loading = false;
+                    });
+                }
+            }
+        });
     </script>
 </body>
 </html>
