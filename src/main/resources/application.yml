@@ -35,3 +35,5 @@ thraex:
     title: THRAEX | Admin
     logo: /AdminLTE/dist/img/AdminLTELogo.png
     brand: THRAEX
+  user:
+    init-password: 111111

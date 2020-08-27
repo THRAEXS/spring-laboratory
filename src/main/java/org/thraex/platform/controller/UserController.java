@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -84,9 +85,10 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<User> save(@RequestBody User user) {
-        userService.save(user.setUsername(user.getUsername().toLowerCase())
-                .setPassword(passwordEncoder.encode(user.getPassword())).snapshot());
+    public ResponseEntity<User> save(@Value("${thraex.user.init-password}") String initPassword,
+                                     @RequestBody User user) {
+        userService.saveOrUpdate(user.setUsername(user.getUsername().toLowerCase())
+                .setPassword(passwordEncoder.encode(initPassword)).snapshot());
         return ResponseEntity.ok(user);
     }
 

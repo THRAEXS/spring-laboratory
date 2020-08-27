@@ -1,6 +1,5 @@
 package org.thraex.platform.entity;
 
-import com.baomidou.mybatisplus.annotation.TableLogic;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -38,9 +37,6 @@ public class User extends Entity<User> implements UserDetails {
     private String password;
 
     private boolean enabled;
-
-    @TableLogic
-    private boolean deleted;
 
     private transient Set<GrantedAuthority> authorities;
 
@@ -116,14 +112,6 @@ public class User extends Entity<User> implements UserDetails {
     public User setEnabled(boolean enabled) {
         this.enabled = enabled;
         return this;
-    }
-
-    public boolean isDeleted() {
-        return deleted;
-    }
-
-    public void setDeleted(boolean deleted) {
-        this.deleted = deleted;
     }
 
     private static SortedSet<GrantedAuthority> sortAuthorities(
