@@ -103,12 +103,12 @@ public class User extends Entity<User> implements UserDetails {
     //    this.username = username;
     //    return this;
     //}
-    //
-    //public User setPassword(String password) {
-    //    this.password = password;
-    //    return this;
-    //}
-    //
+
+    public User setPassword(String password) {
+        this.password = password;
+        return this;
+    }
+
     //public User setEnabled(boolean enabled) {
     //    this.enabled = enabled;
     //    return this;
