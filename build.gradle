@@ -35,6 +35,8 @@ dependencies {
 
     implementation 'com.google.guava:guava:29.0-jre'
     implementation 'com.alibaba:fastjson:1.2.73'
+    implementation  'mysql:mysql-connector-java:8.0.21'
+    implementation  'com.baomidou:mybatis-plus-boot-starter:3.4.0'
 
     compileOnly 'org.projectlombok:lombok:1.18.12'
     annotationProcessor 'org.projectlombok:lombok:1.18.12'

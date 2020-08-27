@@ -38,7 +38,7 @@ public class User extends Entity<User> implements UserDetails {
 
     private boolean enabled;
 
-    private Set<GrantedAuthority> authorities;
+    private transient Set<GrantedAuthority> authorities;
 
     public User() {}
 
@@ -94,6 +94,26 @@ public class User extends Entity<User> implements UserDetails {
         return enabled;
     }
 
+    //public User setNickname(String nickname) {
+    //    this.nickname = nickname;
+    //    return this;
+    //}
+    //
+    //public User setUsername(String username) {
+    //    this.username = username;
+    //    return this;
+    //}
+    //
+    //public User setPassword(String password) {
+    //    this.password = password;
+    //    return this;
+    //}
+    //
+    //public User setEnabled(boolean enabled) {
+    //    this.enabled = enabled;
+    //    return this;
+    //}
+
     private static SortedSet<GrantedAuthority> sortAuthorities(
             Collection<? extends GrantedAuthority> authorities) {
         Assert.notNull(authorities, "Cannot pass a null GrantedAuthority collection");
@@ -130,7 +150,8 @@ public class User extends Entity<User> implements UserDetails {
         sb.append("Password: [PROTECTED]; ");
         sb.append("Enabled: ").append(this.enabled).append("; ");
 
-        sb.append(authorities.isEmpty() ? "Not granted any authorities" : String.format("Granted Authorities: %s",
+        sb.append(Objects.nonNull(authorities) && authorities.isEmpty() ?
+                "Not granted any authorities" : String.format("Granted Authorities: %s",
                 authorities.stream().map(GrantedAuthority::getAuthority).collect(Collectors.joining(","))));
 
         return sb.toString();
