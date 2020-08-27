@@ -6,6 +6,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.thraex.base.properties.SiteProperties;
 import org.thraex.platform.service.MenuService;
+import org.thraex.security.SecurityHolder;
 
 /**
  * @author 鬼王
@@ -24,6 +25,7 @@ public class IndexController {
     public String index(Model model) {
         model.addAttribute("site", siteProperties);
         model.addAttribute("menus", menuService.tree());
+        model.addAttribute("user", SecurityHolder.principal());
         model.addAttribute("dashboard", "/user");
         return "index";
     }

@@ -11,4 +11,6 @@ public interface UserService extends IService<User> {
 
     boolean unique(String id, String username);
 
+    User findByUsername(String username);
+
 }

@@ -33,4 +33,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         return count > 0 ? false : true;
     }
 
+    @Override
+    public User findByUsername(String username) {
+        return this.getOne(Wrappers.<User>lambdaQuery().eq(User::getUsername, username));
+    }
+
 }

@@ -138,7 +138,8 @@
                              class="img-circle elevation-2" alt="User Image">
                     </div>
                     <div class="info">
-                        <a href="#" class="d-block" sec:authentication="name">UNKNOWN</a>
+                        <!--<a href="#" class="d-block" sec:authentication="name">UNKNOWN</a>-->
+                        <a href="#" class="d-block" th:text="${user.getNickname() ?: user.getUsername() }">UNKNOWN</a>
                     </div>
                 </div>
 
