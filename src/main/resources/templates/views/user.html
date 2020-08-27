@@ -138,7 +138,7 @@
                     this.axios.get(this.api, {
                         params: this.list.query,
                         paramsSerializer: params => Qs.stringify(params, { allowDots: false })
-                    }).then(({ data, total }) => {
+                    }).then(({ records: data, total }) => {
                         this.list.data = data;
                         this.list.total = total;
                     }).finally(() => {

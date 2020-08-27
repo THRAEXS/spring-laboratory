@@ -1,7 +1,9 @@
 package org.thraex.platform.controller;
 
-import com.google.common.base.Functions;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.extern.log4j.Log4j2;
+import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -13,16 +15,15 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.thraex.base.entity.Entity;
 import org.thraex.base.page.Query;
 import org.thraex.platform.entity.User;
 import org.thraex.platform.service.UserService;
-import org.thraex.security.SecurityHolder;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.IntStream;
 
 /**
@@ -41,14 +42,21 @@ public class UserController {
     private PasswordEncoder passwordEncoder;
 
     @GetMapping
-    public ResponseEntity<List<User>> list(Query query) {
-        return ResponseEntity.ok().build();
+    public ResponseEntity<Page<User>> list(Query query) {
+        String kw = Optional.ofNullable(query.getValue()).map(it -> it.toString()).orElse(null);
+        boolean notBlank = Strings.isNotBlank(kw);
+
+        Page<User> page = userService.page(new Page<>(query.getPage(), query.getSize()),
+                Wrappers.<User>lambdaQuery()
+                        .like(notBlank, User::getNickname, kw).or().like(notBlank, User::getUsername, kw)
+                        .orderByAsc(User::getUsername, User::getNickname, User::getCreateTime));
+
+        return ResponseEntity.ok(page);
     }
 
     @GetMapping("mock")
     public ResponseEntity<Map<String, Object>> mock(Query query) {
         final int total = 123;
-        Object value = query.getValue();
         int page = Math.toIntExact(query.getPage());
         int size = Math.toIntExact(query.getSize());
 
