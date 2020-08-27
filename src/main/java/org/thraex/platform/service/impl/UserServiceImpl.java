@@ -29,6 +29,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
         int count = this.count(Wrappers.<User>lambdaQuery()
                 .eq(User::getUsername, low).ne(Strings.isNotBlank(id), User::getId, id));
+
         return count > 0 ? false : true;
     }
 

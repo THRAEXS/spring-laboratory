@@ -215,7 +215,7 @@
                 },
                 handleSave() {
                     this.$refs.form.validate(valid => valid && (() => {
-                        console.log('User form', JSON.stringify(this.form));
+                        console.log('User form data:', JSON.stringify(this.form));
                         this.axios.post(this.api, this.form).then(({ username }) => {
                             this.list.query.params.keywords = username;
                             this.search();
