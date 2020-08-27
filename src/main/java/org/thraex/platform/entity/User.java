@@ -94,25 +94,25 @@ public class User extends Entity<User> implements UserDetails {
         return enabled;
     }
 
-    //public User setNickname(String nickname) {
-    //    this.nickname = nickname;
-    //    return this;
-    //}
-    //
-    //public User setUsername(String username) {
-    //    this.username = username;
-    //    return this;
-    //}
+    public User setNickname(String nickname) {
+        this.nickname = nickname;
+        return this;
+    }
+
+    public User setUsername(String username) {
+        this.username = username;
+        return this;
+    }
 
     public User setPassword(String password) {
         this.password = password;
         return this;
     }
 
-    //public User setEnabled(boolean enabled) {
-    //    this.enabled = enabled;
-    //    return this;
-    //}
+    public User setEnabled(boolean enabled) {
+        this.enabled = enabled;
+        return this;
+    }
 
     private static SortedSet<GrantedAuthority> sortAuthorities(
             Collection<? extends GrantedAuthority> authorities) {
@@ -150,7 +150,7 @@ public class User extends Entity<User> implements UserDetails {
         sb.append("Password: [PROTECTED]; ");
         sb.append("Enabled: ").append(this.enabled).append("; ");
 
-        sb.append(Objects.nonNull(authorities) && authorities.isEmpty() ?
+        sb.append(Objects.isNull(authorities) || authorities.isEmpty() ?
                 "Not granted any authorities" : String.format("Granted Authorities: %s",
                 authorities.stream().map(GrantedAuthority::getAuthority).collect(Collectors.joining(","))));
 

@@ -2,7 +2,6 @@ package org.thraex.platform.controller;
 
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import lombok.extern.log4j.Log4j2;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -30,7 +29,6 @@ import java.util.stream.IntStream;
  * @author 鬼王
  * @date 2020/08/25 10:15
  */
-@Log4j2
 @RestController
 @RequestMapping("api/user")
 public class UserController {
@@ -75,21 +73,31 @@ public class UserController {
         return ResponseEntity.ok(result);
     }
 
+    @GetMapping("{id}")
+    public ResponseEntity<User> one(@PathVariable String id) {
+        return ResponseEntity.ok(userService.getById(id));
+    }
+
+    @GetMapping("unique")
+    public ResponseEntity<Boolean> uniqueness(String id, String username) {
+        return ResponseEntity.ok(userService.unique(id, username));
+    }
+
     @PostMapping
     public ResponseEntity<User> save(@RequestBody User user) {
-        log.info("Save user: {}", userService.saveOrUpdate(
-                user.setPassword(passwordEncoder.encode(user.getPassword())).snapshot()));
+        userService.save(user.setUsername(user.getUsername().toLowerCase())
+                .setPassword(passwordEncoder.encode(user.getPassword())).snapshot());
         return ResponseEntity.ok(user);
     }
 
-    @PutMapping("{enable}")
-    public ResponseEntity<Boolean> enabled(@PathVariable boolean enable) {
-        return ResponseEntity.ok(true);
+    @PutMapping
+    public ResponseEntity<Boolean> update(@RequestBody User user) {
+        return ResponseEntity.ok(userService.updateById(user.snapshot()));
     }
 
     @DeleteMapping("{id}")
     public ResponseEntity<Boolean> delete(@PathVariable String id) {
-        return ResponseEntity.ok(true);
+        return ResponseEntity.ok(userService.removeById(id));
     }
 
 }

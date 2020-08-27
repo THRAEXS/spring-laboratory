@@ -8,4 +8,7 @@ import org.thraex.platform.entity.User;
  * @date 2020/08/27 09:58
  */
 public interface UserService extends IService<User> {
+
+    boolean unique(String id, String username);
+
 }

@@ -45,7 +45,8 @@
                                     v-model="scope.row.enabled"
                                     active-color="#13ce66"
                                     inactive-color="#ff4949"
-                                    @change="handleEnable"></el-switch>
+                                    @change="handleEnable(scope.row.id, $event)">
+                                </el-switch>
                             </template>
                         </el-table-column>
                         <el-table-column
@@ -59,13 +60,15 @@
                                     icon="el-icon-edit"
                                     size="small"
                                     circle
-                                    @click="handleEdit(scope.row)"></el-button>
+                                    @click="handleEdit(scope.row)">
+                                </el-button>
                                 <el-button
                                     type="danger"
                                     icon="el-icon-delete"
                                     size="small"
                                     circle
-                                    @click="handleDelete(scope.row.id)"></el-button>
+                                    @click="handleDelete(scope.row.$index, scope.row.id)">
+                                </el-button>
                             </template>
                         </el-table-column>
                     </el-table>
@@ -93,7 +96,24 @@
             :visible.sync="dialog.visible"
             @closed="handleClosed"
             width="30%">
-            <span>这是一段信息</span>
+            <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+                <el-form-item prop="nickname" label="昵称">
+                    <el-input v-model.trim="form.nickname"></el-input>
+                </el-form-item>
+                <el-form-item prop="username" label="用户名">
+                    <el-input v-model.trim="form.username"></el-input>
+                </el-form-item>
+                <el-form-item prop="password" label="密码">
+                    <el-input v-model="form.password" show-password></el-input>
+                </el-form-item>
+                <el-form-item label="是否启用">
+                    <el-switch
+                        v-model="form.enabled"
+                        active-color="#13ce66"
+                        inactive-color="#ff4949">
+                    </el-switch>
+                </el-form-item>
+            </el-form>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="dialog.visible = false">取 消</el-button>
                 <el-button type="primary" @click="handleSave">保 存</el-button>
@@ -105,6 +125,8 @@
         Factory.Vue.build({
             data() {
                 const gutter = 15;
+                const lenLimit = { max: 50, message: '长度超出范围' };
+
                 return {
                     axios: Factory.Request,
                     api: '/api/user',
@@ -126,6 +148,30 @@
                                 keywords: ''
                             }
                         }
+                    },
+                    form: {
+                        id: '',
+                        nickname: '',
+                        username: '',
+                        password: '',
+                        enabled: false
+                    },
+                    rules: {
+                        nickname: lenLimit,
+                        username: [
+                            { required: true, message: '请输入用户名' },
+                            { validator: (rule, value, callback) => {
+                                    const params = { id: this.form.id, username: value };
+                                    this.axios.get(`${this.api}/unique`, { params })
+                                        .then(data => callback(data ? undefined : '用户名存在'));
+                                }, trigger: 'blur'
+                            },
+                            lenLimit
+                        ],
+                        password: [
+                            { required: true, message: '请输入密码' },
+                            lenLimit
+                        ]
                     }
                 }
             },
@@ -157,25 +203,27 @@
                     this.list.query.page = val;
                     this.search();
                 },
-                handleEnable(val) {
-                    console.log(val);
-                    this.axios.put(`${this.api}/${val}`).then(data => console.log('Enable:', data));
+                handleEnable(id, enabled) {
+                    this.axios.put(this.api, { id, enabled });
                 },
                 handleEdit(row) {
                     console.log(row);
                 },
-                handleDelete(id) {
-                    console.log(id);
-                    this.axios.delete(`${this.api}/${id}`).then(data => console.log('Delete:', data));
+                handleDelete(ind, id) {
+                    this.list.data.splice(ind, 1);
+                    this.axios.delete(`${this.api}/${id}`);
                 },
                 handleSave() {
-                    this.axios.post(this.api, {
-                        // id: 'ad356b8ca873c4650127c7a29aa068b1', nickname: 'THRAEX', username: 'Guiwang1', password: '1232', enabled: true
-                        nickname: 'THRAEX', username: 'Guiwang1', password: '1232', enabled: true
-                    }).finally(() => this.dialog.visible = false);
+                    this.$refs.form.validate(valid => valid && (() => {
+                        console.log('User form', JSON.stringify(this.form));
+                        this.axios.post(this.api, this.form).then(({ username }) => {
+                            this.list.query.params.keywords = username;
+                            this.search();
+                        }).finally(() => this.dialog.visible = false);
+                    })());
                 },
-                handleClosed(done) {
-                    console.log('closed', done);
+                handleClosed() {
+                    this.$refs.form.resetFields();
                 }
             }
         });
