@@ -6,11 +6,84 @@
 </head>
 <body>
     <div class="content-wrapper">
-        Role Page...
+        <el-row :gutter="page.gutter">
+            <el-col :span="18">
+                <el-card class="min-h-3">
+                    <el-table
+                        :data="list.data"
+                        v-loading.body="list.loading"
+                        fit
+                        stripe
+                        border
+                        highlight-current-row
+                        :max-height="600">
+                        <el-table-column type="index" width="50" align="center"></el-table-column>
+                        <el-table-column prop="name" label="名称" align="center"></el-table-column>
+                        <el-table-column prop="code" label="编码" align="center"></el-table-column>
+                        <el-table-column prop="remark" label="备注" align="center"></el-table-column>
+                        <el-table-column prop="createTime" label="创建时间" align="center"></el-table-column>
+                    </el-table>
+                </el-card>
+            </el-col>
+            <el-col :span="6">
+                <el-card class="min-h-3">
+                    2
+                </el-card>
+            </el-col>
+        </el-row>
     </div>
 
     <script type="text/javascript">
-        Factory.Request.post('/api/role', { name: 'ADMIN', code: 'ADMIN' });
+        Factory.Vue.build({
+            data() {
+                const entity = { id: '', name: '', code: '', remark: '' };
+                const lenLimit = max => ({ max, message: '长度超出范围' });
+
+                return {
+                    axios: Factory.Request,
+                    api: '/api/role',
+                    page: {
+                        gutter: 15
+                    },
+                    list: {
+                        data: [],
+                        loading: false
+                    },
+                    entity,
+                    form: Object.assign({}, entity),
+                    rules: {
+                        name: [
+                            { required: true, message: '请输入名称' },
+                            lenLimit(50)
+                        ],
+                        code: [
+                            { required: true, message: '请输入编码' },
+                            // { validator: (rule, value, callback) => {
+                            //         const params = { id: this.form.id, code: value };
+                            //         this.axios.get(`${this.api}/unique`, { params })
+                            //             .then(data => callback(data ? undefined : '编码存在'));
+                            //     }, trigger: 'blur'
+                            // },
+                            lenLimit(50)
+                        ],
+                        remark: lenLimit(100)
+                    }
+                }
+            },
+            created() {
+                this.search();
+            },
+            methods: {
+                search() {
+                    this.list.loading = true;
+                    this.axios.get(this.api).then(data => {
+                        this.list.data = data;
+                    }).finally(() => {
+                        this.list.loading = false;
+                    });
+                }
+            }
+        });
     </script>
 </body>
 </html>
