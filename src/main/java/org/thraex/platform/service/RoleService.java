@@ -9,4 +9,6 @@ import org.thraex.platform.entity.Role;
  */
 public interface RoleService extends IService<Role> {
 
+    boolean unique(String id, String code);
+
 }

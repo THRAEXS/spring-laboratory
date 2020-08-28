@@ -10,24 +10,55 @@
             <el-col :span="18">
                 <el-card class="min-h-3">
                     <el-table
+                        ref="table"
                         :data="list.data"
                         v-loading.body="list.loading"
                         fit
                         stripe
                         border
                         highlight-current-row
+                        @row-click="handleRowClick"
                         :max-height="600">
                         <el-table-column type="index" width="50" align="center"></el-table-column>
                         <el-table-column prop="name" label="名称" align="center"></el-table-column>
                         <el-table-column prop="code" label="编码" align="center"></el-table-column>
                         <el-table-column prop="remark" label="备注" align="center"></el-table-column>
-                        <el-table-column prop="createTime" label="创建时间" align="center"></el-table-column>
+                        <el-table-column prop="createTime" label="创建时间" align="center" width="200"></el-table-column>
+                        <el-table-column
+                            fixed="right"
+                            label="操作"
+                            width="50"
+                            align="center">
+                            <template slot-scope="scope">
+                                <el-button
+                                    type="danger"
+                                    icon="el-icon-delete"
+                                    size="mini"
+                                    circle
+                                    @click="handleDelete(scope.row.$index, scope.row.id)">
+                                </el-button>
+                            </template>
+                        </el-table-column>
                     </el-table>
                 </el-card>
             </el-col>
             <el-col :span="6">
                 <el-card class="min-h-3">
-                    2
+                    <el-form ref="form" :model="form" :rules="rules" label-position="top">
+                        <el-form-item prop="name" label="名称">
+                            <el-input v-model.trim="form.name"></el-input>
+                        </el-form-item>
+                        <el-form-item prop="code" label="编码">
+                            <el-input v-model.trim="form.code"></el-input>
+                        </el-form-item>
+                        <el-form-item prop="remark" label="备注">
+                            <el-input type="textarea" :rows="2" v-model.trim="form.remark"></el-input>
+                        </el-form-item>
+                        <el-form-item class="txt-r">
+                            <el-button type="danger" @click="handleClear">清空</el-button>
+                            <el-button type="primary" @click="handleSave">保存</el-button>
+                        </el-form-item>
+                    </el-form>
                 </el-card>
             </el-col>
         </el-row>
@@ -58,12 +89,12 @@
                         ],
                         code: [
                             { required: true, message: '请输入编码' },
-                            // { validator: (rule, value, callback) => {
-                            //         const params = { id: this.form.id, code: value };
-                            //         this.axios.get(`${this.api}/unique`, { params })
-                            //             .then(data => callback(data ? undefined : '编码存在'));
-                            //     }, trigger: 'blur'
-                            // },
+                            { validator: (rule, value, callback) => {
+                                    const params = { id: this.form.id, code: value };
+                                    this.axios.get(`${this.api}/unique`, { params })
+                                        .then(data => callback(data ? undefined : '编码存在'));
+                                }, trigger: 'blur'
+                            },
                             lenLimit(50)
                         ],
                         remark: lenLimit(100)
@@ -81,6 +112,33 @@
                     }).finally(() => {
                         this.list.loading = false;
                     });
+                },
+                handleRowClick(row) {
+                    this.transfer(row, this.form);
+                },
+                handleDelete(ind, id) {
+                    this.list.data.splice(ind, 1);
+                    this.axios.delete(`${this.api}/${id}`);
+                },
+                handleSave() {
+                    this.$refs.form.validate(valid => valid && (() => {
+                        console.log('Role form data:', JSON.stringify(this.form));
+                        this.axios.post(this.api, this.form).then(data => {
+                            this.transfer(data, this.form);
+
+                            const compare = it => it.id === data.id;
+                            const ind = this.list.data.findIndex(compare);
+                            ind > -1 ? Object.assign(this.list.data[ind], data) : this.list.data.unshift(data);
+                            this.$refs.table.setCurrentRow(this.list.data.find(compare));
+                        });
+                    })());
+                },
+                handleClear() {
+                    this.$refs.form.resetFields();
+                    this.form = Object.assign({}, this.entity);
+                },
+                transfer(raw, target) {
+                    Object.keys(this.entity).forEach(k => this.$set(target, k, raw[k]));
                 }
             }
         });

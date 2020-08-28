@@ -22,7 +22,7 @@ import java.util.List;
 public class BaseController<E extends Entity<E>, S extends IService<E>> {
 
     @Autowired
-    private S service;
+    protected S service;
 
     @GetMapping
     public ResponseEntity<List<E>> list() {
