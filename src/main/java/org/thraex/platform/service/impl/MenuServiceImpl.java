@@ -44,7 +44,10 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
     public List<Menu> tree() {
         List<Menu> list = this.list(Wrappers.<Menu>lambdaQuery().orderByAsc(Menu::getLevelCode));
         // TODO: Optimize
-        List<Menu> roots = list.parallelStream().filter(it -> Strings.isBlank(it.getPid())).collect(Collectors.toList());
+        List<Menu> roots = list.parallelStream()
+                .filter(it -> Strings.isBlank(it.getPid()))
+                .sorted((m1, m2) -> m2.getLevelCode().compareTo(m1.getLevelCode()))
+                .collect(Collectors.toList());
         roots.forEach(it -> it.setChildren(list.parallelStream()
                 .filter(s -> it.getId().equals(s.getPid())).collect(Collectors.toList())));
 
