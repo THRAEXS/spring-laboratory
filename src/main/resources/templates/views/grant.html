@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="template :: app_template(~{::title}, ~{::div.content-wrapper}, ~{::script})">
+<head>
+    <title>Grant</title>
+</head>
+<body>
+    <div class="content-wrapper">
+        <el-row :gutter="page.gutter">
+            <el-col :span="8">
+                <el-card class="min-h-3">
+                </el-card>
+            </el-col>
+            <el-col :span="8">
+                <el-card class="min-h-3">
+                </el-card>
+            </el-col>
+            <el-col :span="8">
+                <el-card class="min-h-3">
+                </el-card>
+            </el-col>
+        </el-row>
+    </div>
+
+    <script type="text/javascript">
+        Factory.Vue.build({
+            data() {
+                const entity = { id: '', name: '', code: '', remark: '' };
+                const lenLimit = max => ({ max, message: '长度超出范围' });
+
+                return {
+                    axios: Factory.Request,
+                    api: '/api/role',
+                    page: {
+                        gutter: 15
+                    },
+                    list: {
+                        data: [],
+                        loading: false
+                    },
+                    entity,
+                    form: Object.assign({}, entity),
+                    rules: {
+                        name: [
+                            { required: true, message: '请输入名称' },
+                            lenLimit(50)
+                        ],
+                        code: [
+                            { required: true, message: '请输入编码' },
+                            { validator: (rule, value, callback) => {
+                                    const params = { id: this.form.id, code: value };
+                                    this.axios.get(`${this.api}/unique`, { params })
+                                        .then(data => callback(data ? undefined : '编码存在'));
+                                }, trigger: 'blur'
+                            },
+                            lenLimit(50)
+                        ],
+                        remark: lenLimit(100)
+                    }
+                }
+            },
+            created() {
+                this.search();
+            },
+            methods: {
+                search() {
+                    this.list.loading = true;
+                    this.axios.get(this.api).then(data => {
+                        this.list.data = data;
+                    }).finally(() => {
+                        this.list.loading = false;
+                    });
+                },
+                handleRowClick(row) {
+                    this.transfer(row, this.form);
+                },
+                handleDelete(ind, id) {
+                    console.log(ind, id)
+                    this.list.data.splice(ind, 1);
+                    this.axios.delete(`${this.api}/${id}`);
+                },
+                handleSave() {
+                    this.$refs.form.validate(valid => valid && (() => {
+                        console.log('Role form data:', JSON.stringify(this.form));
+                        this.axios.post(this.api, this.form).then(data => {
+                            this.transfer(data, this.form);
+
+                            const compare = it => it.id === data.id;
+                            const ind = this.list.data.findIndex(compare);
+                            ind > -1 ? Object.assign(this.list.data[ind], data) : this.list.data.unshift(data);
+                            this.$refs.table.setCurrentRow(this.list.data.find(compare));
+                        });
+                    })());
+                },
+                handleClear() {
+                    this.$refs.form.resetFields();
+                    this.form = Object.assign({}, this.entity);
+                },
+                transfer(raw, target) {
+                    Object.keys(this.entity).forEach(k => this.$set(target, k, raw[k]));
+                }
+            }
+        });
+    </script>
+</body>
+</html>
