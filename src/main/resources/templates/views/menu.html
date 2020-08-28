@@ -6,20 +6,59 @@
 </head>
 <body>
     <div class="content-wrapper">
-        <el-row :gutter="15">
+        <el-row :gutter="page.gutter">
             <el-col :span="6">
-                <el-card class="min-h-1">
-                    <el-tree :data="data"
-                             :props="defaultProps"
-                             accordion
-                             @node-click="handleNodeClick"/>
+                <el-card class="min-h-3">
+                    <div slot="header" class="clearfix">
+                        <span>菜单树</span>
+                    </div>
+                    <el-tree
+                        :data="data"
+                        :props="defaultProps"
+                        accordion
+                        @node-click="handleNodeClick"/>
                 </el-card>
             </el-col>
             <el-col :span="18">
-                <el-card class="min-h-1">
-                    <div v-for="o in 4" :key="o" class="text item">
-                        {{'right- 列表内容 ' + o }}
+                <el-card class="min-h-3">
+                    <div slot="header" class="clearfix">
+                        <span>{{ form.name || 'None' }}</span>
+                        <el-button
+                            type="text"
+                            icon="el-icon-edit"
+                            style="float: right; padding: 3px 0;"
+                            @click="page.disabled = false">
+                        </el-button>
                     </div>
+                    <el-form ref="form" :model="form" :rules="rules" :disabled="page.disabled" label-width="80px">
+                        <el-form-item prop="name" label="名称">
+                            <el-input v-model.trim="form.name"></el-input>
+                        </el-form-item>
+                        <el-form-item prop="code" label="编码">
+                            <el-input v-model.trim="form.code"></el-input>
+                        </el-form-item>
+                        <el-form-item prop="url" label="URL">
+                            <el-input v-model.trim="form.url"></el-input>
+                        </el-form-item>
+                        <el-form-item prop="levelCode" label="层级编码">
+                            <el-input v-model.trim="form.levelCode" :disabled="true"></el-input>
+                        </el-form-item>
+                        <el-form-item label="是否禁用">
+                            <el-switch
+                                v-model="form.disabled"
+                                active-color="#13ce66"
+                                inactive-color="#ff4949">
+                            </el-switch>
+                        </el-form-item>
+                        <el-form-item prop="remark" label="备注">
+                            <el-input type="textarea" :rows="2" v-model.trim="form.remark"></el-input>
+                        </el-form-item>
+                        <el-form-item class="txt-r">
+                            <el-button @click="handleCancel">取消</el-button>
+                            <el-button type="success" @click="handleReset">重置</el-button>
+                            <el-button type="primary" @click="handleSave">保存</el-button>
+                        </el-form-item>
+                    </el-form>
                 </el-card>
             </el-col>
         </el-row>
@@ -28,19 +67,62 @@
     <script type="text/javascript">
         Factory.Vue.build({
             data() {
+                const entity = { id: '', name: '', code: '', url: '', pid: '', levelCode: '', disabled: false };
+                const lenLimit = max => ({ max, message: '长度超出范围' });
+
                 return {
+                    axios: Factory.Request,
+                    api: '/api/menu',
+                    page: {
+                        gutter: 15,
+                        disabled: true
+                    },
                     data: [],
                     defaultProps: {
                         label: 'name'
+                    },
+                    entity,
+                    form: Object.assign({}, entity),
+                    rules: {
+                        name: [
+                            { required: true, message: '请输入名称' },
+                            lenLimit(50)
+                        ],
+                        code: [
+                            { required: true, message: '请输入编码' },
+                            lenLimit(50)
+                        ],
+                        url: lenLimit(100),
+                        remark: lenLimit(100)
                     }
                 }
             },
             created() {
-                Factory.Request.get('/api/menu/tree').then(data => { this.data = data; });
+                Factory.Request.get('/api/menu/tree').then(data => { console.log(data);this.data = data; });
             },
             methods: {
                 handleNodeClick(data) {
                     console.log(data);
+                },
+                handleSave() {
+                    this.$refs.form.validate(valid => valid && (() => {
+                        console.log('Menu form data:', JSON.stringify(this.form));
+                        this.form.pid = 'b906b3a98cde1d01ecf62519280d634f';
+                        this.axios.post(this.api, this.form).then(data => {
+                            this.form.id = data.id;
+                            this.form.levelCode = data.levelCode;
+                            this.data.push(data);
+                            this.page.disabled = true;
+                        });
+                    })());
+                },
+                handleReset() {
+                    this.$refs.form.resetFields();
+                    this.form = Object.assign({}, this.entity);
+                },
+                handleCancel() {
+                    this.$refs.form.clearValidate();
+                    this.page.disabled = true;
                 }
             }
         });

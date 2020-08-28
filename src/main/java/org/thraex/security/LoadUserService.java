@@ -52,7 +52,7 @@ public class LoadUserService implements UserDetailsService {
                         .password(user.getPassword()).passwordEncoder(p -> passwordEncoder.encode(p))
                         .roles(StringUtils.toStringArray(user.getRoles())).build())
                 .orElseGet(() -> Optional.ofNullable(userService.findByUsername(username))
-                        .orElseThrow(() -> new UsernameNotFoundException("用户不存在")));
+                        .orElseThrow(() -> new UsernameNotFoundException("The user does exist")));
     }
 
 }

@@ -3,6 +3,8 @@ body {
 }
 
 .min-h-1 { min-height: 400px; }
+.min-h-2 { min-height: 500px; }
+.min-h-3 { min-height: 600px; }
 .max-h-1 { min-height: 600px; }
 
 .txt-r { text-align: right; }

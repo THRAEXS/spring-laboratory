@@ -38,7 +38,7 @@ public class Menu extends Entity<Menu> {
 
     private boolean disabled;
 
-    private List<Menu> children = new ArrayList<>();
+    private transient List<Menu> children = new ArrayList<>();
 
     public Menu() { }
 
