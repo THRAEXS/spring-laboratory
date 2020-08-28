@@ -8,3 +8,12 @@ body {
 .max-h-1 { min-height: 600px; }
 
 .txt-r { text-align: right; }
+
+.custom-tree-node {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 14px;
+    padding-left: 8px;
+}

@@ -42,11 +42,13 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
 
     @Override
     public List<Menu> tree() {
-        List<Menu> list = this.list();
-        List<Menu> root = list.parallelStream().filter(it -> Strings.isBlank(it.getPid())).collect(Collectors.toList());
-        root.forEach(it -> it.setChildren(list.parallelStream()
+        List<Menu> list = this.list(Wrappers.<Menu>lambdaQuery().orderByAsc(Menu::getLevelCode));
+        // TODO: Optimize
+        List<Menu> roots = list.parallelStream().filter(it -> Strings.isBlank(it.getPid())).collect(Collectors.toList());
+        roots.forEach(it -> it.setChildren(list.parallelStream()
                 .filter(s -> it.getId().equals(s.getPid())).collect(Collectors.toList())));
-        return root;
+
+        return roots;
     }
 
     @Override
@@ -62,59 +64,11 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
         final String format = "%08d";
         String pl = Optional.ofNullable(parent).map(Menu::getLevelCode).orElse(empty);
         String max = list.stream().findFirst()
-                .map(it -> it.getLevelCode().replace(pl, empty))
+                .map(it -> it.getLevelCode().substring(it.getLevelCode().length() - 8))
                 .orElse(String.format(format, 0));
         String next = String.format(format, Integer.valueOf(max) + 1);
 
         return String.format("%s%s", pl, next);
-    }
-
-    public static void main(String[] args) {
-        //list.stream().findFirst().orElse("");
-
-        //String parentLevel = null;
-        //final int step = 8;
-        //int len = Optional.ofNullable(parentLevel).map(l -> l.trim().length()).orElse(0);
-        //Preconditions.checkArgument(len % step != 0, "Level code length is not correct");
-        //
-        //list.parallelStream()
-        //        .map(Menu::getLevelCode)
-        //        .filter(it -> Strings.isNotBlank(it) && it.length() == len + step)
-        //        .sorted(Comparator.reverseOrder()).findFirst();
-
-        //System.out.println(-0%8);
-        //System.out.println(0%8);
-        //System.out.println(8%8);
-        //System.out.println(16%8);
-        //System.out.println(24%8);
-        //System.out.println(32%8);
-        //System.out.println(7%8);
-        //System.out.println(15%8);
-        //System.out.println(20%8);
-        //List<String> list = Arrays.asList(
-        //        //"00000001",
-        //        //"00000000",
-        //        //"00000100",
-        //        //"00000003",
-        //        //"00000010",
-        //        //"00000002",
-        //        //"00000004"
-        //);
-        //String a = list.stream().sorted(Comparator.reverseOrder()).findFirst().orElse("00000000");
-        //System.out.println(a);
-
-        //System.out.println(String.format("%08d", 0));
-        //System.out.println(String.format("%08d", 1));
-        //System.out.println(String.format("%08d", 12));
-        String a = "00000089";
-        String b = "0000000100000089";
-        String c = "000000010000008900000004";
-        System.out.println(a.substring(a.length() - 8));
-        System.out.println(a.substring(0, a.length() - 8));
-        System.out.println(b.substring(b.length() - 8));
-        System.out.println(b.substring(0, b.length() - 8));
-        System.out.println(c.substring(c.length() - 8));
-        System.out.println(c.substring(0, c.length() - 8));
     }
 
 }
