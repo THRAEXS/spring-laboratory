@@ -102,6 +102,12 @@
                         ],
                         code: [
                             { required: true, message: '请输入编码' },
+                            { validator: (rule, value, callback) => {
+                                    const params = { id: this.form.id, code: value };
+                                    this.axios.get(`${this.api}/unique`, { params })
+                                        .then(data => callback(data ? undefined : '编码存在'));
+                                }, trigger: 'blur'
+                            },
                             lenLimit(50)
                         ],
                         url: lenLimit(100),

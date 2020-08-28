@@ -52,6 +52,11 @@ public class MenuController {
                 .eq(Menu::getPid, parent.getId()).orderByAsc(Menu::getLevelCode)));
     }
 
+    @GetMapping("unique")
+    public ResponseEntity<Boolean> uniqueness(String id, String code) {
+        return ResponseEntity.ok(menuService.unique(id, code));
+    }
+
     @PostMapping
     public ResponseEntity<Menu> save(@RequestBody Menu menu) {
         if (Strings.isBlank(menu.getPid())) { menu.setPid(null); }

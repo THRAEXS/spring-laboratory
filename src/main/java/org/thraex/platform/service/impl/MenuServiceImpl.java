@@ -71,4 +71,11 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
         return String.format("%s%s", pl, next);
     }
 
+    @Override
+    public boolean unique(String id, String code) {
+        int count = this.count(Wrappers.<Menu>lambdaQuery()
+                .eq(Menu::getCode, code).ne(Strings.isNotBlank(id), Menu::getId, id));
+        return count > 0 ? false : true;
+    }
+
 }

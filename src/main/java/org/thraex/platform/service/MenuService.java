@@ -17,4 +17,6 @@ public interface MenuService extends IService<Menu> {
 
     String nextLevel(String pid);
 
+    boolean unique(String id, String code);
+
 }
