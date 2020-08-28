@@ -73,12 +73,12 @@ public class MenuController {
     public ResponseEntity<Boolean> update(@RequestBody Menu menu) {
         if (Strings.isBlank(menu.getPid())) { menu.setPid(null); }
 
-        return ResponseEntity.ok(menuService.updateById(menu));
+        return ResponseEntity.ok(menuService.updateById(menu.snapshot()));
     }
 
-    @DeleteMapping("{id}")
-    public ResponseEntity<Boolean> delete(@PathVariable String id) {
-        return ResponseEntity.ok(menuService.removeById(id));
+    @DeleteMapping
+    public ResponseEntity<Boolean> delete(String levelCode) {
+        return ResponseEntity.ok(menuService.remove(Wrappers.<Menu>lambdaQuery().likeRight(Menu::getLevelCode, levelCode)));
     }
 
 }

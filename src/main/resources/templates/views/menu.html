@@ -31,7 +31,7 @@
                                     size="mini"
                                     icon="el-icon-delete"
                                     style="color: red;"
-                                    @click="handleRemove($event, node, data)">
+                                    @click="handleRemove($event, data)">
                                 </el-button>
                             </span>
                         </span>
@@ -138,8 +138,14 @@
                     event.stopPropagation();
                     this.transfer(Object.assign({}, this.entity, { pid: data.id }), this.form);
                 },
-                handleRemove(event, node, data) {
+                handleRemove(event, data) {
                     event.stopPropagation();
+                    Factory.Request.delete(this.api, {
+                        params: { levelCode: data.levelCode }
+                    }).then(() => {
+                        this.handleClear();
+                        this.getTree();
+                    });
                 },
                 handleSave() {
                     this.$refs.form.validate(valid => valid && (() => {
