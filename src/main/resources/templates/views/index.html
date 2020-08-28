@@ -8,6 +8,10 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
 
+    <!-- DefaultCsrfToken -->
+    <meta id="_csrf_token" th:content="${_csrf}?${_csrf.token}"/>
+    <meta id="_csrf_header" th:content="${_csrf}?${_csrf.headerName}"/>
+
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="/AdminLTE/plugins/fontawesome-free/css/all.min.css">
     <!-- overlayScrollbars -->
@@ -117,6 +121,19 @@
                         <a href="#" class="dropdown-item dropdown-footer">See All Notifications</a>
                     </div>
                 </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link" data-toggle="dropdown" href="#">
+                        <i class="fas fa-cogs"></i>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right">
+                        <a href="javascript: void(0);" class="dropdown-item">
+                            <i class="fas fa-cog mr-2"></i> 密码修改
+                        </a>
+                        <a href="javascript: void(0);" class="dropdown-item" onclick="handleLogout()">
+                            <i class="fas fa-arrow-circle-left mr-2"></i> 退出
+                        </a>
+                    </div>
+                </li>
             </ul>
         </nav>
         <!-- /.navbar -->
@@ -203,9 +220,13 @@
     <!-- AdminLTE App -->
     <script src="/AdminLTE/dist/js/adminlte.js"></script>
 
+    <script type="text/javascript" src="/axios/dist/axios.min.js"></script>
+    <script type="text/javascript" src="/assets/js/factory.js"></script>
+
     <script src="/assets/js/util.js"></script>
     <script type="text/javascript">
-        let handleMenuClick;
+        let handleMenuClick, handleLogout;
+
         ($ => {
             const container = $('#page-container');
 
@@ -220,6 +241,8 @@
                 (newURL ? () => oldURL !== newURL && container.attr('src', newURL)
                     : () => Util.toast.fire({ icon: 'warning', title: 'Please check the menu url.' }))();
             };
+
+            handleLogout = () => Factory.Request.post('/logout').finally(() => window.location.reload());
         })(jQuery)
     </script>
 </body>

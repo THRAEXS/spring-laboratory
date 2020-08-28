@@ -51,16 +51,8 @@ public class LoadUserService implements UserDetailsService {
                 .map(u -> User.withId(u).nickname(u.toUpperCase()).username(u)
                         .password(user.getPassword()).passwordEncoder(p -> passwordEncoder.encode(p))
                         .roles(StringUtils.toStringArray(user.getRoles())).build())
-                .orElseGet(() -> {
-                    User dbUser = Optional.ofNullable(userService.findByUsername(username))
-                            .orElseThrow(() -> new UsernameNotFoundException("用户名或密码错误"));
-
-                    if (!dbUser.isEnabled()) {
-                        throw new UsernameNotFoundException("账号已禁用，请联系管理员");
-                    }
-
-                    return dbUser;
-                });
+                .orElseGet(() -> Optional.ofNullable(userService.findByUsername(username))
+                        .orElseThrow(() -> new UsernameNotFoundException("用户不存在")));
     }
 
 }
