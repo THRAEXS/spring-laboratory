@@ -36,7 +36,7 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
                 new Menu("id-0-0", "菜单管理", "MENU_MENU", "/menu", "id-0"),
                 new Menu("id-0-1", "用户管理", "MENU_USER", "/user", "id-0"),
                 new Menu("id-0-2", "角色管理", "MENU_ROLE", "/role", "id-0"),
-                new Menu("id-0-2", "授权管理", "MENU_ROLE", "/grant", "id-0")
+                new Menu("id-0-2", "授权管理", "MENU_GRANT", "/grant", "id-0")
         ).collect(Collectors.toList());
     }
 

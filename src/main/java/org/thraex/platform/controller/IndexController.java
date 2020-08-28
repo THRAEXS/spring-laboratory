@@ -26,7 +26,7 @@ public class IndexController {
         model.addAttribute("site", siteProperties);
         model.addAttribute("menus", menuService.tree());
         model.addAttribute("user", SecurityHolder.principal());
-        model.addAttribute("dashboard", "/menu");
+        model.addAttribute("dashboard", "/role");
         return "index";
     }
 

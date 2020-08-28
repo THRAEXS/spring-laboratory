@@ -116,13 +116,13 @@
                 }
             },
             created() {
-                Factory.Request.get(this.api).then(data => { this.list = data; });
+                this.axios.get(this.api).then(data => { this.list = data; });
                 this.getTree();
             },
             methods: {
                 getTree() {
                     return new Promise(resolve => {
-                        Factory.Request.get(`${this.api}/tree`).then(data => {
+                        this.axios.get(`${this.api}/tree`).then(data => {
                             this.data = data;
                             resolve(data);
                         });
@@ -140,7 +140,7 @@
                 },
                 handleRemove(event, data) {
                     event.stopPropagation();
-                    Factory.Request.delete(this.api, {
+                    this.axios.delete(this.api, {
                         params: { levelCode: data.levelCode }
                     }).then(() => {
                         this.handleClear();
