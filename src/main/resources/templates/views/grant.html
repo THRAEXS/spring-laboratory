@@ -33,7 +33,8 @@
                         stripe
                         border
                         highlight-current-row
-                        @selection-change="handleSelectionChange"
+                        @select="handleSelect"
+                        @select-all="handleSelect"
                         @row-click="handleRoleRowClick"
                         :max-height="600">
                         <el-table-column type="selection" width="55" align="center"></el-table-column>
@@ -51,7 +52,8 @@
                         show-checkbox
                         node-key="id"
                         default-expand-all
-                        highlight-current>
+                        highlight-current
+                        @check="handleCheck">
                     </el-tree>
                 </el-card>
             </el-col>
@@ -80,30 +82,42 @@
             },
             created() {
                 this.axios.get(this.api).then(data => this.vo = data);
-
-                // const roles = this.vo.roles;
-                // roles.length > 0 && this.$refs.roles.setCurrentRow(roles[0]);
             },
             methods: {
                 handleUserRowClick({ id }) {
-                    this.$refs.roles.clearSelection();
+                    if (this.selected.user === id) return;
+
                     this.selected.user = id;
-                    this.axios.get(`${this.api}/role/${id}`).then(data => {
-                        console.log('user role:', data)
+                    const roles = this.$refs.roles;
+                    roles.clearSelection();
+
+                    this.axios.get(`${this.api}/role/${id}`).then(data => data.forEach(it => {
+                        const role = this.vo.roles.find(r => r.id === it.rid);
+                        role && roles.toggleRowSelection(role, true);
+                    }));
+                },
+                handleSelect(selection) {
+                    const uid = this.selected.user;
+                    uid && this.axios.put(`${this.api}/role/${uid}`, selection.map(it => ({ uid, rid: it.id })));
+                },
+                handleRoleRowClick({ id }) {
+                    if (this.selected.role === id) return;
+
+                    this.selected.role = id;
+                    const menus = this.$refs.menus;
+                    menus.setCheckedKeys([]);
+
+                    this.axios.get(`${this.api}/menu/${id}`).then(data => {
+                        const keys = data.map(it => it.mid).filter(m => {
+                            const node = menus.getNode(m);
+                            return node && node.isLeaf;
+                        });
+                        menus.setCheckedKeys(keys);
                     });
                 },
-                handleSelectionChange(selection) {
-                    console.log('selection', selection)
-                    const uid = this.selected.user;
-                    uid && (() => {
-                        const data = selection.map(it => ({ uid, rid: it.id }));
-                        console.log(data)
-                        this.axios.put(`${this.api}/role`, data);
-                    })();
-
-                },
-                handleRoleRowClick(row) {
-                    console.log('role', row)
+                handleCheck(data, { checkedKeys: k1, halfCheckedKeys: k2 }) {
+                    const rid = this.selected.role;
+                    rid && this.axios.put(`${this.api}/menu/${rid}`, Array.of(...k1, ...k2).map(mid => ({ rid, mid })));
                 }
             }
         });

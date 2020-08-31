@@ -60,9 +60,11 @@ public class GrantController {
         return ResponseEntity.ok(userRoleService.list(Wrappers.<UserRole>lambdaQuery().eq(UserRole::getUid, uid)));
     }
 
-    @PutMapping("role")
-    public ResponseEntity<UserRole> role(@RequestBody List<UserRole> roles) {
-        return ResponseEntity.ok(null);
+    @PutMapping("role/{uid}")
+    public ResponseEntity<List<UserRole>> role(@PathVariable String uid, @RequestBody List<UserRole> roles) {
+        userRoleService.remove(Wrappers.<UserRole>lambdaQuery().eq(UserRole::getUid, uid));
+        userRoleService.saveBatch(roles);
+        return ResponseEntity.ok(roles);
     }
 
     @GetMapping("menu/{rid}")
@@ -70,9 +72,11 @@ public class GrantController {
         return ResponseEntity.ok(roleMenuService.list(Wrappers.<RoleMenu>lambdaQuery().eq(RoleMenu::getRid, rid)));
     }
 
-    @PutMapping("menu")
-    public ResponseEntity<RoleMenu> menu(@RequestBody List<RoleMenu> menus) {
-        return ResponseEntity.ok(null);
+    @PutMapping("menu/{rid}")
+    public ResponseEntity<List<RoleMenu>> menu(@PathVariable String rid, @RequestBody List<RoleMenu> menus) {
+        roleMenuService.remove(Wrappers.<RoleMenu>lambdaQuery().eq(RoleMenu::getRid, rid));
+        roleMenuService.saveBatch(menus);
+        return ResponseEntity.ok(menus);
     }
 
 }
