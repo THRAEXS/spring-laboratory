@@ -20,7 +20,7 @@ import java.time.format.DateTimeFormatter;
  * @date 2020/08/28 22:19
  */
 @Configuration
-public class LocalDateTimeConfiguration {
+public class LocalDateTimeConfig {
 
     private static final String DEFAULT_DATE_TIME = "yyyy-MM-dd HH:mm:ss";
     private static final String DEFAULT_DATE = "yyyy-MM-dd";

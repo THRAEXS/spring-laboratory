@@ -9,14 +9,50 @@
         <el-row :gutter="page.gutter">
             <el-col :span="8">
                 <el-card class="min-h-3">
+                    <el-table
+                        ref="users"
+                        :data="vo.users"
+                        fit
+                        stripe
+                        border
+                        highlight-current-row
+                        @row-click="handleUserRowClick"
+                        :max-height="600">
+                        <el-table-column type="index" width="50" align="center"></el-table-column>
+                        <el-table-column prop="username" label="用户名" align="center"></el-table-column>
+                        <el-table-column prop="nickname" label="昵称" align="center"></el-table-column>
+                    </el-table>
                 </el-card>
             </el-col>
             <el-col :span="8">
                 <el-card class="min-h-3">
+                    <el-table
+                        ref="roles"
+                        :data="vo.roles"
+                        fit
+                        stripe
+                        border
+                        highlight-current-row
+                        @selection-change="handleSelectionChange"
+                        @row-click="handleRoleRowClick"
+                        :max-height="600">
+                        <el-table-column type="selection" width="55" align="center"></el-table-column>
+                        <el-table-column prop="name" label="名称" align="center"></el-table-column>
+                        <el-table-column prop="code" label="编码" align="center"></el-table-column>
+                    </el-table>
                 </el-card>
             </el-col>
             <el-col :span="8">
                 <el-card class="min-h-3">
+                    <el-tree
+                        ref="menus"
+                        :data="vo.menus"
+                        :props="{ label: 'name' }"
+                        show-checkbox
+                        node-key="id"
+                        default-expand-all
+                        highlight-current>
+                    </el-tree>
                 </el-card>
             </el-col>
         </el-row>
@@ -25,79 +61,49 @@
     <script type="text/javascript">
         Factory.Vue.build({
             data() {
-                const entity = { id: '', name: '', code: '', remark: '' };
-                const lenLimit = max => ({ max, message: '长度超出范围' });
-
                 return {
                     axios: Factory.Request,
-                    api: '/api/role',
+                    api: '/api/grant',
                     page: {
                         gutter: 15
                     },
-                    list: {
-                        data: [],
-                        loading: false
+                    vo: {
+                        users: [],
+                        roles: [],
+                        menus: []
                     },
-                    entity,
-                    form: Object.assign({}, entity),
-                    rules: {
-                        name: [
-                            { required: true, message: '请输入名称' },
-                            lenLimit(50)
-                        ],
-                        code: [
-                            { required: true, message: '请输入编码' },
-                            { validator: (rule, value, callback) => {
-                                    const params = { id: this.form.id, code: value };
-                                    this.axios.get(`${this.api}/unique`, { params })
-                                        .then(data => callback(data ? undefined : '编码存在'));
-                                }, trigger: 'blur'
-                            },
-                            lenLimit(50)
-                        ],
-                        remark: lenLimit(100)
+                    selected: {
+                        user: null,
+                        role: null
                     }
                 }
             },
             created() {
-                this.search();
+                this.axios.get(this.api).then(data => this.vo = data);
+
+                // const roles = this.vo.roles;
+                // roles.length > 0 && this.$refs.roles.setCurrentRow(roles[0]);
             },
             methods: {
-                search() {
-                    this.list.loading = true;
-                    this.axios.get(this.api).then(data => {
-                        this.list.data = data;
-                    }).finally(() => {
-                        this.list.loading = false;
+                handleUserRowClick({ id }) {
+                    this.$refs.roles.clearSelection();
+                    this.selected.user = id;
+                    this.axios.get(`${this.api}/role/${id}`).then(data => {
+                        console.log('user role:', data)
                     });
                 },
-                handleRowClick(row) {
-                    this.transfer(row, this.form);
-                },
-                handleDelete(ind, id) {
-                    console.log(ind, id)
-                    this.list.data.splice(ind, 1);
-                    this.axios.delete(`${this.api}/${id}`);
-                },
-                handleSave() {
-                    this.$refs.form.validate(valid => valid && (() => {
-                        console.log('Role form data:', JSON.stringify(this.form));
-                        this.axios.post(this.api, this.form).then(data => {
-                            this.transfer(data, this.form);
+                handleSelectionChange(selection) {
+                    console.log('selection', selection)
+                    const uid = this.selected.user;
+                    uid && (() => {
+                        const data = selection.map(it => ({ uid, rid: it.id }));
+                        console.log(data)
+                        this.axios.put(`${this.api}/role`, data);
+                    })();
 
-                            const compare = it => it.id === data.id;
-                            const ind = this.list.data.findIndex(compare);
-                            ind > -1 ? Object.assign(this.list.data[ind], data) : this.list.data.unshift(data);
-                            this.$refs.table.setCurrentRow(this.list.data.find(compare));
-                        });
-                    })());
                 },
-                handleClear() {
-                    this.$refs.form.resetFields();
-                    this.form = Object.assign({}, this.entity);
-                },
-                transfer(raw, target) {
-                    Object.keys(this.entity).forEach(k => this.$set(target, k, raw[k]));
+                handleRoleRowClick(row) {
+                    console.log('role', row)
                 }
             }
         });

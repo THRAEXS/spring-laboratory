@@ -16,7 +16,7 @@ spring:
   datasource:
     name: THRAEX-DB
 #    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/THRAEX-ADMIN
+    url: jdbc:mysql://localhost:3306/thraex-admin
     username: root
     password: mysql
 
