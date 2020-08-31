@@ -32,7 +32,6 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
-        //registry.addViewController("/login").setViewName("login");
         Stream.of("menu", "user", "role", "grant").forEach(it ->
                 registry.addViewController(String.format("/%s", it)).setViewName(it));
     }
