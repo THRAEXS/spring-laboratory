@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      th:replace="template :: app_template(~{::title}, ~{::div.content-wrapper}, ~{::script})">
+<head>
+    <title>Dashboard</title>
+</head>
+<body>
+    <div class="content-wrapper">
+        <el-tag type="success" sec:authentication="principal"></el-tag>
+    </div>
+    <script type="text/javascript">
+        Factory.Vue.build();
+    </script>
+</body>
+</html>

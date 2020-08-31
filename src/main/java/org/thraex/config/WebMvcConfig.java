@@ -32,7 +32,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
-        Stream.of("menu", "user", "role", "grant").forEach(it ->
+        Stream.of("dashboard", "menu", "user", "role", "grant").forEach(it ->
                 registry.addViewController(String.format("/%s", it)).setViewName(it));
     }
 
