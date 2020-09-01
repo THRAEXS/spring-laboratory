@@ -8,6 +8,8 @@ import org.thraex.platform.entity.Menu;
 import org.thraex.platform.mapper.MenuMapper;
 import org.thraex.platform.service.MenuService;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -42,14 +44,28 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
 
     @Override
     public List<Menu> tree() {
-        List<Menu> list = this.list(Wrappers.<Menu>lambdaQuery().orderByAsc(Menu::getLevelCode));
+        return toTree(this.list(Wrappers.<Menu>lambdaQuery().orderByAsc(Menu::getLevelCode)));
+    }
+
+    @Override
+    public List<Menu> tree(List<String> ids) {
+        return Optional.ofNullable(ids)
+                .filter(it -> !it.isEmpty())
+                .map(it -> this.listByIds(it))
+                .map(it -> toTree(it))
+                .orElse(Collections.emptyList());
+    }
+
+    private List<Menu> toTree(List<Menu> list) {
         // TODO: Optimize
         List<Menu> roots = list.parallelStream()
                 .filter(it -> Strings.isBlank(it.getPid()))
                 .sorted((m1, m2) -> m2.getLevelCode().compareTo(m1.getLevelCode()))
                 .collect(Collectors.toList());
         roots.forEach(it -> it.setChildren(list.parallelStream()
-                .filter(s -> it.getId().equals(s.getPid())).collect(Collectors.toList())));
+                .filter(s -> it.getId().equals(s.getPid()))
+                .sorted(Comparator.comparing(Menu::getLevelCode))
+                .collect(Collectors.toList())));
 
         return roots;
     }

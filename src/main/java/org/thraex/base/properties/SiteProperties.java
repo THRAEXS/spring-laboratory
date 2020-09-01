@@ -26,4 +26,9 @@ public class SiteProperties {
      */
     private String brand;
 
+    /**
+     * Admin dashboard
+     */
+    private String dashboard = "/dashboard";
+
 }

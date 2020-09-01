@@ -15,6 +15,8 @@ public interface MenuService extends IService<Menu> {
 
     List<Menu> tree();
 
+    List<Menu> tree(List<String> ids);
+
     String nextLevel(String pid);
 
     boolean unique(String id, String code);
