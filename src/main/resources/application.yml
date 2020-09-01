@@ -35,5 +35,28 @@ thraex:
     title: THRAEX | Admin
     logo: /AdminLTE/dist/img/AdminLTELogo.png
     brand: THRAEX
+  mvc:
+    webjars: classpath:/META-INF/resources/webjars
+    resources:
+      - paths:
+          - /favicon.ico
+          - /assets/**
+        locations: classpath:/templates/assets/
+      - paths: /vue/**
+        locations: ${thraex.mvc.webjars}/vue/2.6.11/
+      - paths: /AdminLTE/**
+        locations: ${thraex.mvc.webjars}/AdminLTE/3.0.5/
+      - paths: /element-ui/**
+        locations: ${thraex.mvc.webjars}/element-ui/2.13.2/
+      - paths: /axios/**
+        locations: ${thraex.mvc.webjars}/axios/0.19.2/
+      - paths: /qs/**
+        locations: ${thraex.mvc.webjars}/qs/6.9.4/
+    views:
+      - dashboard
+      - menu
+      - user
+      - role
+      - grant
   user:
     init-password: 111111
