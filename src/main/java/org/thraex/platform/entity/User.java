@@ -115,6 +115,17 @@ public class User extends Entity<User> implements UserDetails {
         return this;
     }
 
+    public User setAuthorities(List<String> roles) {
+        List<GrantedAuthority> authorities = roles.stream().map(it -> {
+            Assert.isTrue(!it.startsWith("ROLE_"), () ->
+                    String.format("%s cannot start with ROLE_ (it is automatically added)", it));
+            return new SimpleGrantedAuthority(String.format("ROLE_%s", it));
+        }).collect(Collectors.toList());
+        this.authorities = Collections.unmodifiableSet(sortAuthorities(authorities));;
+
+        return this;
+    }
+
     private static SortedSet<GrantedAuthority> sortAuthorities(
             Collection<? extends GrantedAuthority> authorities) {
         Assert.notNull(authorities, "Cannot pass a null GrantedAuthority collection");
