@@ -9,10 +9,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.thraex.base.properties.SiteProperties;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Stream;
-
 /**
  * @author 鬼王
  * @date 2020/08/11 11:46
@@ -35,18 +31,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(HttpSecurity http) throws Exception {
-        List<String> permits = new ArrayList<>();
-        boolean na = properties.notAdmin();
-        if (na) {
-            permits.add("/");
-        }
-
         http.headers().frameOptions().disable()
                 .and().authorizeRequests()
-                    .antMatchers(permits.stream().toArray(String[]::new)).permitAll()
+                    .antMatchers(properties.permit()).permitAll()
                     .anyRequest().authenticated()
                 .and().formLogin()
-                    .defaultSuccessUrl(na ? "/admin" : "/", true)
+                    .defaultSuccessUrl(properties.successUrl())
                 .and().httpBasic();
     }
 

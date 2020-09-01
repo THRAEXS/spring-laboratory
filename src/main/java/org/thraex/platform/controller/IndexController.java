@@ -39,13 +39,11 @@ public class IndexController {
 
     @GetMapping
     public String index(Model model) {
-        String index = properties.getIndex();
-
         if (properties.isAdmin()) {
             admin(model);
         }
 
-        return index;
+        return properties.index();
     }
 
     @GetMapping("admin")

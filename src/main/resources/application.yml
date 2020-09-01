@@ -35,7 +35,6 @@ thraex:
     title: THRAEX | Admin
     logo: /AdminLTE/dist/img/AdminLTELogo.png
     brand: THRAEX
-    index: index
   mvc:
     webjars: classpath:/META-INF/resources/webjars
     resources:
