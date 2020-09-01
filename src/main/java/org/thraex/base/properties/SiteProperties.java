@@ -11,6 +11,8 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties("thraex.site")
 public class SiteProperties {
 
+    public static final String ADMIN = "admin";
+
     /**
      * Site title
      */
@@ -27,8 +29,21 @@ public class SiteProperties {
     private String brand;
 
     /**
+     * View page for index
+     */
+    private String index = ADMIN;
+
+    /**
      * Admin dashboard
      */
     private String dashboard = "/dashboard";
+
+    public boolean isAdmin() {
+        return ADMIN.equalsIgnoreCase(index);
+    }
+
+    public boolean notAdmin() {
+        return !isAdmin();
+    }
 
 }

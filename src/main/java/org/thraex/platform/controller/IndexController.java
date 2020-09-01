@@ -39,6 +39,17 @@ public class IndexController {
 
     @GetMapping
     public String index(Model model) {
+        String index = properties.getIndex();
+
+        if (properties.isAdmin()) {
+            admin(model);
+        }
+
+        return index;
+    }
+
+    @GetMapping("admin")
+    public String admin(Model model) {
         model.addAttribute("site", properties);
 
         User user = SecurityHolder.principal();
@@ -54,7 +65,7 @@ public class IndexController {
                 .orElse(null);
         model.addAttribute("menus", menuService.tree(menuIds));
 
-        return "index";
+        return "admin";
     }
 
 }
