@@ -2,10 +2,12 @@ package org.thraex.platform.controller;
 
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.thraex.base.properties.SiteProperties;
+import org.thraex.platform.entity.Menu;
 import org.thraex.platform.entity.RoleMenu;
 import org.thraex.platform.entity.User;
 import org.thraex.platform.entity.UserRole;
@@ -26,7 +28,10 @@ import java.util.stream.Collectors;
 public class IndexController {
 
     @Autowired
-    private SiteProperties properties;
+    private SiteProperties sitProperties;
+
+    @Autowired
+    private SecurityProperties securityProperties;
 
     @Autowired
     private UserRoleService userRoleService;
@@ -39,31 +44,39 @@ public class IndexController {
 
     @GetMapping
     public String index(Model model) {
-        if (properties.isAdmin()) {
+        if (sitProperties.isAdmin()) {
             admin(model);
         }
 
-        return properties.index();
+        return sitProperties.index();
     }
 
     @GetMapping("admin")
     public String admin(Model model) {
-        model.addAttribute("site", properties);
+        model.addAttribute("site", sitProperties);
 
+        // TODO: restart bug, User authorities and Authentication authorities
         User user = SecurityHolder.principal();
         model.addAttribute("user", user);
 
+        model.addAttribute("menus", Optional.of(user.getUsername())
+                .filter(u -> u.equals(securityProperties.getUser().getName()))
+                .map(u -> menuService.tree()).orElse(menus(user.getId())));
+
+        return "admin";
+    }
+
+    private List<Menu> menus(String uid) {
         List<String> roleIds = userRoleService.list(
-                Wrappers.<UserRole>lambdaQuery().eq(UserRole::getUid, user.getId()))
+                Wrappers.<UserRole>lambdaQuery().eq(UserRole::getUid, uid))
                 .stream().map(UserRole::getRid).collect(Collectors.toList());
         List<String> menuIds = Optional.of(roleIds)
                 .filter(it -> !it.isEmpty())
                 .map(it -> roleMenuService.list(Wrappers.<RoleMenu>lambdaQuery().in(RoleMenu::getRid, roleIds))
                         .stream().map(RoleMenu::getMid).collect(Collectors.toList()))
                 .orElse(null);
-        model.addAttribute("menus", menuService.tree(menuIds));
 
-        return "admin";
+        return menuService.tree(menuIds);
     }
 
 }

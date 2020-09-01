@@ -211,8 +211,7 @@ public class User extends Entity<User> implements UserDetails {
         }
 
         public UserBuilder roles(String... roles) {
-            List<GrantedAuthority> authorities = new ArrayList<>(
-                    roles.length);
+            List<GrantedAuthority> authorities = new ArrayList<>(roles.length);
 
             Stream.of(roles).forEach(it -> {
                 Assert.isTrue(!it.startsWith("ROLE_"), () ->
