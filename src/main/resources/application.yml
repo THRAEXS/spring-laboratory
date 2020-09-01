@@ -58,5 +58,6 @@ thraex:
       - user
       - role
       - grant
+      - profile
   user:
     init-password: 111111

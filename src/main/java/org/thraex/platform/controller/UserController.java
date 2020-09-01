@@ -2,6 +2,7 @@ package org.thraex.platform.controller;
 
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import org.apache.logging.log4j.util.BiConsumer;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.thraex.base.page.Query;
 import org.thraex.platform.entity.User;
 import org.thraex.platform.service.UserService;
+import org.thraex.security.SecurityHolder;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -79,6 +81,11 @@ public class UserController {
         return ResponseEntity.ok(userService.getById(id));
     }
 
+    @GetMapping("current")
+    public  ResponseEntity<User> current() {
+        return ResponseEntity.ok(SecurityHolder.principal());
+    }
+
     @GetMapping("unique")
     public ResponseEntity<Boolean> uniqueness(String id, String username) {
         return ResponseEntity.ok(userService.unique(id, username));
@@ -94,6 +101,15 @@ public class UserController {
 
     @PutMapping
     public ResponseEntity<Boolean> update(@RequestBody User user) {
+        BiConsumer<String, Runnable> toNull = (v, r) -> {
+            if (Strings.isBlank(v)) { r.run(); }
+        };
+        toNull.accept(user.getUsername(), () -> user.setUsername(null));
+        toNull.accept(user.getNickname(), () -> user.setNickname(null));
+        toNull.accept(user.getPassword(), () -> user.setPassword(null));
+
+        user.setPassword(Optional.ofNullable(user.getPassword()).map(p -> passwordEncoder.encode(p)).orElse(null));
+
         return ResponseEntity.ok(userService.updateById(user.snapshot()));
     }
 
