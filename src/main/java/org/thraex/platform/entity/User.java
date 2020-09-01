@@ -19,6 +19,7 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Reference {@link org.springframework.security.core.userdetails.User}
@@ -212,11 +213,13 @@ public class User extends Entity<User> implements UserDetails {
         public UserBuilder roles(String... roles) {
             List<GrantedAuthority> authorities = new ArrayList<>(
                     roles.length);
-            for (String role : roles) {
-                Assert.isTrue(!role.startsWith("ROLE_"), () ->
-                        String.format("%s cannot start with ROLE_ (it is automatically added)", role));
-                authorities.add(new SimpleGrantedAuthority(String.format("ROLE_%s", role)));
-            }
+
+            Stream.of(roles).forEach(it -> {
+                Assert.isTrue(!it.startsWith("ROLE_"), () ->
+                        String.format("%s cannot start with ROLE_ (it is automatically added)", it));
+                authorities.add(new SimpleGrantedAuthority(String.format("ROLE_%s", it)));
+            });
+
             return authorities(authorities);
         }
 

@@ -12,7 +12,7 @@ import java.util.List;
  * @date 2020/09/01 08:47
  */
 @ConfigurationProperties("thraex.mvc")
-public class MvcConfigProperties {
+public class MvcProperties {
 
     /**
      * Resource list. Reference {@link ResourceHandlerRegistry}
@@ -60,7 +60,7 @@ public class MvcConfigProperties {
         return resources;
     }
 
-    public MvcConfigProperties setResources(List<Resource> resources) {
+    public MvcProperties setResources(List<Resource> resources) {
         this.resources = resources;
         return this;
     }
@@ -69,7 +69,7 @@ public class MvcConfigProperties {
         return views;
     }
 
-    public MvcConfigProperties setViews(List<String> views) {
+    public MvcProperties setViews(List<String> views) {
         this.views = views;
         return this;
     }
