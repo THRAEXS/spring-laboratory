@@ -3,7 +3,6 @@ package org.thraex.base.properties;
 import lombok.Data;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.security.config.annotation.web.AbstractRequestMatcherRegistry;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -25,9 +24,6 @@ public class SiteProperties {
 
     private Portal portal = new Portal();
 
-    /**
-     * Reference {@link AbstractRequestMatcherRegistry#antMatchers(String...)}
-     */
     private Set<String> permits = new HashSet<>();
 
     public Mode mode() {
@@ -64,7 +60,6 @@ public class SiteProperties {
         String redirect();
 
         /**
-         * Reference {@link AbstractRequestMatcherRegistry#antMatchers(String...)}
          * @return {@link String}
          */
         String permit();

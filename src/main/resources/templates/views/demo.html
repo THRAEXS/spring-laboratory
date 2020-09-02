@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org"
       th:replace="template :: app_template(~{::title}, ~{::div.content-wrapper}, ~{::script})">
 <head>
-    <title>Dashboard</title>
+    <title>Demo</title>
 </head>
 <body>
     <div class="content-wrapper">
@@ -12,7 +12,7 @@
         Factory.Vue.build({
             data() {
                 return {
-                    content: '自定义内容'
+                    content: 'Demo 内容'
                 }
             },
             created() {

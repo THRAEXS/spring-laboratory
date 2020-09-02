@@ -4,18 +4,11 @@ spring:
   jackson:
     time-zone: GMT+8
     default-property-inclusion: non_null
-  security:
-    user:
-      name: admin
-      password: admin
-      roles:
-        - ADMIN
   thymeleaf:
     prefix: classpath:/templates/views/
     cache: false # Production environment enabled
   datasource:
     name: THRAEX-DB
-#    driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/thraex-admin
     username: root
     password: mysql
@@ -24,11 +17,6 @@ mybatis-plus:
   global-config:
     db-config:
       id-type: assign_uuid
-      table-prefix: tbl_
-
-logging:
-  level:
-    org.thraex.platform.mapper: debug
 
 thraex:
   mvc:
@@ -50,10 +38,5 @@ thraex:
         locations: ${thraex.mvc.webjars}/qs/6.9.4/
     views:
       dashboard: dashboard
-      menu: menu
-      user: user
-      role: role
-      grant: grant
-      profile: profile
-  user:
-    init-password: 111111
+      demo: demo
+      user: demo2/user

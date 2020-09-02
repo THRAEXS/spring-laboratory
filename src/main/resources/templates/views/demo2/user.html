@@ -2,17 +2,19 @@
 <html xmlns:th="http://www.thymeleaf.org"
       th:replace="template :: app_template(~{::title}, ~{::div.content-wrapper}, ~{::script})">
 <head>
-    <title>Dashboard</title>
+    <title>User</title>
 </head>
 <body>
     <div class="content-wrapper">
-        {{ content }}
+        <div v-for="i in 1000">
+            {{ content }} - {{ i }}
+        </div>
     </div>
     <script type="text/javascript">
         Factory.Vue.build({
             data() {
                 return {
-                    content: '自定义内容'
+                    content: 'User 内容'
                 }
             },
             created() {

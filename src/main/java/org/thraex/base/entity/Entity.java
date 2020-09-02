@@ -3,7 +3,6 @@ package org.thraex.base.entity;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import org.springframework.util.StringUtils;
-import org.thraex.security.SecurityHolder;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -53,7 +52,7 @@ public class Entity<C extends Entity<?>> implements Serializable {
 
     public C snapshot() {
         LocalDateTime now = LocalDateTime.now();
-        String uid = SecurityHolder.id();
+        String uid = "admin";//SecurityHolder.id();
 
         return (C) (StringUtils.hasText(this.id) ?
                 this.setUpdateBy(uid).setUpdateTime(now) :
