@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
  * @date 2020/08/19 10:03
  */
 @Controller
-public class IndexController {
+public class SiteController {
 
     @Autowired
     private SiteProperties sitProperties;
@@ -44,16 +44,19 @@ public class IndexController {
 
     @GetMapping
     public String index(Model model) {
-        if (sitProperties.isAdmin()) {
+        SiteProperties.Mode mode = sitProperties.getMode();
+        if (mode.isEnabled()) {
             admin(model);
+        } else {
+            model.addAttribute("view", sitProperties.getIndex().getView());
         }
 
-        return sitProperties.index();
+        return mode.index();
     }
 
     @GetMapping("admin")
     public String admin(Model model) {
-        model.addAttribute("site", sitProperties);
+        model.addAttribute("admin", sitProperties.getAdmin());
 
         // TODO: restart bug, User authorities and Authentication authorities
         User user = SecurityHolder.principal();
@@ -64,6 +67,12 @@ public class IndexController {
                 .map(u -> menuService.tree()).orElse(menus(user.getId())));
 
         return "admin";
+    }
+
+    @GetMapping("dashboard")
+    public String dashboard(Model model) {
+        model.addAttribute("view", sitProperties.getAdmin().getDashboard());
+        return "dashboard";
     }
 
     private List<Menu> menus(String uid) {

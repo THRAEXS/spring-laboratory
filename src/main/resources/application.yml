@@ -32,9 +32,13 @@ logging:
 
 thraex:
   site:
-    title: THRAEX | Admin
-    logo: /AdminLTE/dist/img/AdminLTELogo.png
-    brand: THRAEX
+    mode:
+      enabled: false
+    index:
+      view: demo
+  #    title: THRAEX | Admin
+#    logo: /AdminLTE/dist/img/AdminLTELogo.png
+#    brand: THRAEX
   mvc:
     webjars: classpath:/META-INF/resources/webjars
     resources:
@@ -53,7 +57,6 @@ thraex:
       - paths: /qs/**
         locations: ${thraex.mvc.webjars}/qs/6.9.4/
     views:
-      - dashboard
       - menu
       - user
       - role

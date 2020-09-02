@@ -1,6 +1,5 @@
 package org.thraex.base.properties;
 
-import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import java.util.Objects;
@@ -10,55 +9,202 @@ import java.util.stream.Stream;
  * @author 鬼王
  * @date 2020/08/19 09:24
  */
-@Data
 @ConfigurationProperties("thraex.site")
 public class SiteProperties {
 
-    public static final String ADMIN = "admin";
+    private Mode mode = new Mode();
 
-    /**
-     * Site title
-     */
-    private String title;
+    private Index index = new Index();
 
-    /**
-     * Logo path
-     */
-    private String logo;
+    private Admin admin = new Admin();
 
-    /**
-     * Banner text behind the logo
-     */
-    private String brand;
+    public static class Mode {
 
-    /**
-     * View page for index. Optional value: [admin | index]
-     */
-    private String index = ADMIN;
+        /**
+         * Whether to enable admin mode
+         */
+        private boolean enabled = true;
 
-    /**
-     * Admin dashboard
-     */
-    private String dashboard = "/dashboard";
+        public String[] permit() {
+            return Stream.of(enabled ? null : "/").filter(Objects::nonNull).toArray(String[]::new);
+        }
 
-    public boolean isAdmin() {
-        return ADMIN.equalsIgnoreCase(index);
+        public String successUrl() {
+            return enabled ? "/" : "/admin";
+        }
+
+        public String index() {
+            return enabled ? "admin" : "index";
+        }
+
+        public boolean isEnabled() {
+            return enabled;
+        }
+
+        public void setEnabled(boolean enabled) {
+            this.enabled = enabled;
+        }
+
+        @Override
+        public String toString() {
+            return "Mode{" +
+                    "enabled=" + enabled +
+                    '}';
+        }
     }
 
-    public String[] permit() {
-        return Stream.of(isAdmin() ? null : "/").filter(Objects::nonNull).toArray(String[]::new);
+    public static class Index {
+
+        /**
+         * Site title
+         */
+        private String title = "THRAEX | Index";
+
+        /**
+         * Logo path
+         */
+        private String logo = "/AdminLTE/dist/img/AdminLTELogo.png";
+
+        /**
+         * Index view. The optional values refer to the 'views/index' directory
+         */
+        private String view = "default";
+
+        public String getTitle() {
+            return title;
+        }
+
+        public void setTitle(String title) {
+            this.title = title;
+        }
+
+        public String getLogo() {
+            return logo;
+        }
+
+        public void setLogo(String logo) {
+            this.logo = logo;
+        }
+
+        public String getView() {
+            return view;
+        }
+
+        public void setView(String view) {
+            this.view = view;
+        }
+
+        @Override
+        public String toString() {
+            return "Index{" +
+                    "title='" + title + '\'' +
+                    ", logo='" + logo + '\'' +
+                    ", view='" + view + '\'' +
+                    '}';
+        }
+
     }
 
-    public String successUrl() {
-        return isAdmin() ? "/" : "/admin";
+    public static class Admin {
+
+        /**
+         * Site title
+         */
+        private String title = "THRAEX | Admin";
+
+        /**
+         * Logo path
+         */
+        private String logo = "/AdminLTE/dist/img/AdminLTELogo.png";
+
+        /**
+         * Banner text behind the logo
+         */
+        private String brand = "THRAEX";
+
+        /**
+         * Admin dashboard view. The optional values refer to the 'views/dashboard' directory
+         */
+        private String dashboard = "default";
+
+        public String getTitle() {
+            return title;
+        }
+
+        public Admin setTitle(String title) {
+            this.title = title;
+            return this;
+        }
+
+        public String getLogo() {
+            return logo;
+        }
+
+        public Admin setLogo(String logo) {
+            this.logo = logo;
+            return this;
+        }
+
+        public String getBrand() {
+            return brand;
+        }
+
+        public Admin setBrand(String brand) {
+            this.brand = brand;
+            return this;
+        }
+
+        public String getDashboard() {
+            return dashboard;
+        }
+
+        public void setDashboard(String dashboard) {
+            this.dashboard = dashboard;
+        }
+
+        @Override
+        public String toString() {
+            return "Admin{" +
+                    "title='" + title + '\'' +
+                    ", logo='" + logo + '\'' +
+                    ", brand='" + brand + '\'' +
+                    ", dashboard='" + dashboard + '\'' +
+                    '}';
+        }
+
     }
 
-    public String index() {
-        return getIndex();
+    public Mode getMode() {
+        return mode;
     }
 
-    public String getIndex() {
-        return index.toLowerCase();
+    public void setMode(Mode mode) {
+        this.mode = mode;
+    }
+
+    public Index getIndex() {
+        return index;
+    }
+
+    public void setIndex(Index index) {
+        this.index = index;
+    }
+
+    public Admin getAdmin() {
+        return admin;
+    }
+
+    public void setAdmin(Admin admin) {
+        this.admin = admin;
+    }
+
+    @Override
+    public String toString() {
+        return "SiteProperties{" +
+                "mode=" + mode +
+                ", index=" + index +
+                ", admin=" + admin +
+                '}';
     }
 
 }

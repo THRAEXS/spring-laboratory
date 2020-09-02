@@ -2,7 +2,7 @@
 <html xmlns:th="https://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
-    <title th:text="${site.title}"></title>
+    <title th:text="${admin.title}"></title>
 
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
@@ -57,8 +57,8 @@
         <aside class="main-sidebar sidebar-dark-primary elevation-4">
             <!-- Brand Logo -->
             <a href="/" class="brand-link">
-                <img alt="Logo" class="brand-image img-circle elevation-3" style="opacity: .8" th:src="${site.logo}"/>
-                <span class="brand-text font-weight-light" th:text="${site.brand}"></span>
+                <img alt="Logo" class="brand-image img-circle elevation-3" style="opacity: .8" th:src="${admin.logo}"/>
+                <span class="brand-text font-weight-light" th:text="${admin.brand}"></span>
             </a>
 
             <!-- Sidebar -->
@@ -115,7 +115,7 @@
         <div class="content-wrapper">
             <!-- Main content -->
             <div class="content px-0">
-                <iframe id="page-container" width="100%" class="border-0" th:src="${site.dashboard}"></iframe>
+                <iframe id="page-container" width="100%" class="border-0" src="/dashboard"></iframe>
             </div>
             <!-- /.content -->
         </div>

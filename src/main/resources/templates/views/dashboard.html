@@ -1,17 +1,13 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
-      th:replace="template :: app_template(~{::title}, ~{::div.content-wrapper}, ~{::script})">
+<html xmlns:th="http://www.thymeleaf.org" th:replace="|dashboard/${view}|">
 <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
+
     <title>Dashboard</title>
 </head>
 <body>
-    <div class="content-wrapper">
-        <el-tag sec:authentication="name"></el-tag>
-        <el-tag type="success" sec:authentication="authorities"></el-tag>
-    </div>
-    <script type="text/javascript">
-        Factory.Vue.build();
-    </script>
+    Dashboard View
 </body>
 </html>
