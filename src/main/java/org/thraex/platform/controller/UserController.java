@@ -101,9 +101,7 @@ public class UserController {
 
     @PutMapping
     public ResponseEntity<Boolean> update(@RequestBody User user) {
-        BiConsumer<String, Runnable> toNull = (v, r) -> {
-            if (Strings.isBlank(v)) { r.run(); }
-        };
+        BiConsumer<String, Runnable> toNull = (v, r) -> { if (Strings.isBlank(v)) { r.run(); } };
         toNull.accept(user.getUsername(), () -> user.setUsername(null));
         toNull.accept(user.getNickname(), () -> user.setNickname(null));
         toNull.accept(user.getPassword(), () -> user.setPassword(null));

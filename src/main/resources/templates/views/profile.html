@@ -9,14 +9,11 @@
         <el-card class="min-h-3">
             <el-row>
                 <el-col :offset="8" :span="8">
-                    <el-form ref="form" :model="form" :rules="rules" :disabled="form.username === 'admin'" label-width="80px">
+                    <el-form ref="form" :model="form" :rules="rules" :disabled="disabled" label-width="80px">
                         <el-form-item label="昵称" prop="nickname">
                             <el-input v-model.trim="form.nickname"></el-input>
                         </el-form-item>
-                        <el-form-item label="原密码" prop="oldPassword">
-                            <el-input type="password" v-model="form.oldPassword" show-password autocomplete="off"></el-input>
-                        </el-form-item>
-                        <el-form-item label="信密码" prop="newPassword">
+                        <el-form-item label="密码" prop="newPassword">
                             <el-input type="password" v-model="form.newPassword" show-password autocomplete="off"></el-input>
                         </el-form-item>
                         <el-form-item label="确认密码" prop="checkPassword">
@@ -36,22 +33,73 @@
                 return {
                     axios: Factory.Request,
                     api: '/api/user',
-                    disabled: false,
+                    user: {},
+                    disabled: true,
                     form: {
                         nickname: null,
-                        oldPassword: null,
                         newPassword: null,
                         checkPassword: null
                     },
-                    rules: {}
+                    rules: {
+                        nickname: [
+                            { required: true, message: '请输入昵称' },
+                            { max: 50, message: '长度超出范围' }
+                        ],
+                        newPassword: [
+                            {
+                                validator: (rule, value, callback) => {
+                                    const { checkPassword } = this.form;
+                                    callback(this.legal(checkPassword)
+                                        ? this.legal(value)
+                                            ? value !== checkPassword ? '两次输入密码不一致' : undefined
+                                            : '请输入密码'
+                                        : undefined);
+                                },
+                                trigger: 'blur'
+                            },
+                            { min: 6, max: 50, message: '长度6-50' }
+                        ],
+                        checkPassword: [
+                            {
+                                validator: (rule, value, callback) => {
+                                    const { newPassword } = this.form;
+                                    callback(this.legal(newPassword)
+                                        ? this.legal(value)
+                                            ? value !== newPassword ? '两次输入密码不一致' : undefined
+                                            : '请再次输入密码'
+                                        : undefined);
+                                },
+                                trigger: 'blur'
+                            },
+                            { min: 6, max: 50, message: '长度6-50' }
+                        ]
+                    }
                 }
             },
             created() {
-                this.axios.get(`${this.api}/current`).then(data => Object.assign(this.form, data));
+                this.axios.get(`${this.api}/current`).then(data => {
+                    this.user = data;
+                    const { nickname, username } = this.user;
+                    this.disabled = username === 'admin';
+                    this.form.nickname = nickname;
+                });
             },
             methods: {
+                legal(val) {
+                    return val !== undefined && val !== null && val !== '';
+                },
                 handleSave() {
+                    this.$refs.form.validate(valid => valid && (() => {
+                        const { id, nickname, enabled } = this.user;
+                        const { nickname: newNickname, newPassword: password } = this.form;
+                        const data = { id, nickname: newNickname !== nickname ? newNickname : null, password, enabled }
 
+                        const pl = this.legal(data.password);
+                        if (this.legal(data.nickname) || pl) {
+                            this.axios.put(this.api, data).then(() =>
+                                pl && this.axios.post('/logout').finally(() => window.top.location.reload()));
+                        }
+                    })());
                 }
             }
         });
