@@ -11,4 +11,49 @@ spring:
       roles:
         - ADMIN
   thymeleaf:
+    prefix: classpath:/templates/views/
     cache: false # Production environment enabled
+  datasource:
+    name: THRAEX-DB
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/thraex-admin
+    username: root
+    password: mysql
+
+mybatis-plus:
+  global-config:
+    db-config:
+      id-type: assign_uuid
+      table-prefix: tbl_
+
+logging:
+  level:
+    org.thraex.platform.mapper: debug
+
+thraex:
+  mvc:
+    webjars: classpath:/META-INF/resources/webjars
+    resources:
+      - paths:
+          - /favicon.ico
+          - /assets/**
+        locations: classpath:/templates/assets/
+      - paths: /vue/**
+        locations: ${thraex.mvc.webjars}/vue/2.6.11/
+      - paths: /AdminLTE/**
+        locations: ${thraex.mvc.webjars}/AdminLTE/3.0.5/
+      - paths: /element-ui/**
+        locations: ${thraex.mvc.webjars}/element-ui/2.13.2/
+      - paths: /axios/**
+        locations: ${thraex.mvc.webjars}/axios/0.19.2/
+      - paths: /qs/**
+        locations: ${thraex.mvc.webjars}/qs/6.9.4/
+    views:
+      dashboard: dashboard
+      menu: menu
+      user: user
+      role: role
+      grant: grant
+      profile: profile
+  user:
+    init-password: 111111
