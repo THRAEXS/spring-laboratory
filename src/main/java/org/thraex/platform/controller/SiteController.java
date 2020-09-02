@@ -48,7 +48,7 @@ public class SiteController {
         if (mode.isEnabled()) {
             admin(model);
         } else {
-            model.addAttribute("view", sitProperties.getIndex().getView());
+            model.addAttribute("site", sitProperties.getIndex());
         }
 
         return mode.index();
@@ -56,7 +56,7 @@ public class SiteController {
 
     @GetMapping("admin")
     public String admin(Model model) {
-        model.addAttribute("admin", sitProperties.getAdmin());
+        model.addAttribute("site", sitProperties.getAdmin());
 
         // TODO: restart bug, User authorities and Authentication authorities
         User user = SecurityHolder.principal();
