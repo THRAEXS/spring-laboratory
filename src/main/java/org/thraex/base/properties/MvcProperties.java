@@ -5,7 +5,9 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author 鬼王
@@ -20,9 +22,9 @@ public class MvcProperties {
     private List<Resource> resources = Collections.emptyList();
 
     /**
-     * View controllers. Reference {@link ViewControllerRegistry}
+     * View controllers, e.g.: { mapping: viewName, ... }, Reference {@link ViewControllerRegistry}
      */
-    private List<String> views = Collections.emptyList();
+    private Map<String, String> views = new HashMap<>();
 
     public static class Resource {
 
@@ -65,11 +67,11 @@ public class MvcProperties {
         return this;
     }
 
-    public List<String> getViews() {
+    public Map<String, String> getViews() {
         return views;
     }
 
-    public MvcProperties setViews(List<String> views) {
+    public MvcProperties setViews(Map<String, String> views) {
         this.views = views;
         return this;
     }

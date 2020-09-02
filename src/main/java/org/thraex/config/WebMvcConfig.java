@@ -1,5 +1,6 @@
 package org.thraex.config;
 
+import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
@@ -8,6 +9,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.thraex.base.properties.MvcProperties;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.function.Function;
 
 /**
@@ -31,8 +34,9 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
     @Override
     public void addViewControllers(final ViewControllerRegistry registry) {
-        properties.getViews().stream().forEach(it ->
-                registry.addViewController(String.format("/%s", it)).setViewName(it));
+        final Map<String, String> views = properties.getViews();
+        views.keySet().stream().forEach(k -> registry.addViewController(String.format("/%s", k))
+                .setViewName(Optional.of(views.get(k)).filter(v -> !Strings.isBlank(v)).orElse(k)));
     }
 
 }

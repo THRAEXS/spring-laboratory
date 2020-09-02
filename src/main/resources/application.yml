@@ -31,11 +31,6 @@ logging:
     org.thraex.platform.mapper: debug
 
 thraex:
-  site:
-    mode:
-      enabled: false
-    index:
-      view: demo
   mvc:
     webjars: classpath:/META-INF/resources/webjars
     resources:
@@ -54,10 +49,11 @@ thraex:
       - paths: /qs/**
         locations: ${thraex.mvc.webjars}/qs/6.9.4/
     views:
-      - menu
-      - user
-      - role
-      - grant
-      - profile
+      dashboard: dashboard
+      menu: menu
+      user: user
+      role: role
+      grant: grant
+      profile: profile
   user:
     init-password: 111111

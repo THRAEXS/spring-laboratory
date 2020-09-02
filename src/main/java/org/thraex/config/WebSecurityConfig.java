@@ -31,13 +31,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(HttpSecurity http) throws Exception {
-        SiteProperties.Mode mode = properties.getMode();
         http.headers().frameOptions().disable()
                 .and().authorizeRequests()
-                    .antMatchers(mode.permit()).permitAll()
+                    .antMatchers(properties.permits()).permitAll()
                     .anyRequest().authenticated()
                 .and().formLogin()
-                    .defaultSuccessUrl(mode.successUrl())
+                    .defaultSuccessUrl(properties.redirect())
                 .and().httpBasic();
     }
 

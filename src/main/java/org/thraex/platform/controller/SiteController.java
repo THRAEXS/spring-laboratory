@@ -44,19 +44,17 @@ public class SiteController {
 
     @GetMapping
     public String index(Model model) {
-        SiteProperties.Mode mode = sitProperties.getMode();
-        if (mode.isEnabled()) {
+        if (!sitProperties.isEnabled()) {
             admin(model);
-        } else {
-            model.addAttribute("site", sitProperties.getIndex());
         }
 
-        return mode.index();
+        return sitProperties.index();
     }
 
     @GetMapping("admin")
     public String admin(Model model) {
-        model.addAttribute("site", sitProperties.getAdmin());
+        SiteProperties.Admin admin = sitProperties.getAdmin();
+        model.addAttribute("site", admin);
 
         // TODO: restart bug, User authorities and Authentication authorities
         User user = SecurityHolder.principal();
@@ -66,13 +64,7 @@ public class SiteController {
                 .filter(u -> u.equals(securityProperties.getUser().getName()))
                 .map(u -> menuService.tree()).orElse(menus(user.getId())));
 
-        return "admin";
-    }
-
-    @GetMapping("dashboard")
-    public String dashboard(Model model) {
-        model.addAttribute("view", sitProperties.getAdmin().getDashboard());
-        return "dashboard";
+        return admin.view();
     }
 
     private List<Menu> menus(String uid) {
