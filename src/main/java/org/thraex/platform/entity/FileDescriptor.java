@@ -20,6 +20,20 @@ public class FileDescriptor extends Entity<FileDescriptor> {
 
     private String path;
 
+    /**
+     * {@link org.springframework.http.MediaType}
+     */
+    private String contentType;
+
     private long size;
+
+    public FileDescriptor() { }
+
+    public FileDescriptor(String name, String path, String contentType, long size) {
+        this.name = name;
+        this.path = path;
+        this.contentType = contentType;
+        this.size = size;
+    }
 
 }

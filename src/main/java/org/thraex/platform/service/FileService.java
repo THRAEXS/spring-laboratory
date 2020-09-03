@@ -14,6 +14,8 @@ public interface FileService extends IService<FileDescriptor> {
 
     List<FileDescriptor> list(List<String> ids);
 
+    FileDescriptor transfer(MultipartFile file);
+
     List<FileDescriptor> transfer(List<MultipartFile> files);
 
     boolean delete(String id);

@@ -2,6 +2,7 @@ package org.thraex.platform.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,7 +12,6 @@ import org.thraex.base.controller.Service;
 import org.thraex.platform.entity.FileDescriptor;
 import org.thraex.platform.service.FileService;
 
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -22,9 +22,14 @@ import java.util.List;
 @RequestMapping("api/files")
 public class FileController extends Service<FileService> {
 
+    @GetMapping
+    public ResponseEntity<List<FileDescriptor>> list(List<String> ids) {
+        return ResponseEntity.ok(service.list(ids));
+    }
+
     @PostMapping
-    public ResponseEntity<List<FileDescriptor>> upload(MultipartFile file) {
-        return uploads(Arrays.asList(file));
+    public ResponseEntity<FileDescriptor> upload(MultipartFile file) {
+        return ResponseEntity.ok(service.transfer(file));
     }
 
     @PostMapping("multiple")

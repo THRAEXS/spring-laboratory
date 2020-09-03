@@ -24,7 +24,7 @@ CREATE TABLE `thraex-admin`.tbl_menu (
     pid VARCHAR(36),
     level_code VARCHAR(200),
     remark VARCHAR(200),
-    disabled boolean,
+    disabled BOOLEAN,
     create_by VARCHAR(36),
     create_time DATETIME,
     update_by VARCHAR(36),
@@ -55,6 +55,19 @@ CREATE TABLE `thraex-admin`.tbl_role_menu (
     id VARCHAR(36) NOT NULL PRIMARY KEY,
     rid VARCHAR(36),
     mid VARCHAR(36)
+);
+
+DROP TABLE IF EXISTS `thraex-admin`.tbl_file_descriptor;
+CREATE TABLE `thraex-admin`.tbl_file_descriptor (
+    id VARCHAR(36) NOT NULL PRIMARY KEY,
+    name VARCHAR(200),
+    path VARCHAR(500),
+    content_type VARCHAR(50),
+    size BIGINT,
+    create_by VARCHAR(36),
+    create_time DATETIME,
+    update_by VARCHAR(36),
+    update_time DATETIME
 );
 
 -- Initialization data
