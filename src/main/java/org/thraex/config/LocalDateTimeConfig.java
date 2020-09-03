@@ -9,6 +9,7 @@ import com.fasterxml.jackson.datatype.jsr310.ser.LocalTimeSerializer;
 import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilderCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.thraex.constant.DateTimeFormat;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -22,38 +23,34 @@ import java.time.format.DateTimeFormatter;
 @Configuration
 public class LocalDateTimeConfig {
 
-    private static final String DEFAULT_DATE_TIME = "yyyy-MM-dd HH:mm:ss";
-    private static final String DEFAULT_DATE = "yyyy-MM-dd";
-    private static final String DEFAULT_TIME = "HH:mm:ss";
-
     @Bean
     public LocalDateTimeSerializer localDateTimeSerializer() {
-        return new LocalDateTimeSerializer(DateTimeFormatter.ofPattern(DEFAULT_DATE_TIME));
+        return new LocalDateTimeSerializer(DateTimeFormatter.ofPattern(DateTimeFormat.DATE_TIME.value()));
     }
 
     @Bean
     public LocalDateTimeDeserializer localDateTimeDeserializer() {
-        return new LocalDateTimeDeserializer(DateTimeFormatter.ofPattern(DEFAULT_DATE_TIME));
+        return new LocalDateTimeDeserializer(DateTimeFormatter.ofPattern(DateTimeFormat.DATE_TIME.value()));
     }
 
     @Bean
     public LocalDateSerializer localDateSerializer() {
-        return new LocalDateSerializer(DateTimeFormatter.ofPattern(DEFAULT_DATE));
+        return new LocalDateSerializer(DateTimeFormatter.ofPattern(DateTimeFormat.DATE.value()));
     }
 
     @Bean
     public LocalDateDeserializer localDateDeserializer() {
-        return new LocalDateDeserializer(DateTimeFormatter.ofPattern(DEFAULT_DATE));
+        return new LocalDateDeserializer(DateTimeFormatter.ofPattern(DateTimeFormat.DATE.value()));
     }
 
     @Bean
     public LocalTimeSerializer localTimeSerializer() {
-        return new LocalTimeSerializer(DateTimeFormatter.ofPattern(DEFAULT_TIME));
+        return new LocalTimeSerializer(DateTimeFormatter.ofPattern(DateTimeFormat.TIME.value()));
     }
 
     @Bean
     public LocalTimeDeserializer localTimeDeserializer() {
-        return new LocalTimeDeserializer(DateTimeFormatter.ofPattern(DEFAULT_TIME));
+        return new LocalTimeDeserializer(DateTimeFormatter.ofPattern(DateTimeFormat.TIME.value()));
     }
 
     @Bean
