@@ -18,7 +18,7 @@ import java.util.List;
  * @author 鬼王
  * @date 2020/08/28 21:28
  */
-public class BaseController<E extends Entity<E>, S extends IService<E>> extends Service<S> {
+public class BaseController<E extends Entity<E>, S extends IService<E>> extends Controller<S> {
 
     @GetMapping
     public ResponseEntity<List<E>> list() {

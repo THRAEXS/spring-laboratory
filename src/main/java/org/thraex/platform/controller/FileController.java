@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-import org.thraex.base.controller.Service;
+import org.thraex.base.controller.Controller;
 import org.thraex.platform.entity.FileDescriptor;
 import org.thraex.platform.service.FileService;
 
@@ -20,7 +20,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("api/files")
-public class FileController extends Service<FileService> {
+public class FileController extends Controller<FileService> {
 
     @GetMapping
     public ResponseEntity<List<FileDescriptor>> list(List<String> ids) {
