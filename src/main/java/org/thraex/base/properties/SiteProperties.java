@@ -90,6 +90,11 @@ public class SiteProperties {
         private String brand = "THRAEX";
 
         /**
+         * Dashboard url of Admin
+         */
+        private String dashboard = "/dashboard";
+
+        /**
          * Default: admin.html
          */
         private String view = "admin";
