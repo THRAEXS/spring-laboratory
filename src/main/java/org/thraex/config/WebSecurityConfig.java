@@ -36,8 +36,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     .antMatchers(properties.permits()).permitAll()
                     .anyRequest().authenticated()
                 .and().formLogin()
-                    .defaultSuccessUrl(properties.redirect())
-                .and().httpBasic();
+                    .defaultSuccessUrl(properties.redirect());
     }
 
 }
