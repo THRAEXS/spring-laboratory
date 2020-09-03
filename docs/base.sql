@@ -81,3 +81,4 @@ INSERT INTO `thraex-admin`.tbl_role (id, name, code, remark, create_by, create_t
 INSERT INTO `thraex-admin`.tbl_role (id, name, code, remark, create_by, create_time, update_by, update_time) VALUES ('58ddea5881aa61470c3eef3b67922541', '维护人员', 'MAINTAINERS', '', 'admin', '2020-08-28 15:06:04', null, null);
 
 INSERT INTO `thraex-admin`.tbl_user (id, nickname, username, password, enabled, create_by, create_time, update_by, update_time) VALUES ('49803ceafc6124c50d908c08dba2d799', 'Editor', 'editor', '$2a$10$oO6CEpQ7ewnTbyh6y3FE5uyO.WgfE/BBftZplci4MWg/FQI3d9ScW', 1, 'admin', '2020-08-31 01:36:08', null, null);
+INSERT INTO `thraex-admin`.tbl_user (id, nickname, username, password, enabled, create_by, create_time, update_by, update_time) VALUES ('c071c91457d1e40dc1ad0c3f664d57c7', 'Administrator', 'administrator', '$2a$10$3GFBMXKzDLKqUpWJVh4qL.ATHJI0uNLmzo.Wi2VktHOSrJfkn3B3G', 1, 'admin', '2020-09-02 12:02:10', null, null);
