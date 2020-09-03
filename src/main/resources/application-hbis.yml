@@ -1,0 +1,12 @@
+thraex:
+  mvc:
+    views:
+      advert: hbis/advert
+  site:
+    enabled: true
+    admin:
+      title: HBIS | Admin
+      brand: HBIS
+      dashboard: /advert
+    portal:
+      view: hbis/index
