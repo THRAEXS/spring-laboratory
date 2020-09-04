@@ -7,7 +7,7 @@
 <body>
     <div class="content-wrapper">
         <el-upload
-            action="api/adverts"
+            :action="api"
             list-type="picture-card"
             multiple
             :headers="upload.headers"
@@ -35,20 +35,20 @@
         Factory.Vue.build({
             data() {
                 return {
+                    axios: Factory.Request,
+                    api: '/api/adverts',
                     dialog: {
                         visible: false,
                         src: ''
                     },
                     upload: {
                         headers: {},
-                        list: [
-                            { id: 'id-b1', name: 'b1', url: '/assets/images/hbis/b1.jpg'},
-                            { id: 'id-b2', name: 'b2', url: '/assets/images/hbis/b2.jpg'},
-                            { id: 'id-b3', name: 'b3', url: '/assets/images/hbis/b3.jpg'},
-                            { id: 'id-b4', name: 'b4', url: '/assets/images/hbis/b4.jpg'}
-                        ]
+                        list: []
                     }
                 }
+            },
+            created() {
+                this.axios.get(this.api).then(data => this.$set(this.upload, 'list', data));
             },
             mounted() {
                 const csrf = id => document.getElementById(id).getAttribute('content');

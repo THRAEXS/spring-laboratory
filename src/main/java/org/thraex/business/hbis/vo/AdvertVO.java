@@ -1,20 +1,25 @@
 package org.thraex.business.hbis.vo;
 
 import lombok.Data;
-import lombok.experimental.Accessors;
 import org.thraex.business.hbis.entity.Advert;
+import org.thraex.platform.entity.FileDescriptor;
 
 /**
  * @author 鬼王
  * @date 2020/09/03 18:02
  */
 @Data
-@Accessors(chain = true)
 public class AdvertVO extends Advert {
 
+    /**
+     * {@link FileDescriptor#getName()}
+     */
     private String name;
 
-    private String path;
+    /**
+     * {@link FileDescriptor#getPath()}
+     */
+    private String url;
 
     public AdvertVO() { }
 
@@ -23,10 +28,10 @@ public class AdvertVO extends Advert {
         this.setFid(fid);
     }
 
-    public AdvertVO(String id, String fid, String name, String path) {
+    public AdvertVO(String id, String fid, String name, String url) {
         this(id, fid);
         this.name = name;
-        this.path = path;
+        this.url = url;
     }
 
 }
