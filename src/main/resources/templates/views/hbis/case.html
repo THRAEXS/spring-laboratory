@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="template :: app_template(~{::title}, ~{::div.content-wrapper}, ~{::script})">
+<head>
+    <title>Case</title>
+</head>
+<body>
+    <div class="content-wrapper">
+        <el-row>
+            <el-col>
+                <el-card>
+                    <el-form ref="form" :model="form" :rules="rules" label-width="80px" inline>
+                        <el-form-item prop="name" label="名称">
+                            <el-input v-model.trim="form.name"></el-input>
+                        </el-form-item>
+                        <el-form-item prop="counter">
+                            <input type="hidden" v-model="form.counter"/>
+                            <el-upload
+                                ref="upload"
+                                :action="api"
+                                :data="form"
+                                :auto-upload="false"
+                                :headers="upload.headers"
+                                :on-change="handleChange"
+                                :on-remove="handleRemove"
+                                :limit="1">
+                                <el-button size="small" type="success">添加封面</el-button>
+                            </el-upload>
+                        </el-form-item>
+                        <el-form-item class="txt-r">
+                            <el-button type="primary" @click="handleSave">保存</el-button>
+                        </el-form-item>
+                    </el-form>
+                </el-card>
+            </el-col>
+        </el-row>
+        <el-row class="t-mt-0">
+            <el-col>
+                <el-card class="min-h-1">
+                    1123
+                </el-card>
+            </el-col>
+        </el-row>
+    </div>
+
+    <script type="text/javascript">
+        Factory.Vue.build({
+            data() {
+                return {
+                    axios: Factory.Request,
+                    api: '/api/cases',
+                    upload: {
+                        headers: {}
+                    },
+                    form: {
+                        name: '',
+                        counter: 0
+                    },
+                    rules: {
+                        name: [
+                            { required: true, message: '请输入名称' },
+                            { max: 50, message: '长度超出范围' }
+                        ],
+                        counter: { type: 'number', min: 1, message: '请选择封面' }
+                    },
+                    covers: []
+                }
+            },
+            created() {
+
+            },
+            mounted() {
+                const csrf = id => document.getElementById(id).getAttribute('content');
+                this.$set(this.upload.headers, csrf('_csrf_header'), csrf('_csrf_token'));
+            },
+            methods: {
+                list() {
+                    this.axios.get(this.api).then(data => {
+                        this.covers = data;
+                        console.log(data)
+                    });
+                },
+                setCover(len) {
+                    this.form.counter = len;
+                },
+                handleChange(file, fileList) {
+                    this.setCover(fileList.length);
+                },
+                handleRemove(file, fileList) {
+                    this.setCover(fileList.length);
+                },
+                handleSave() {
+                    this.$refs.form.validate(valid => {
+                        console.log('Valid:' ,valid)
+                        valid && this.$refs.upload.submit();
+                    });
+                }
+            }
+        });
+    </script>
+</body>
+</html>

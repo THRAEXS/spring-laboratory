@@ -2,6 +2,7 @@ thraex:
   mvc:
     views:
       advert: hbis/advert
+      case: hbis/case
   site:
     enabled: true
     admin:
