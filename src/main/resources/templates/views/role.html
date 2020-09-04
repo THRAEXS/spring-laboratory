@@ -117,7 +117,6 @@
                     this.transfer(row, this.form);
                 },
                 handleDelete(ind, id) {
-                    console.log(ind, id)
                     this.list.data.splice(ind, 1);
                     this.axios.delete(`${this.api}/${id}`);
                 },

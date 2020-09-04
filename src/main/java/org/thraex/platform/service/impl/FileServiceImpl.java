@@ -112,7 +112,7 @@ public class FileServiceImpl extends ServiceImpl<FileMapper, FileDescriptor> imp
                 log.error(e.toString());
             }
 
-            boolean b = this.delete(id);
+            boolean b = this.removeById(id);
             log.debug("Physically deleted: [{}], record delete: [{}]", a, b);
 
             return a && b;
