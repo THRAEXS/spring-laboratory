@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.thraex.base.controller.Controller;
@@ -59,11 +60,28 @@ public class AdvertController extends Controller<AdvertService> {
                 }).orElse(null));
     }
 
+    @DeleteMapping
+    public ResponseEntity<Boolean> delete(@RequestParam String id, @RequestParam String fid) {
+        return ResponseEntity.ok(remove(id, fid));
+    }
+
+    /**
+     * TODO: Inaccessible
+     *
+     * @param id
+     * @return
+     */
     @DeleteMapping("{id}")
     public ResponseEntity<Boolean> delete(@PathVariable String id) {
         return ResponseEntity.ok(Optional.ofNullable(service.getById(id))
-                .map(a -> fileService.delete(a.getFid()) && service.removeById(a.getId()))
+                .map(it -> remove(it.getId(), it.getFid()))
                 .orElse(false));
+    }
+
+    private boolean remove(String id, String fid) {
+        boolean a = fileService.delete(fid);
+        boolean b = service.removeById(id);
+        return a && b;
     }
 
 }

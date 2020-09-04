@@ -11,7 +11,8 @@
             list-type="picture-card"
             multiple
             :headers="upload.headers"
-            :file-list="upload.list">
+            :file-list="upload.list"
+            :on-success="handleSuccess">
             <i slot="default" class="el-icon-plus"></i>
             <div slot="file" slot-scope="{file}">
                 <img class="el-upload-list__item-thumbnail" :src="file.url"/>
@@ -48,20 +49,30 @@
                 }
             },
             created() {
-                this.axios.get(this.api).then(data => this.$set(this.upload, 'list', data));
+                this.list();
             },
             mounted() {
                 const csrf = id => document.getElementById(id).getAttribute('content');
                 this.$set(this.upload.headers, csrf('_csrf_header'), csrf('_csrf_token'));
             },
             methods: {
+                list() {
+                    this.axios.get(this.api).then(data => this.$set(this.upload, 'list', data));
+                },
+                handleSuccess(res, file) {
+                    Object.assign(file, res);
+                },
                 handlePreview(file) {
-                    console.log(file);
                     this.dialog.src = file.url;
                     this.dialog.visible = true;
                 },
-                handleRemove(file) {
-                    console.log(file)
+                handleRemove({ id, fid }) {
+                    const list = this.upload.list;
+                    list.splice(list.findIndex(f => f.id === id), 1);
+
+                    // TODO: Inaccessible
+                    // this.axios.delete(`${this.api}/${id}`);
+                    this.axios.delete(this.api, { params: { id, fid } });
                 }
             }
         });
