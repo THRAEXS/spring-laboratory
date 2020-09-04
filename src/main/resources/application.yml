@@ -38,6 +38,8 @@ thraex:
   mvc:
     webjars: classpath:/META-INF/resources/webjars
     resources:
+      - paths: ${thraex.file.access-prefix}/**
+        locations: file://${thraex.file.directory}/
       - paths:
           - /favicon.ico
           - /assets/**
@@ -61,5 +63,6 @@ thraex:
       profile: profile
   file:
     directory: ${user.home}/thraex-files
+    access-prefix: /assets/files
   user:
     init-password: 111111

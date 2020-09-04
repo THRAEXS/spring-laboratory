@@ -38,12 +38,18 @@ public class FileServiceImpl extends ServiceImpl<FileMapper, FileDescriptor> imp
     @Value("${thraex.file.directory}")
     private String directory;
 
+    @Value("${thraex.file.access-prefix}")
+    private String accessPrefix;
+
     @Override
     public List<FileDescriptor> list(List<String> ids) {
         return Optional.ofNullable(ids)
                 .filter(it -> !it.isEmpty())
                 .map(it -> this.list(Wrappers.<FileDescriptor>lambdaQuery()
                         .in(FileDescriptor::getId, it).orderByDesc(FileDescriptor::getCreateTime)))
+                .map(it -> it.parallelStream())
+                .map(it -> it.map(f -> f.setPath(joiner(accessPrefix, f.getPath())))
+                        .collect(Collectors.toList()))
                 .orElse(Collections.emptyList());
     }
 
@@ -118,14 +124,6 @@ public class FileServiceImpl extends ServiceImpl<FileMapper, FileDescriptor> imp
 
     private static String joiner(String... item) {
         return Stream.of(item).collect(Collectors.joining(File.separator));
-    }
-
-    public static void main(String[] args) {
-        try {
-            java.nio.file.Files.createDirectories(Paths.get("/Users/Guiwang/tt/09"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
 }
