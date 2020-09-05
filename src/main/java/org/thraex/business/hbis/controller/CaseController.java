@@ -2,6 +2,7 @@ package org.thraex.business.hbis.controller;
 
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,8 +16,11 @@ import org.thraex.business.hbis.entity.Case;
 import org.thraex.business.hbis.service.CaseService;
 import org.thraex.platform.service.FileService;
 
+import java.io.File;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * @author 鬼王
@@ -26,12 +30,20 @@ import java.util.Optional;
 @RequestMapping("api/cases")
 public class CaseController extends Controller<CaseService> {
 
+    @Value("${thraex.file.access-prefix}")
+    private String accessPrefix;
+
     @Autowired
     private FileService fileService;
 
+    private static String joiner(String... item) {
+        return Stream.of(item).collect(Collectors.joining(File.separator));
+    }
+
     @GetMapping
     public ResponseEntity<List<Case>> list() {
-        return ResponseEntity.ok(service.list(Wrappers.<Case>lambdaQuery().orderByDesc(Case::getCreateTime)));
+        return ResponseEntity.ok(service.list(Wrappers.<Case>lambdaQuery().orderByDesc(Case::getCreateTime))
+                .stream().map(it -> it.setCover(joiner(accessPrefix, it.getCover()))).collect(Collectors.toList()));
     }
 
     @PostMapping
