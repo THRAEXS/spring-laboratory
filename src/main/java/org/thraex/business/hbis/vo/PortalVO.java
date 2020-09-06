@@ -24,18 +24,15 @@ public class PortalVO implements Serializable {
 
     private List<AdvertVO> adverts;
 
-    private String url;
-
     public PortalVO() { }
 
-    public PortalVO(SiteProperties.Portal site, List<Menu> navs, String url) {
+    public PortalVO(SiteProperties.Portal site, List<Menu> navs) {
         this.site = site;
         this.navs = navs;
-        this.url = url;
     }
 
-    public PortalVO(SiteProperties.Portal site, List<Menu> navs, String url, List<AdvertVO> adverts) {
-        this(site, navs, url);
+    public PortalVO(SiteProperties.Portal site, List<Menu> navs, List<AdvertVO> adverts) {
+        this(site, navs);
         this.adverts = adverts;
     }
 

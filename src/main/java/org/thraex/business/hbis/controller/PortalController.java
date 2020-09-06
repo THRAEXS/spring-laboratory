@@ -29,9 +29,6 @@ public class PortalController {
     @Value("${hbis.nav-code}")
     private String navCode;
 
-    @Value("${hbis.url}")
-    private String url;
-
     @Autowired
     private MenuService menuService;
 
@@ -44,9 +41,8 @@ public class PortalController {
          * Compatible access: / or /hbis
          */
         SiteProperties.Portal site = sitProperties.getPortal();
-        List<Menu> tree = menuService.tree(navCode);
-        List<Menu> menus = tree.stream().findFirst().map(Menu::getChildren).orElse(Collections.emptyList());
-        model.addAttribute("portal", new PortalVO(site, menus, url, advertService.listVO()));
+        List<Menu> menus = menuService.tree(navCode).stream().findFirst().map(Menu::getChildren).orElse(Collections.emptyList());
+        model.addAttribute(new PortalVO(site, menus, advertService.listVO()));
 
         return "hbis/index";
     }
