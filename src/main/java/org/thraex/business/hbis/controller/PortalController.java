@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.thraex.base.properties.SiteProperties;
 import org.thraex.business.hbis.service.AdvertService;
+import org.thraex.business.hbis.vo.PortalVO;
 
 /**
  * @author 鬼王
@@ -15,7 +16,7 @@ import org.thraex.business.hbis.service.AdvertService;
  */
 @Controller
 @RequestMapping("hbis")
-public class HomeController {
+public class PortalController {
 
     @Autowired
     private SiteProperties sitProperties;
@@ -27,16 +28,19 @@ public class HomeController {
     private AdvertService advertService;
 
     @GetMapping
-    public String home(Model model) {
+    public String index(Model model) {
         /**
          * Compatible access: / or /hbis
          */
-        model.addAttribute("site", sitProperties.getPortal());
-        model.addAttribute("HBIS_URL", url);
-
-        model.addAttribute("adverts", advertService.listVO());
+        SiteProperties.Portal site = sitProperties.getPortal();
+        model.addAttribute("portal", new PortalVO(site, url, advertService.listVO()));
 
         return "hbis/index";
+    }
+
+    @GetMapping("company")
+    public String company() {
+        return null;
     }
 
 }
