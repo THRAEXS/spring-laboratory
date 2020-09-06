@@ -1,13 +1,113 @@
 <!DOCTYPE html>
 <html xmlns:th="https://www.thymeleaf.org">
 <head>
+    <title th:text="${site.title}"></title>
+
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
 
-    <title>邯钢集团信达科技有限公司</title>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="/AdminLTE/plugins/fontawesome-free/css/all.min.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="/AdminLTE/dist/css/adminlte.min.css">
+    <!-- Google Font: Source Sans Pro -->
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
 </head>
-<body>
-    <h1>邯钢集团信达科技有限公司</h1>
+<body class="hold-transition layout-top-nav layout-navbar-fixed layout-footer-fixed">
+    <div class="wrapper">
+        <!-- Navbar -->
+        <nav class="main-header navbar navbar-expand-md navbar-dark">
+            <div class="container">
+                <a href="/" class="navbar-brand">
+                    <!--src="/dist/img/AdminLTELogo.png"-->
+                    <img th:src="${site.logo}" alt="Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
+                    <span class="brand-text font-weight-light" th:text="${site.title}"></span>
+                </a>
+
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item dropdown dropdown-hover">
+                        <a class="nav-link" data-toggle="dropdown" href="javascript: void(0);">公司简介</a>
+                        <ul class="dropdown-menu dropdown-menu-right border-0 shadow">
+                            <li><a href="javascript: void(0);" class="dropdown-item">Some action </a></li>
+                            <li><a href="javascript: void(0);" class="dropdown-item">Some other action</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown dropdown-hover">
+                        <a class="nav-link" data-toggle="dropdown" href="javascript: void(0);">专业领域</a>
+                        <ul class="dropdown-menu dropdown-menu-right border-0 shadow">
+                            <li><a href="javascript: void(0);" class="dropdown-item">Some action </a></li>
+                            <li><a href="javascript: void(0);" class="dropdown-item">Some other action</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown dropdown-hover">
+                        <a class="nav-link" data-toggle="dropdown" href="javascript: void(0);">应用案例</a>
+                        <ul class="dropdown-menu dropdown-menu-right border-0 shadow">
+                            <li><a href="javascript: void(0);" class="dropdown-item">Some action </a></li>
+                            <li><a href="javascript: void(0);" class="dropdown-item">Some other action</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown dropdown-hover">
+                        <a class="nav-link" data-toggle="dropdown" href="javascript: void(0);">新闻动态</a>
+                        <ul class="dropdown-menu dropdown-menu-right border-0 shadow">
+                            <li><a href="javascript: void(0);" class="dropdown-item">Some action </a></li>
+                            <li><a href="javascript: void(0);" class="dropdown-item">Some other action</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown dropdown-hover">
+                        <a class="nav-link" data-toggle="dropdown" href="javascript: void(0);">企业文化</a>
+                        <ul class="dropdown-menu dropdown-menu-right border-0 shadow">
+                            <li><a href="javascript: void(0);" class="dropdown-item">Some action </a></li>
+                            <li><a href="javascript: void(0);" class="dropdown-item">Some other action</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <!-- /.navbar -->
+
+        <!-- Content Wrapper. Contains page content -->
+        <div class="content-wrapper">
+            <!-- Main content -->
+            <div class="content">
+                <div class="container">
+                    Content
+                </div><!-- /.container -->
+            </div>
+            <!-- /.content -->
+        </div>
+        <!-- /.content-wrapper -->
+
+        <!-- Main Footer -->
+        <footer class="main-footer bg-gradient-dark">
+            <div class="container">
+                <!-- To the right -->
+                <div class="float-right d-none d-sm-inline">
+                    <a href="javascript: void(0);">联系我们</a>
+                    <a href="javascript: void(0);">留言咨询</a>
+                </div>
+                <!-- Default to the left -->
+                版权所有 <strong>Copyright &copy; 2020 <a th:href="${HBIS_URL}" th:text="${site.title}"></a></strong>
+            </div>
+        </footer>
+    </div>
+    <!-- ./wrapper -->
+
+    <!-- REQUIRED SCRIPTS -->
+
+    <!-- jQuery -->
+    <script src="/plugins/jquery/jquery.min.js"></script>
+    <!-- Bootstrap 4 -->
+    <script src="/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- AdminLTE App -->
+    <script src="/dist/js/adminlte.min.js"></script>
+
+    <!-- REQUIRED SCRIPTS -->
+    <!-- jQuery -->
+    <script src="/AdminLTE/plugins/jquery/jquery.min.js"></script>
+    <!-- Bootstrap 4 -->
+    <script src="/AdminLTE/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- AdminLTE App -->
+    <script src="/AdminLTE/dist/js/adminlte.js"></script>
 </body>
 </html>

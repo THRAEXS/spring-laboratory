@@ -14,4 +14,16 @@ thraex:
       brand: HBIS
       dashboard: /maint-advert
     portal:
-      view: hbis/index
+      title: ${hbis.title}
+      view: forward:/hbis
+    permits:
+      - /vue/**
+      - /AdminLTE/**
+      - /element-ui/**
+      - /axios/**
+      - /qs/**
+      - /hbis/**
+
+hbis:
+  title: 邯钢集团信达科技有限公司
+  url: http://www.xinda-keji.com
