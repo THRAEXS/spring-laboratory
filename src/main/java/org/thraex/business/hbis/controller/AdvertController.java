@@ -35,19 +35,7 @@ public class AdvertController extends Controller<AdvertService> {
 
     @GetMapping
     public ResponseEntity<List<AdvertVO>> list() {
-        List<Advert> adverts = service.list();
-        List<FileDescriptor> files = fileService.list(adverts.stream().map(Advert::getFid).collect(Collectors.toList()));
-
-        List<AdvertVO> vos = files.stream()
-                .map(f -> new AdvertVO(
-                        adverts.stream()
-                                .filter(a -> f.getId().equals(a.getFid()))
-                                .map(Advert::getId).findFirst().orElse(null),
-                        f.getId(), f.getName(), f.getPath()))
-                .filter(v -> Objects.nonNull(v.getId()))
-                .collect(Collectors.toList());
-
-        return ResponseEntity.ok(vos);
+        return ResponseEntity.ok(service.listVO());
     }
 
     @PostMapping
