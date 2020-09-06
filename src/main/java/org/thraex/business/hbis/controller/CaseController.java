@@ -15,12 +15,11 @@ import org.thraex.base.controller.Controller;
 import org.thraex.business.hbis.entity.Case;
 import org.thraex.business.hbis.service.CaseService;
 import org.thraex.platform.service.FileService;
+import org.thraex.util.Joiner;
 
-import java.io.File;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * @author 鬼王
@@ -36,14 +35,10 @@ public class CaseController extends Controller<CaseService> {
     @Autowired
     private FileService fileService;
 
-    private static String joiner(String... item) {
-        return Stream.of(item).collect(Collectors.joining(File.separator));
-    }
-
     @GetMapping
     public ResponseEntity<List<Case>> list() {
         return ResponseEntity.ok(service.list(Wrappers.<Case>lambdaQuery().orderByDesc(Case::getCreateTime))
-                .stream().map(it -> it.setCover(joiner(accessPrefix, it.getCover()))).collect(Collectors.toList()));
+                .stream().map(it -> it.setCover(Joiner.path(accessPrefix, it.getCover()))).collect(Collectors.toList()));
     }
 
     @PostMapping
