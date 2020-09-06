@@ -37,7 +37,7 @@ public class CaseController extends Controller<CaseService> {
 
     @GetMapping
     public ResponseEntity<List<Case>> list() {
-        return ResponseEntity.ok(service.list(Wrappers.<Case>lambdaQuery().orderByDesc(Case::getCreateTime))
+        return ResponseEntity.ok(service.list(Wrappers.<Case>lambdaQuery().orderByAsc(Case::getCreateTime))
                 .stream().map(it -> it.setCover(Joiner.path(accessPrefix, it.getCover()))).collect(Collectors.toList()));
     }
 

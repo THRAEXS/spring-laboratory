@@ -36,12 +36,18 @@
             </el-col>
         </el-row>
         <el-row :gutter="15">
-            <el-col :span="4" v-for="item in cases" :key="item.id" class="t-mt-0">
+            <el-col :span="4" v-for="(item, ind) in cases" :key="item.id" class="t-mt-0">
                 <el-card>
-                    <img :src="item.cover" width="100%" height="110"/>
-                    <div>
-                        {{ item.name }}
+                    <div slot="header" class="clearfix">
+                        <span>{{ item.name || 'Unknown' }}</span>
+                        <el-button
+                            type="text"
+                            size="mini"
+                            icon="el-icon-delete"
+                            style="float: right; padding: 3px 0;color: red;"
+                            @click="handleDelete(ind, item)"></el-button>
                     </div>
+                    <img :src="item.cover" width="100%" height="110"/>
                 </el-card>
             </el-col>
         </el-row>
@@ -91,9 +97,14 @@
                     this.$refs.upload.clearFiles();
                     Object.assign(this.form, { name: '', counter: 0 });
                     this.$refs.form.resetFields();
+                    this.list();
                 },
                 handleSave() {
                     this.$refs.form.validate(valid => valid && this.$refs.upload.submit());
+                },
+                handleDelete(ind, { id, fid }) {
+                    this.cases.splice(ind, 1);
+                    this.axios.delete(this.api, { params: { id, fid } });
                 }
             }
         });

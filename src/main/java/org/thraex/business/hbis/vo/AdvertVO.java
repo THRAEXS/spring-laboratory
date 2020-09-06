@@ -4,12 +4,26 @@ import lombok.Data;
 import org.thraex.business.hbis.entity.Advert;
 import org.thraex.platform.entity.FileDescriptor;
 
+import java.io.Serializable;
+
 /**
  * @author 鬼王
  * @date 2020/09/03 18:02
  */
 @Data
-public class AdvertVO extends Advert {
+public class AdvertVO implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
+    /**
+     * {@link Advert#getId()}
+     */
+    private String id;
+
+    /**
+     * {@link FileDescriptor#getId()}
+     */
+    private String fid;
 
     /**
      * {@link FileDescriptor#getName()}
@@ -23,13 +37,9 @@ public class AdvertVO extends Advert {
 
     public AdvertVO() { }
 
-    public AdvertVO(String id, String fid) {
-        this.setId(id);
-        this.setFid(fid);
-    }
-
     public AdvertVO(String id, String fid, String name, String url) {
-        this(id, fid);
+        this.id = id;
+        this.fid = fid;
         this.name = name;
         this.url = url;
     }
