@@ -22,6 +22,7 @@ thraex:
       - /element-ui/**
       - /axios/**
       - /qs/**
+      - /assets/**
       - /hbis/**
 
 hbis:

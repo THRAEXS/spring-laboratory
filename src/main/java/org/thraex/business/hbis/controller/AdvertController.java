@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
  * @date 2020/09/03 14:05
  */
 @RestController
-@RequestMapping("api/adverts")
+@RequestMapping("api/hbis/adverts")
 public class AdvertController extends Controller<AdvertService> {
 
     @Autowired

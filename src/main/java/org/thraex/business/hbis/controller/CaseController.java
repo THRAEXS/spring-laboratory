@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
  * @date 2020/09/04 16:17
  */
 @RestController
-@RequestMapping("api/cases")
+@RequestMapping("api/hbis/cases")
 public class CaseController extends Controller<CaseService> {
 
     @Value("${thraex.file.access-prefix}")
