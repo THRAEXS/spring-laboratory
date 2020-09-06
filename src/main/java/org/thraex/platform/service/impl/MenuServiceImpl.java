@@ -56,18 +56,41 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
                 .orElse(Collections.emptyList());
     }
 
+    @Override
+    public List<Menu> tree(String code) {
+        List<Menu> list = Optional.ofNullable(code)
+                .map(c -> this.getOne(Wrappers.<Menu>lambdaQuery().eq(Menu::getCode, c)))
+                .map(m -> m.getLevelCode())
+                .map(l -> this.list(Wrappers.<Menu>lambdaQuery().likeRight(Menu::getLevelCode, l)
+                        .orderByAsc(Menu::getLevelCode)))
+                .orElse(Collections.emptyList());
+
+        return toTree(list);
+    }
+
     private List<Menu> toTree(List<Menu> list) {
         // TODO: Optimize
         List<Menu> roots = list.parallelStream()
                 .filter(it -> Strings.isBlank(it.getPid()))
                 .sorted((m1, m2) -> m2.getLevelCode().compareTo(m1.getLevelCode()))
                 .collect(Collectors.toList());
-        roots.forEach(it -> it.setChildren(list.parallelStream()
-                .filter(s -> it.getId().equals(s.getPid()))
-                .sorted(Comparator.comparing(Menu::getLevelCode))
-                .collect(Collectors.toList())));
+
+        List<Menu> leafs = list.parallelStream()
+                .filter(it -> Strings.isNotBlank(it.getPid()))
+                .collect(Collectors.toList());
+
+        roots.forEach(r -> toTree(r, leafs));
 
         return roots;
+    }
+
+    private void toTree(Menu root, List<Menu> nodes) {
+        List<Menu> children = nodes.parallelStream()
+                .filter(l -> root.getId().equals(l.getPid()))
+                .sorted(Comparator.comparing(Menu::getLevelCode))
+                .collect(Collectors.toList());
+        root.setChildren(children);
+        children.forEach(n -> toTree(n, nodes));
     }
 
     @Override
