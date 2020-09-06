@@ -5,13 +5,13 @@ spring:
 thraex:
   mvc:
     views:
-      advert: hbis/advert
-      case: hbis/case
+      maint-advert: hbis/maint/advert
+      maint-case: hbis/maint/case
   site:
     enabled: true
     admin:
       title: HBIS | Admin
       brand: HBIS
-      dashboard: /advert
+      dashboard: /maint-advert
     portal:
       view: hbis/index
