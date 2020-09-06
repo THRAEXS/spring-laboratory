@@ -11,8 +11,8 @@ import org.thraex.constant.DateTimeFormat;
 import org.thraex.platform.entity.FileDescriptor;
 import org.thraex.platform.mapper.FileMapper;
 import org.thraex.platform.service.FileService;
+import org.thraex.util.Joiner;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -48,7 +48,7 @@ public class FileServiceImpl extends ServiceImpl<FileMapper, FileDescriptor> imp
                 .map(it -> this.list(Wrappers.<FileDescriptor>lambdaQuery()
                         .in(FileDescriptor::getId, it).orderByDesc(FileDescriptor::getCreateTime)))
                 .map(it -> it.parallelStream())
-                .map(it -> it.map(f -> f.setPath(joiner(accessPrefix, f.getPath())))
+                .map(it -> it.map(f -> f.setPath(Joiner.path(accessPrefix, f.getPath())))
                         .collect(Collectors.toList()))
                 .orElse(Collections.emptyList());
     }
@@ -76,10 +76,10 @@ public class FileServiceImpl extends ServiceImpl<FileMapper, FileDescriptor> imp
             String id = UUID.randomUUID().toString().replace("-", "");
             try {
                 String newName = String.format("%s.%s", id, Files.getFileExtension(name));
-                String path = joiner(today, newName);
+                String path = Joiner.path(today, newName);
 
-                String fullDir = joiner(directory, today);
-                Path fullPath = Paths.get(joiner(directory, today, newName));
+                String fullDir = Joiner.path(directory, today);
+                Path fullPath = Paths.get(Joiner.path(directory, today, newName));
 
                 log.debug("File transfer: [{}, {}, {}]", name, type, size);
                 java.nio.file.Files.createDirectories(Paths.get(fullDir));
@@ -107,7 +107,7 @@ public class FileServiceImpl extends ServiceImpl<FileMapper, FileDescriptor> imp
             log.debug("Delete file: [{}, {}]", f.getName(), f.getPath());
             boolean a = false;
             try {
-                a = java.nio.file.Files.deleteIfExists(Paths.get(joiner(directory, file.getPath())));
+                a = java.nio.file.Files.deleteIfExists(Paths.get(Joiner.path(directory, file.getPath())));
             } catch (IOException e) {
                 log.error(e.toString());
             }
@@ -120,10 +120,6 @@ public class FileServiceImpl extends ServiceImpl<FileMapper, FileDescriptor> imp
             log.debug("File not found");
             return false;
         });
-    }
-
-    private static String joiner(String... item) {
-        return Stream.of(item).collect(Collectors.joining(File.separator));
     }
 
 }
