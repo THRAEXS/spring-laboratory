@@ -35,15 +35,21 @@ public class PortalController {
     @Autowired
     private AdvertService advertService;
 
-    @GetMapping
-    public String index(Model model) {
+    private void base(Model model) {
         /**
          * Compatible access: / or /hbis
          */
         SiteProperties.Portal site = sitProperties.getPortal();
-        List<Menu> menus = menuService.tree(navCode).stream().findFirst().map(Menu::getChildren).orElse(Collections.emptyList());
-        model.addAttribute(new PortalVO(site, menus, advertService.listVO()));
 
+        List<Menu> menus = menuService.tree(navCode).stream().findFirst().map(Menu::getChildren).orElse(Collections.emptyList());
+        PortalVO vo = new PortalVO(site, menus, advertService.listVO());
+
+        model.addAttribute(vo);
+    }
+
+    @GetMapping
+    public String index(Model model) {
+        base(model);
         return "hbis/index";
     }
 
