@@ -44,10 +44,22 @@ public class MenuController {
         return ResponseEntity.ok(menuService.getById(id));
     }
 
+    private Menu parent(String identifier) {
+        return menuService.getOne(Wrappers.<Menu>lambdaQuery()
+                .eq(Menu::getId, identifier).or().eq(Menu::getCode, identifier));
+    }
+
+    @GetMapping("down/{identifier}")
+    public ResponseEntity<List<Menu>> down(@PathVariable String identifier) {
+        Menu parent = this.parent(identifier);
+
+        return ResponseEntity.ok(menuService.list(Wrappers.<Menu>lambdaQuery()
+                .likeRight(Menu::getLevelCode, parent.getLevelCode()).orderByAsc(Menu::getLevelCode)));
+    }
+
     @GetMapping("children/{identifier}")
     public ResponseEntity<List<Menu>> children(@PathVariable String identifier) {
-        Menu parent = menuService.getOne(Wrappers.<Menu>lambdaQuery()
-                .eq(Menu::getId, identifier).or().eq(Menu::getCode, identifier));
+        Menu parent = this.parent(identifier);
 
         return ResponseEntity.ok(menuService.list(Wrappers.<Menu>lambdaQuery()
                 .eq(Menu::getPid, parent.getId()).orderByAsc(Menu::getLevelCode)));
