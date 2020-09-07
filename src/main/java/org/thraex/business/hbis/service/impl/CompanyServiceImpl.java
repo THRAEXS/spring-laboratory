@@ -10,6 +10,8 @@ import org.thraex.business.hbis.entity.Company;
 import org.thraex.business.hbis.mapper.CompanyMapper;
 import org.thraex.business.hbis.service.CompanyService;
 
+import java.util.Optional;
+
 /**
  * @author 鬼王
  * @date 2020/09/07 09:01
@@ -22,7 +24,12 @@ public class CompanyServiceImpl extends ServiceImpl<CompanyMapper, Company> impl
 
     @Override
     public Company one() {
-        return this.list().stream().findFirst().orElse(dc);
+        return this.list().stream().findFirst().orElse(null);
+    }
+
+    @Override
+    public Company oneOrDefault() {
+        return Optional.ofNullable(one()).orElse(dc);
     }
 
     @Data

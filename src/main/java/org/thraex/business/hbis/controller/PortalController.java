@@ -54,7 +54,7 @@ public class PortalController {
          * Compatible access: / or /hbis
          */
         SiteProperties.Portal site = sitProperties.getPortal();
-        Optional.ofNullable(companyService.one()).map(Company::getName).ifPresent(n -> site.setTitle(n));
+        Optional.ofNullable(companyService.oneOrDefault()).map(Company::getName).ifPresent(n -> site.setTitle(n));
 
         List<Menu> menus = menuService.tree(navCode).stream().findFirst().map(Menu::getChildren).orElse(Collections.emptyList());
 
@@ -64,7 +64,7 @@ public class PortalController {
     @GetMapping
     public String index(Model model) {
         model.addAttribute(base()
-                .setCompany(companyService.one())
+                .setCompany(companyService.oneOrDefault())
                 .setNews(newsService.list(5))
                 .setCases(caseService.list(6)));
         return "hbis/index";

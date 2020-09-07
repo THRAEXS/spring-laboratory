@@ -12,12 +12,13 @@ thraex:
       maint-advert: hbis/maint/advert
       maint-case: hbis/maint/case
       maint-company: hbis/maint/company
+      maint-news: hbis/maint/news
   site:
     enabled: true
     admin:
       title: HBIS | Admin
       brand: HBIS
-      dashboard: /maint-advert
+      dashboard: /maint/company
     portal:
       title: ${hbis.name}
       view: forward:/hbis

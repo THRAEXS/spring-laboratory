@@ -1,10 +1,271 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="template-v2 :: app_template(~{::title}, ~{::style}, ~{}, ~{::.container-item}, ~{::script})">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Company</title>
+    <style type="text/css">
+        .avatar-uploader .el-upload {
+            border: 1px dashed #d9d9d9!important;
+            border-radius: 6px!important;
+            cursor: pointer!important;
+            position: relative!important;
+            overflow: hidden!important;
+        }
+        .avatar-uploader .el-upload:hover {
+            border-color: #409EFF!important;
+        }
+        .avatar-uploader-icon {
+            font-size: 28px!important;
+            color: #8c939d!important;
+            /*width: 400px!important;*/
+            /*height: 400px!important;*/
+            /*line-height: 400px!important;*/
+            text-align: center!important;
+        }
+        .avatar {
+            /*width: 400px!important;*/
+            /*height: 400px!important;*/
+            display: block!important;
+        }
+    </style>
 </head>
 <body>
+    <section class="content p-2 container-item">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12">
+                    <el-tabs v-model="tab.selected" tab-position="left">
+                        <el-tab-pane
+                            v-for="item in tab.list"
+                            :key="item.label"
+                            :label="item.label"
+                            :disabled="tabDisabled"></el-tab-pane>
+                        <el-form ref="form" :model="form" :rules="rules" label-width="auto">
+                            <el-form-item prop="name" label="名称" v-show="handleShow('name')">
+                                <el-input v-model.trim="form.name"></el-input>
+                            </el-form-item>
+                            <el-form-item prop="address" label="地址" v-show="handleShow('address')">
+                                <el-input v-model.trim="form.address"></el-input>
+                            </el-form-item>
+                            <el-form-item prop="zipCode" label="邮编" v-show="handleShow('zipCode')">
+                                <el-input v-model.trim="form.zipCode"></el-input>
+                            </el-form-item>
+                            <el-form-item prop="phone" label="电话" v-show="handleShow('phone')">
+                                <el-input v-model.trim="form.phone"></el-input>
+                            </el-form-item>
+                            <el-form-item prop="fax" label="传真" v-show="handleShow('fax')">
+                                <el-input v-model.trim="form.fax"></el-input>
+                            </el-form-item>
+                            <el-form-item prop="contact" label="联系人" v-show="handleShow('contact')">
+                                <el-input v-model.trim="form.contact"></el-input>
+                            </el-form-item>
+                            <el-form-item prop="mobile" label="手机" v-show="handleShow('mobile')">
+                                <el-input v-model.trim="form.mobile"></el-input>
+                            </el-form-item>
 
+                            <el-form-item v-show="handleShow('introduction')">
+                                <el-input type="textarea" v-model="form.introduction" :rows="textarea.rows"></el-input>
+                            </el-form-item>
+                            <el-form-item v-show="handleShow('situation')">
+                                <el-input type="textarea" v-model="form.situation" :rows="textarea.rows"></el-input>
+                            </el-form-item>
+                            <el-form-item v-show="handleShow('organization')">
+                                <el-input type="textarea" v-model="form.organization" :rows="textarea.rows"></el-input>
+                            </el-form-item>
+                            <el-form-item v-show="handleShow('scope')">
+                                <el-input type="textarea" v-model="form.scope" :rows="textarea.rows"></el-input>
+                            </el-form-item>
+                            <el-form-item v-show="handleShow('personnel')">
+                                <el-input type="textarea" v-model="form.personnel" :rows="textarea.rows"></el-input>
+                            </el-form-item>
+                            <el-form-item v-show="handleShow('history')">
+                                <el-input type="textarea" v-model="form.history" :rows="textarea.rows"></el-input>
+                            </el-form-item>
+
+                            <el-form-item class="text-right" v-show="handleShow('save')">
+                                <el-button type="primary" @click="handleSave">保存</el-button>
+                            </el-form-item>
+                        </el-form>
+
+                        <el-upload
+                            class="avatar-uploader"
+                            :action="`${this.api}/upload`"
+                            :headers="upload.headers"
+                            :data="uploadData"
+                            v-show="handleShow('upload')"
+                            :show-file-list="false"
+                            :on-success="handleUploadSuccess">
+                            <img v-if="upload.url" :src="upload.url"
+                                 class="avatar" :style="upload.style.avatar">
+                            <i v-else class="el-icon-plus avatar-uploader-icon" :style="upload.style.icon"></i>
+                        </el-upload>
+                    </el-tabs>
+                </div>
+            </div>
+        </div>
+    </section>
+    <script type="text/javascript">
+        Factory.Vue.build({
+            data() {
+                const lenLimit = max => ({ max, message: '长度超出范围' });
+
+                return {
+                    axios: Factory.Request,
+                    api: '/api/hbis/companies',
+                    tab: {
+                        selected: 0,
+                        list: [
+                            {
+                                name: 'base',
+                                label: '基本信息',
+                                field: ['name', 'address', 'zipCode', 'phone', 'fax', 'contact', 'mobile', 'save'],
+                                save: () => this.$refs.form.validate(valid => valid && (() => {
+                                    let formData = { id: this.form.id };
+                                    for (let k of this.getTab().field) {
+                                        const val = this.form[k];
+                                        val && Object.assign(formData, { [k]: val })
+                                    }
+                                    this.axios.post(this.api, formData).then(data => this.$set(this, 'form', data));
+                                })())
+                            },
+                            {
+                                name: 'cover',
+                                label: '封面图',
+                                field: ['upload'],
+                                handler: () => this.handleUploadStyle(400, 400, this.form.coverPath)
+                            },
+                            {
+                                name: 'map',
+                                label: '地图',
+                                field: ['upload'],
+                                handler: () => this.handleUploadStyle(900, 600, this.form.mapPath)
+                            },
+                            {
+                                name: 'intr',
+                                label: '公司简介',
+                                field: ['introduction', 'save'],
+                                save: () => this.handleUpdate('introduction')
+                            },
+                            {
+                                name: 'cp',
+                                label: '公司概况',
+                                field: ['situation', 'save'],
+                                save: () => this.handleUpdate('situation')
+                            },
+                            {
+                                name: 'org',
+                                label: '组织机构',
+                                field: ['organization', 'save'],
+                                save: () => this.handleUpdate('organization')
+                            },
+                            {
+                                name: 'scope',
+                                label: '经营范围',
+                                field: ['scope', 'save'],
+                                save: () => this.handleUpdate('scope')
+                            },
+                            {
+                                name: 'ps',
+                                label: '人员概况',
+                                field: ['personnel', 'save'],
+                                save: () => this.handleUpdate('personnel')
+                            },
+                            {
+                                name: 'dc',
+                                label: '发展历程',
+                                field: ['history', 'save'],
+                                save: () => this.handleUpdate('history')
+                            }
+                        ]
+                    },
+                    upload: {
+                        style: {},
+                        headers: {},
+                        url: ''
+                    },
+                    textarea: {
+                        rows: 25
+                    },
+                    form: {
+                        id: null,
+                        name: null,
+                        address: null,
+                        zipCode: null,
+                        phone: null,
+                        fax: null,
+                        contact: null,
+                        mobile: null,
+                        coverId: null,
+                        coverPath: null,
+                        mapId: null,
+                        mapPath: null,
+                        introduction: null,
+                        situation: null,
+                        organization: null,
+                        scope: null,
+                        personnel: null,
+                        history: null
+                    },
+                    rules: {
+                        name: [
+                            { required: true, message: '请输入名称' },
+                            lenLimit(100)
+                        ],
+                        address: [lenLimit(100)],
+                        zipCode: [lenLimit(50)],
+                        phone: [lenLimit(50)],
+                        fax: [lenLimit(50)],
+                        contact: [lenLimit(50)],
+                        mobile: [lenLimit(50)]
+                    }
+                }
+            },
+            computed: {
+                tabDisabled() {
+                    return !this.form.id;
+                },
+                uploadData() {
+                    return Object.assign({}, this.form)
+                }
+            },
+            created() {
+                this.axios.get(this.api).then(data => {
+                    console.log(data);
+                    Object.assign(this.form, data)
+                });
+            },
+            mounted() {
+                const csrf = id => document.getElementById(id).getAttribute('content');
+                this.$set(this.upload.headers, csrf('_csrf_header'), csrf('_csrf_token'));
+            },
+            methods: {
+                getTab() {
+                    return this.tab.list[Number.parseInt(this.tab.selected)];
+                },
+                handleShow(key) {
+                    const tab = this.getTab();
+                    tab.handler && tab.handler();
+                    return tab.field.includes(key);
+                },
+                handleUploadStyle(w, h, path) {
+                    Object.assign(this.upload.style, {
+                        icon: { width: `${w}px`, height: `${h}px`, lineHeight: `${h}px` },
+                        avatar: { width: `${w}px`, height: `${h}px` }
+                    });
+                    this.$set(this.upload, 'url', path);
+                },
+                handleUploadSuccess(res, file) {
+                    this.$set(this.upload, 'url', URL.createObjectURL(file.raw));
+                },
+                handleSave() {
+                    this.getTab().save();
+                },
+                handleUpdate(field) {
+                    const val = this.form[field];
+                    val && this.axios.put(this.api, { id: this.form.id, [field]: val });
+                }
+            }
+        });
+    </script>
 </body>
 </html>

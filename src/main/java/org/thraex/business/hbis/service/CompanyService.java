@@ -11,4 +11,6 @@ public interface CompanyService extends IService<Company> {
 
     Company one();
 
+    Company oneOrDefault();
+
 }
