@@ -1,130 +1,78 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-      th:replace="hbis/base :: app_template(~{::.container-item})">
+<html xmlns:th="http://www.thymeleaf.org" th:replace="hbis/base :: app_template(~{::.container-item})">
 <body>
-    <!--<el-row :gutter="15" class="container-item">
-        <el-col :span="16">
-            <el-row :gutter="15">
-                <el-col :span="8">
-                    <el-image th:src="${portalVO.company.coverPath}"/>
-                </el-col>
-                <el-col :span="16">
-                    <div style="padding: 0;text-indent: 2em;font: 12px/22px simsun, arial;color: #505050;">
-                        [[${portalVO.company.introduction}]]
-                    </div>
-                </el-col>
-            </el-row>
-        </el-col>
-    </el-row>-->
-
-    <div class="row container-item mt-1">
-        <div class="col-12">
-            <div class="card card-primary">
+    <div class="row container-item mt-3">
+        <div class="col-7">
+            <div class="card card-outline card-primary">
                 <div class="card-header">
-                    <h3 class="card-title">Ribbons</h3>
+                    <h3 class="card-title font-weight-bold">公司简介</h3>
+
+                    <div class="card-tools">
+                        <button type="button" class="btn btn-tool"><i class="fas fa-info-circle"></i></button>
+                    </div>
+                    <!-- /.card-tools -->
                 </div>
                 <!-- /.card-header -->
                 <div class="card-body">
                     <div class="row">
-                        <div class="col-sm-4">
-                            <div class="position-relative p-3 bg-gray" style="height: 180px">
-                                <div class="ribbon-wrapper">
-                                    <div class="ribbon bg-primary">
-                                        Ribbon
-                                    </div>
-                                </div>
-                                Ribbon Default <br />
-                                <small>.ribbon-wrapper.ribbon-lg .ribbon</small>
-                            </div>
+                        <div class="col-4">
+                            <img alt="Cover" width="208" height="141" th:src="${portalVO.company.coverPath}"/>
                         </div>
-                        <div class="col-sm-4">
-                            <div class="position-relative p-3 bg-gray" style="height: 180px">
-                                <div class="ribbon-wrapper ribbon-lg">
-                                    <div class="ribbon bg-info">
-                                        Ribbon Large
-                                    </div>
-                                </div>
-                                Ribbon Large <br />
-                                <small>.ribbon-wrapper.ribbon-lg .ribbon</small>
-                            </div>
-                        </div>
-                        <div class="col-sm-4">
-                            <div class="position-relative p-3 bg-gray" style="height: 180px">
-                                <div class="ribbon-wrapper ribbon-xl">
-                                    <div class="ribbon bg-secondary">
-                                        Ribbon Extra Large
-                                    </div>
-                                </div>
-                                Ribbon Extra Large <br />
-                                <small>.ribbon-wrapper.ribbon-xl .ribbon</small>
-                            </div>
+                        <div class="col-8" style="text-indent: 2em;font: 12px/22px simsun, arial;color: #505050;">
+                            [[${portalVO.company.introduction}]]
                         </div>
                     </div>
-                    <div class="row mt-4">
-                        <div class="col-sm-4">
-                            <div class="position-relative p-3 bg-gray" style="height: 180px">
-                                <div class="ribbon-wrapper ribbon-lg">
-                                    <div class="ribbon bg-success text-lg">
-                                        Ribbon
-                                    </div>
-                                </div>
-                                Ribbon Large <br /> with Large Text <br />
-                                <small>.ribbon-wrapper.ribbon-lg .ribbon.text-lg</small>
-                            </div>
-                        </div>
-                        <div class="col-sm-4">
-                            <div class="position-relative p-3 bg-gray" style="height: 180px">
-                                <div class="ribbon-wrapper ribbon-xl">
-                                    <div class="ribbon bg-warning text-lg">
-                                        Ribbon
-                                    </div>
-                                </div>
-                                Ribbon Extra Large <br /> with Large Text <br />
-                                <small>.ribbon-wrapper.ribbon-xl .ribbon.text-lg</small>
-                            </div>
-                        </div>
-                        <div class="col-sm-4">
-                            <div class="position-relative p-3 bg-gray" style="height: 180px">
-                                <div class="ribbon-wrapper ribbon-xl">
-                                    <div class="ribbon bg-danger text-xl">
-                                        Ribbon
-                                    </div>
-                                </div>
-                                Ribbon Extra Large <br /> with Extra Large Text <br />
-                                <small>.ribbon-wrapper.ribbon-xl .ribbon.text-xl</small>
-                            </div>
+                </div>
+                <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+        </div>
+        <!-- /.col -->
+        <div class="col-5">
+            <div class="card card-outline card-primary">
+                <div class="card-header">
+                    <h3 class="card-title font-weight-light">新闻资讯</h3>
+
+                    <div class="card-tools">
+                        <button type="button" class="btn btn-tool"><i class="fas fa-info-circle"></i></button>
+                    </div>
+                    <!-- /.card-tools -->
+                </div>
+                <!-- /.card-header -->
+                <div class="card-body">
+                    <div style="min-height: 141px;">
+                        <div th:each="n : ${portalVO.news}">
+                            <a href="javascript: void(0);" style="font: 12px/26px simsun, Arial,Verdana;color: #505050;">
+                                <i class="fas fa-envelope mr-2"></i> [[${n.title}]]
+                                <span class="float-right text-muted text-sm">3 mins</span>
+                            </a>
                         </div>
                     </div>
-                    <div class="row mt-4">
-                        <div class="col-sm-4">
-                            <div class="position-relative">
-                                <img src="../../dist/img/photo1.png" alt="Photo 1" class="img-fluid">
-                                <div class="ribbon-wrapper ribbon-lg">
-                                    <div class="ribbon bg-success text-lg">
-                                        Ribbon
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-sm-4">
-                            <div class="position-relative">
-                                <img src="../../dist/img/photo2.png" alt="Photo 2" class="img-fluid">
-                                <div class="ribbon-wrapper ribbon-xl">
-                                    <div class="ribbon bg-warning text-lg">
-                                        Ribbon
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-sm-4">
-                            <div class="position-relative" style="min-height: 180px;">
-                                <img src="../../dist/img/photo3.jpg" alt="Photo 3" class="img-fluid">
-                                <div class="ribbon-wrapper ribbon-xl">
-                                    <div class="ribbon bg-danger text-xl">
-                                        Ribbon
-                                    </div>
-                                </div>
-                            </div>
+                </div>
+                <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+        </div>
+        <!-- /.col -->
+    </div>
+    <!-- /.row -->
+    <div class="row container-item">
+        <div class="col-12">
+            <div class="card card-outline card-primary">
+                <div class="card-header">
+                    <h3 class="card-title font-weight-light">项目展示</h3>
+
+                    <div class="card-tools">
+                        <button type="button" class="btn btn-tool"><i class="fas fa-info-circle"></i></button>
+                    </div>
+                    <!-- /.card-tools -->
+                </div>
+                <!-- /.card-header -->
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-2" th:each="c : ${portalVO.cases}">
+                            <img th:src="${c.cover}" width="150" height="110"/>
+                            <label style="font: 12px Verdana, Arial, Helvetica, sans-serif;color: #505050;">[[${c.name}]]</label>
                         </div>
                     </div>
                 </div>

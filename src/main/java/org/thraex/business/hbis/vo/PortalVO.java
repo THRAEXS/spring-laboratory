@@ -3,6 +3,7 @@ package org.thraex.business.hbis.vo;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import org.thraex.base.properties.SiteProperties;
+import org.thraex.business.hbis.entity.Case;
 import org.thraex.business.hbis.entity.Company;
 import org.thraex.business.hbis.entity.News;
 import org.thraex.platform.entity.Menu;
@@ -29,6 +30,8 @@ public class PortalVO implements Serializable {
     private Company company;
 
     private List<News> news;
+
+    private List<Case> cases;
 
     public PortalVO() { }
 

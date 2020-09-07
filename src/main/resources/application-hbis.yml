@@ -2,6 +2,10 @@ spring:
   datasource:
     url: jdbc:mysql://localhost:3306/hbis
 
+logging:
+  level:
+    org.thraex.business.hbis.mapper: debug
+
 thraex:
   mvc:
     views:
