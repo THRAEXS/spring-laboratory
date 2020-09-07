@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="template-v2 :: app_template(~{::title}, ~{}, ~{}, ~{::.container-item}, ~{::script})">
+<head>
+    <title>Additional</title>
+</head>
+<body>
+    <section class="content p-2 container-item">
+        <div class="container-fluid">
+            <div>[[${#request.getRequestURL()}]]</div>
+            <div>[[${#request.getRequestURI()}]]</div>
+            <div>[[${#request.getRequestURI().split('/')}]]</div>
+            <div>[[${#request.getContextPath()}]]</div>
+            <div>[[${#servletContext.contextPath}]]</div>
+        </div>
+    </section>
+
+    <script type="text/javascript" th:inline="javascript">
+        Factory.Vue.build({
+            data() {
+                const uri = [[${#request.getRequestURI().toString()}]];
+                return {
+                    axios: Factory.Request,
+                    api: '/api/hbis/additional',
+                    code: `MENU_HBIS_NAV_${uri.substring(uri.lastIndexOf('/') + 1)}`.toUpperCase()
+                }
+            },
+            created() {
+                this.axios.get(`/api/menu/down/${this.code}`).then(data => {
+                    console.log(data)
+                })
+            }
+        });
+    </script>
+</body>
+</html>

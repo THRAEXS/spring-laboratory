@@ -13,6 +13,9 @@ thraex:
       maint-case: hbis/maint/case
       maint-company: hbis/maint/company
       maint-news: hbis/maint/news
+      maint-additional-professional: hbis/maint/additional
+      maint-additional-cases: hbis/maint/additional
+      maint-additional-culture: hbis/maint/additional
   site:
     enabled: true
     admin:
