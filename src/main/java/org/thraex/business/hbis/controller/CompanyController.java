@@ -1,6 +1,8 @@
 package org.thraex.business.hbis.controller;
 
+import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,6 +15,10 @@ import org.thraex.base.controller.Controller;
 import org.thraex.business.hbis.entity.Company;
 import org.thraex.business.hbis.service.CompanyService;
 import org.thraex.platform.service.FileService;
+import org.thraex.util.Joiner;
+
+import java.util.Objects;
+import java.util.Optional;
 
 /**
  * @author 鬼王
@@ -21,6 +27,9 @@ import org.thraex.platform.service.FileService;
 @RestController
 @RequestMapping("api/hbis/companies")
 public class CompanyController extends Controller<CompanyService> {
+
+    @Value("${thraex.file.access-prefix}")
+    private String accessPrefix;
 
     @Autowired
     private FileService fileService;
@@ -37,11 +46,30 @@ public class CompanyController extends Controller<CompanyService> {
     }
 
     @PostMapping("upload")
-    public ResponseEntity<Boolean> upload(MultipartFile file, Company company) {
-        //Optional.ofNullable(fileService.transfer(file)).ifPresent(f -> {
-        //    System.out.println(company);
-        //});
-        return ResponseEntity.ok(false);
+    public ResponseEntity<Company> upload(MultipartFile file, Company company) {
+        boolean cidNotBlank = Strings.isNotBlank(company.getCoverId());
+        boolean midNotBlank = Strings.isNotBlank(company.getMapId());
+        boolean valid = Strings.isNotBlank(company.getId()) && (cidNotBlank || midNotBlank);
+
+        Company c = new Company().setId(company.getId());
+        if (valid) {
+            Optional.ofNullable(fileService.transfer(file)).ifPresent(f -> {
+                String oldFid = cidNotBlank ? company.getCoverId() : company.getMapId();
+                Optional.of(oldFid).filter(of -> !Objects.equals(of, "NONE")).ifPresent(of -> fileService.delete(of));
+
+                if (cidNotBlank) {
+                    service.updateById(c.setCoverId(f.getId()).setCoverPath(f.getPath()).snapshot());
+                    c.setCoverPath(Joiner.path(accessPrefix, c.getCoverPath()));
+                }
+
+                if (midNotBlank) {
+                    service.updateById(c.setMapId(f.getId()).setMapPath(f.getPath()).snapshot());
+                    c.setMapPath(Joiner.path(accessPrefix, c.getMapPath()));
+                }
+            });
+        }
+
+        return ResponseEntity.ok(c);
     }
 
     @PutMapping

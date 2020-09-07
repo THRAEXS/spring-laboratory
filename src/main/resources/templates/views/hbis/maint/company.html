@@ -132,13 +132,13 @@
                                 name: 'cover',
                                 label: '封面图',
                                 field: ['upload'],
-                                handler: () => this.handleUploadStyle(400, 400, this.form.coverPath)
+                                handler: () => this.handleUploadStyle(400, 400, 'coverPath')
                             },
                             {
                                 name: 'map',
                                 label: '地图',
                                 field: ['upload'],
-                                handler: () => this.handleUploadStyle(900, 600, this.form.mapPath)
+                                handler: () => this.handleUploadStyle(900, 600, 'mapPath')
                             },
                             {
                                 name: 'intr',
@@ -225,14 +225,15 @@
                     return !this.form.id;
                 },
                 uploadData() {
-                    return Object.assign({}, this.form)
+                    const tab = this.getTab();
+                    const up = tab.field.includes('upload');
+                    const filed = `${tab.name}Id`;
+
+                    return up ? { id: this.form.id, [filed]: this.form[filed] || 'NONE' } : {};
                 }
             },
             created() {
-                this.axios.get(this.api).then(data => {
-                    console.log(data);
-                    Object.assign(this.form, data)
-                });
+                this.axios.get(this.api).then(data => Object.assign(this.form, data));
             },
             mounted() {
                 const csrf = id => document.getElementById(id).getAttribute('content');
@@ -247,15 +248,17 @@
                     tab.handler && tab.handler();
                     return tab.field.includes(key);
                 },
-                handleUploadStyle(w, h, path) {
+                handleUploadStyle(w, h, field) {
                     Object.assign(this.upload.style, {
                         icon: { width: `${w}px`, height: `${h}px`, lineHeight: `${h}px` },
                         avatar: { width: `${w}px`, height: `${h}px` }
                     });
-                    this.$set(this.upload, 'url', path);
+                    this.$set(this.upload, 'url', this.form[field]);
                 },
                 handleUploadSuccess(res, file) {
-                    this.$set(this.upload, 'url', URL.createObjectURL(file.raw));
+                    // this.$set(this.upload, 'url', URL.createObjectURL(file.raw));
+                    this.$set(this.upload, 'url', res.coverPath || res.mapPath);
+                    Object.assign(this.form, res);
                 },
                 handleSave() {
                     this.getTab().save();

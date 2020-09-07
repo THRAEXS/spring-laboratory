@@ -16,7 +16,7 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-4">
-                            <img alt="Cover" width="208" height="141" th:src="${portalVO.company.coverPath}"/>
+                            <img alt="Cover" width="208" height="160" th:src="${portalVO.company.coverPath}"/>
                         </div>
                         <div class="col-8" style="text-indent: 2em;font: 12px/22px simsun, arial;color: #505050;">
                             [[${portalVO.company.introduction}]]
@@ -40,7 +40,7 @@
                 </div>
                 <!-- /.card-header -->
                 <div class="card-body">
-                    <div style="min-height: 141px;">
+                    <div style="min-height: 160px;">
                         <div th:each="n : ${portalVO.news}">
                             <a href="javascript: void(0);" style="font: 12px/26px simsun, Arial,Verdana;color: #505050;">
                                 <i class="fas fa-envelope mr-2"></i> [[${n.title}]]
