@@ -18,7 +18,7 @@ thraex:
     admin:
       title: HBIS | Admin
       brand: HBIS
-      dashboard: /maint/company
+      dashboard: /maint/case
     portal:
       title: ${hbis.name}
       view: forward:/hbis

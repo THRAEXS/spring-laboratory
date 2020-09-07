@@ -27,6 +27,6 @@ public class News extends Entity<News> {
     /**
      * 0: company; 10: industry
      */
-    private int type;
+    private Integer type;
 
 }

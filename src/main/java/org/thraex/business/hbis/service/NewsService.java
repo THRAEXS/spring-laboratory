@@ -1,6 +1,8 @@
 package org.thraex.business.hbis.service;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
+import org.thraex.base.page.Query;
 import org.thraex.business.hbis.entity.News;
 
 import java.util.List;
@@ -12,5 +14,9 @@ import java.util.List;
 public interface NewsService extends IService<News> {
 
     List<News> list(long size);
+
+    List<News> list(Integer type);
+
+    Page<News> page(Query query);
 
 }
