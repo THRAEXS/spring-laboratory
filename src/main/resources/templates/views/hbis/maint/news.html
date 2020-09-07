@@ -7,11 +7,189 @@
 <body>
     <section class="content p-2 container-item">
         <div class="container-fluid">
-            News
+            <div class="row">
+                <div class="col-6">
+                    <div class="card card-outline card-primary">
+                        <div class="card-header">
+                            <h3 class="card-title font-weight-light">新闻资讯</h3>
+                        </div>
+                        <div class="card-body" style="min-height: 650px;">
+                            <el-input
+                                v-model="list.query.params.keywords"
+                                @input="search"
+                                clearable
+                                suffix-icon="el-icon-search"
+                                class="mb-2"
+                                placeholder="请输入关键字"></el-input>
+
+                            <el-table
+                                :data="list.data"
+                                @row-click="handleRowClick"
+                                v-loading.body="list.loading"
+                                fit
+                                stripe
+                                border
+                                highlight-current-row
+                                :max-height="480">
+                                <el-table-column :index="indexCalc" type="index" width="50" align="center"></el-table-column>
+                                <el-table-column prop="title" label="标题" align="left"></el-table-column>
+<!--                                <el-table-column prop="author" label="作者" align="center"></el-table-column>-->
+                                <el-table-column prop="hits" label="点击数" align="center" width="60"></el-table-column>
+<!--                                <el-table-column prop="type" label="类型" align="center"></el-table-column>-->
+                                <el-table-column prop="createTime" label="创建时间" align="center" width="150"></el-table-column>
+                                <el-table-column
+                                    label="操作"
+                                    width="60"
+                                    align="center">
+                                    <template slot-scope="scope">
+                                        <el-button
+                                            type="danger"
+                                            icon="el-icon-delete"
+                                            size="mini"
+                                            circle
+                                            @click="handleDelete(scope.$index, scope.row.id)">
+                                        </el-button>
+                                    </template>
+                                </el-table-column>
+                            </el-table>
+                        </div>
+                        <div class="card-footer">
+                            <el-pagination
+                                background
+                                layout="total, sizes, prev, pager, next, jumper"
+                                :page-sizes="[10, 20, 50, 100, 500]"
+                                :page-size="list.query.size"
+                                :current-page.sync="list.query.page"
+                                :total="list.total"
+                                @size-change="handleSizeChange"
+                                @current-change="handleCurrentChange">
+                            </el-pagination>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="card card-outline card-primary">
+                        <div class="card-header">
+                            <h3 class="card-title font-weight-light">{{ form.title || 'None' }}</h3>
+                        </div>
+                        <div class="card-body" style="min-height: 650px;">
+                            <el-form ref="form" :model="form" :rules="rules" label-width="auto">
+                                <el-form-item prop="title" label="标题">
+                                    <el-input v-model.trim="form.title"></el-input>
+                                </el-form-item>
+                                <el-form-item prop="author" label="作者">
+                                    <el-input v-model.trim="form.author"></el-input>
+                                </el-form-item>
+                                <el-form-item label="类型">
+                                    <el-radio v-model="form.type" :label="0">公司动态</el-radio>
+                                    <el-radio v-model="form.type" :label="10">行业动态</el-radio>
+                                </el-form-item>
+                                <el-form-item label="内容">
+                                    <el-input type="textarea" v-model="form.content" :rows="16"></el-input>
+                                </el-form-item>
+                            </el-form>
+                        </div>
+                        <div class="card-footer text-right">
+                            <button type="submit" class="btn btn-success btn-sm" @click="handleClear">清空</button>
+                            <button type="submit" class="btn btn-primary btn-sm" @click="handleSave">保存</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
     <script type="text/javascript">
-        Factory.Vue.build();
+        Factory.Vue.build({
+            data() {
+                const entity = { id: null, title: null, author: null, type: 0, content: null };
+                const lenLimit = max => ({ max, message: '长度超出范围' });
+
+                return {
+                    axios: Factory.Request,
+                    api: '/api/hbis/news',
+                    list: {
+                        data: [],
+                        total: 0,
+                        loading: false,
+                        query: {
+                            page: 1,
+                            size: 10,
+                            params: {
+                                keywords: ''
+                            }
+                        }
+                    },
+                    entity,
+                    form: Object.assign({}, entity),
+                    rules: {
+                        title: [
+                            { required: true, message: '请输入标题' },
+                            lenLimit(100)
+                        ],
+                        author: [
+                            { required: true, message: '请输入作者' },
+                            lenLimit(50)
+                        ]
+                    }
+                };
+            },
+            created() {
+                this.search();
+            },
+            methods: {
+                search() {
+                    const { keywords } = this.list.query.params;
+                    const params = Object.assign({}, this.list.query, { params: { title: keywords, author: keywords } });
+
+                    this.list.loading = true;
+                    this.axios.get(`${this.api}/page`, {
+                        params,
+                        paramsSerializer: params => Qs.stringify(params, { allowDots: false })
+                    }).then(({ records: data, total }) => {
+                        this.list.data = data;
+                        this.list.total = total;
+                    }).finally(() => {
+                        this.list.loading = false;
+                    });
+                },
+                indexCalc(ind) {
+                    const { page, size } = this.list.query;
+                    return (page - 1) * size + (ind + 1);
+                },
+                handleSizeChange(val) {
+                    this.list.query.size = val;
+                    this.search();
+                },
+                handleCurrentChange(val) {
+                    this.list.query.page = val;
+                    this.search();
+                },
+                handleRowClick(row) {
+                    this.transfer(row, this.form);
+                },
+                handleDelete(ind, id) {
+                    this.list.data.splice(ind, 1);
+                    this.axios.delete(this.api, { params: { id } });
+                },
+                handleSave() {
+                    this.$refs.form.validate(valid => valid && (() => {
+                        this.axios.post(this.api, this.form).then(data => {
+                            // this.transfer(data, this.form);
+                            this.handleClear();
+                            // this.list.query.params.keywords = data.title;
+                            this.search();
+                        });
+                    })());
+                },
+                handleClear() {
+                    this.$refs.form.resetFields();
+                    this.form = Object.assign({}, this.entity);
+                },
+                transfer(raw, target) {
+                    Object.keys(this.entity).forEach(k => this.$set(target, k, raw[k]));
+                }
+            }
+        });
     </script>
 </body>
 </html>

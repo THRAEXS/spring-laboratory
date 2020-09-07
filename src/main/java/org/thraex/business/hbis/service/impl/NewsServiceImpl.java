@@ -47,9 +47,11 @@ public class NewsServiceImpl extends ServiceImpl<NewsMapper, News> implements Ne
 
         Page<News> page = this.page(new Page<>(query.getPage(), query.getSize()), Wrappers.<News>lambdaQuery()
                 .eq(Objects.nonNull(news.getType()), News::getType, news.getType())
+                .or()
                 .like(Strings.isNotBlank(news.getTitle()), News::getTitle, news.getTitle())
+                .or()
                 .like(Strings.isNotBlank(news.getAuthor()), News::getAuthor, news.getAuthor())
-                .orderByDesc(News::getCreateTime));
+                .orderByDesc(News::getCreateTime, News::getUpdateTime));
 
         return page;
     }
