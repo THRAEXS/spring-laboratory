@@ -20,14 +20,6 @@ import java.util.Objects;
 @Service
 public class NewsServiceImpl extends ServiceImpl<NewsMapper, News> implements NewsService {
 
-    //private List<News> mock = Stream.of(
-    //        "北京国金衡信到信达公司开展质量体系认证审核",
-    //        "河钢邯钢信达科技成为河北省数字经济联合会会员单位",
-    //        "信达科技维护人员远程解决客户难题",
-    //        "信达科技有限公司加入FDT协会",
-    //        "全员“岗位素质提升行动”在进行")
-    //        .map(t -> new News().setTitle(t).setCreateTime(LocalDateTime.now())).collect(Collectors.toList());
-
     @Override
     public List<News> list(long size) {
         return this.list(Wrappers.<News>lambdaQuery()

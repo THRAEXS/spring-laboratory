@@ -71,8 +71,9 @@ public class PortalController {
     }
 
     @GetMapping("company")
-    public String company() {
-        return null;
+    public String company(Model model) {
+        model.addAttribute(base().setCompany(companyService.oneOrDefault()));
+        return "hbis/company";
     }
 
 }
