@@ -19,7 +19,7 @@ thraex:
       brand: HBIS
       dashboard: /maint-advert
     portal:
-      title: ${hbis.title}
+      title: ${hbis.name}
       view: forward:/hbis
     permits:
       - /vue/**
@@ -31,5 +31,7 @@ thraex:
       - /hbis/**
 
 hbis:
-  title: 邯钢集团信达科技有限公司
   nav-code: MENU_HBIS_NAV
+  name: 邯钢集团信达科技有限公司
+  cover-path: /assets/images/hbis/company/cover.png
+  introduction: 邯郸市邯钢集团信达科技有限公司（简称信达科技），系河钢集团邯钢公司全资子公司，注册资本500万元，1997年成立。历经邯钢20年基础自动化的高速发展和信息化改造的曲折进程，通过引进消化吸收、联合、自主等途径，实施了涵盖钢铁冶金行业全工艺流程的自动化、信息化系统。凭借服务邯钢的经验和技术积累，信达科技面向社会持续发展，已经成长为能够提供自动化、信息化、通讯、监控等系统解决方案的高新技术企业。

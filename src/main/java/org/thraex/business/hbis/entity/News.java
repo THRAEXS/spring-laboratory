@@ -20,7 +20,7 @@ public class News extends Entity<News> {
 
     private String author;
 
-    private int hits;
+    private long hits;
 
     private String content;
 

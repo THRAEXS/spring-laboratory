@@ -8,18 +8,17 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.thraex.base.properties.SiteProperties;
 import org.thraex.business.hbis.entity.Company;
-import org.thraex.business.hbis.entity.News;
 import org.thraex.business.hbis.service.AdvertService;
 import org.thraex.business.hbis.service.CaseService;
+import org.thraex.business.hbis.service.CompanyService;
+import org.thraex.business.hbis.service.NewsService;
 import org.thraex.business.hbis.vo.PortalVO;
 import org.thraex.platform.entity.Menu;
 import org.thraex.platform.service.MenuService;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Stream;
+import java.util.Optional;
 
 /**
  * @author 鬼王
@@ -42,6 +41,12 @@ public class PortalController {
     private AdvertService advertService;
 
     @Autowired
+    private NewsService newsService;
+
+    @Autowired
+    private CompanyService companyService;
+
+    @Autowired
     private CaseService caseService;
 
     private PortalVO base() {
@@ -49,29 +54,19 @@ public class PortalController {
          * Compatible access: / or /hbis
          */
         SiteProperties.Portal site = sitProperties.getPortal();
+        Optional.ofNullable(companyService.one()).map(Company::getName).ifPresent(n -> site.setTitle(n));
 
         List<Menu> menus = menuService.tree(navCode).stream().findFirst().map(Menu::getChildren).orElse(Collections.emptyList());
-        PortalVO vo = new PortalVO(site, menus, advertService.listVO());
 
-        return vo;
+        return new PortalVO(site, menus, advertService.listVO());
     }
 
     @GetMapping
     public String index(Model model) {
-        Company c = new Company();
-        c.setCoverPath("/assets/images/hbis/company/cover.png");
-        c.setIntroduction("邯郸市邯钢集团信达科技有限公司（简称信达科技），系河钢集团邯钢公司全资子公司，注册资本500万元，1997年成立。历经邯钢20年基础自动化的高速发展和信息化改造的曲折进程，通过引进消化吸收、联合、自主等途径，实施了涵盖钢铁冶金行业全工艺流程的自动化、信息化系统。凭借服务邯钢的经验和技术积累，信达科技面向社会持续发展，已经成长为能够提供自动化、信息化、通讯、监控等系统解决方案的高新技术企业。");
-
-        List<News> news = new ArrayList<>(5);
-
-        Stream.of("北京国金衡信到信达公司开展质量体系认证审核",
-                "河钢邯钢信达科技成为河北省数字经济联合会会员单位",
-                "信达科技维护人员远程解决客户难题",
-                "信达科技有限公司加入FDT协会",
-                "全员“岗位素质提升行动”在进行").forEach(it ->
-                news.add(new News().setTitle(it).setCreateTime(LocalDateTime.now())));
-
-        model.addAttribute(base().setCompany(c).setNews(news).setCases(caseService.list(6)));
+        model.addAttribute(base()
+                .setCompany(companyService.one())
+                .setNews(newsService.list(5))
+                .setCases(caseService.list(6)));
         return "hbis/index";
     }
 
