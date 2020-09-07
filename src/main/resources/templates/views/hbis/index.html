@@ -44,7 +44,8 @@
                         <div th:each="n : ${portalVO.news}">
                             <a href="javascript: void(0);" style="font: 12px/26px simsun, Arial,Verdana;color: #505050;">
                                 <i class="fas fa-envelope mr-2"></i> [[${n.title}]]
-                                <span class="float-right text-muted text-sm">3 mins</span>
+                                <span class="float-right text-muted text-sm"
+                                      th:text="${#temporals.format(n.createTime, 'MM-dd')}"></span>
                             </a>
                         </div>
                     </div>
