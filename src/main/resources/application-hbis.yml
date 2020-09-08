@@ -1,6 +1,7 @@
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/hbis
+    url: jdbc:mysql://localhost:3306/hbis?serverTimezone=GMT
+    password: root
 
 logging:
   level:
@@ -36,6 +37,8 @@ thraex:
       - /assets/**
       - /hbis/**
   favicon: classpath:/templates/assets/images/hbis/
+  file:
+    directory: /thraex-files
 
 hbis:
   nav-code: MENU_HBIS_NAV
