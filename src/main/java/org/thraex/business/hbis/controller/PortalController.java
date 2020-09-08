@@ -20,9 +20,7 @@ import org.thraex.platform.service.MenuService;
 import org.thraex.util.Joiner;
 
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -68,12 +66,6 @@ public class PortalController {
         this.additionalService = additionalService;
     }
 
-    private void toModel(Model model, Consumer<PortalVO> set) {
-        PortalVO vo = vo();
-        set.accept(vo);
-        model.addAttribute(vo);
-    }
-
     @GetMapping
     public String index(Model model) {
         toModel(model, v -> v.setNews(newsService.list(5)).setCases(caseService.list(6)));
@@ -83,50 +75,22 @@ public class PortalController {
     @GetMapping({ "company", "company/{identifier}" })
     public String company(@PathVariable(required = false) String identifier, Model model) {
         final String key = "COMPANY";
-        toModel(model, v -> navigator(v, key, identifier, c -> FetchCompany.valueOf(c).value(v.getCompany())));
+        toModel(model, v -> navigator(v, key, identifier, c -> FetchCompany.value(c, v.getCompany())));
         return VIEW_NAVIGATOR;
     }
 
     @GetMapping({ "professional", "professional/{identifier}" })
     public String professional(@PathVariable(required = false) String identifier, Model model) {
         final String key = "PROFESSIONAL";
-        toModel(model, v -> navigator(v, key, identifier, c -> FetchAdditional.valueOf(c).value(additionalService.one())));
+        toModel(model, v -> navigator(v, key, identifier, c -> FetchAdditional.value(c, additionalService.one())));
         return VIEW_NAVIGATOR;
     }
 
     @GetMapping({ "cases", "cases/{identifier}" })
     public String cases(@PathVariable(required = false) String identifier, Model model) {
         final String key = "CASES";
-        toModel(model, v -> navigator(v, key, identifier, c -> FetchAdditional.valueOf(c).value(additionalService.one())));
+        toModel(model, v -> navigator(v, key, identifier, c -> FetchAdditional.value(c, additionalService.one())));
         return VIEW_NAVIGATOR;
-    }
-
-    /**
-     * 0: company; 10: industry
-     */
-    Map<String, Integer> newsType = new HashMap<String, Integer>() {{ put("cd", 0); put("id", 10); }};
-
-    private enum NewsType {
-
-        CD(0),
-        ID(10);
-
-        private final Integer value;
-
-        NewsType(int value) {
-            this.value = value;
-        }
-
-        public static Integer value(String type) {
-            return Optional.ofNullable(type)
-                    .map(t -> Stream.of(values())
-                            .filter(it -> it.name().equals(t.toUpperCase()))
-                            .findFirst()
-                            .map(it -> it.value)
-                            .orElse(null))
-                    .orElse(null);
-        }
-
     }
 
     @GetMapping({ "news", "news/{identifier}" })
@@ -139,8 +103,14 @@ public class PortalController {
     @GetMapping({ "culture", "culture/{identifier}" })
     public String culture(@PathVariable(required = false) String identifier, Model model) {
         final String key = "CULTURE";
-        toModel(model, v -> navigator(v, key, identifier, c -> FetchAdditional.valueOf(c).value(additionalService.one())));
+        toModel(model, v -> navigator(v, key, identifier, c -> FetchAdditional.value(c, additionalService.one())));
         return VIEW_NAVIGATOR;
+    }
+
+    private void toModel(Model model, Consumer<PortalVO> set) {
+        PortalVO vo = vo();
+        set.accept(vo);
+        model.addAttribute(vo);
     }
 
     private PortalVO vo() {
@@ -180,14 +150,21 @@ public class PortalController {
         COMPANY_PERSONNEL(c -> c.getPersonnel()),
         COMPANY_DC(c -> c.getHistory());
 
-        private final Function<Company, String> get;
+        private final Function<Company, String> fun;
 
-        FetchCompany(Function<Company, String> get) {
-            this.get = get;
+        FetchCompany(Function<Company, String> fun) {
+            this.fun = fun;
         }
 
-        public String value(Company c) {
-            return get.apply(c);
+        public static String value(String name, Company c) {
+            return Optional.ofNullable(name)
+                    .map(n -> Stream.of(values())
+                            .filter(it -> it.name().equals(n))
+                            .findFirst()
+                            .map(it -> it.fun)
+                            .map(it -> it.apply(c))
+                            .orElse(null))
+                    .orElse(null);
         }
 
     }
@@ -211,14 +188,44 @@ public class PortalController {
         CULTURE_CRA(a -> a.getCra()),
         CULTURE_CTB(a -> a.getCtb());
 
-        private final Function<Additional, String> get;
+        private final Function<Additional, String> fun;
 
-        FetchAdditional(Function<Additional, String> get) {
-            this.get = get;
+        FetchAdditional(Function<Additional, String> fun) {
+            this.fun = fun;
         }
 
-        public String value(Additional a) {
-            return get.apply(a);
+        public static String value(String name, Additional c) {
+            return Optional.ofNullable(name)
+                    .map(n -> Stream.of(values())
+                            .filter(it -> it.name().equals(n))
+                            .findFirst()
+                            .map(it -> it.fun)
+                            .map(it -> it.apply(c))
+                            .orElse(null))
+                    .orElse(null);
+        }
+
+    }
+
+    private enum NewsType {
+
+        CD(0),
+        ID(10);
+
+        private final Integer value;
+
+        NewsType(int value) {
+            this.value = value;
+        }
+
+        public static Integer value(String type) {
+            return Optional.ofNullable(type)
+                    .map(t -> Stream.of(values())
+                            .filter(it -> it.name().equals(t.toUpperCase()))
+                            .findFirst()
+                            .map(it -> it.value)
+                            .orElse(null))
+                    .orElse(null);
         }
 
     }
