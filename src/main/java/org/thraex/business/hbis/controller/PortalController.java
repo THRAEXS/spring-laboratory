@@ -68,52 +68,52 @@ public class PortalController {
 
     @GetMapping
     public String index(Model model) {
-        toModel(model, v -> v.setNews(newsService.list(5)).setCases(caseService.list(6)));
+        mixVo(model, v -> v.setNews(newsService.list(5)).setCases(caseService.list(6)));
         return "hbis/index";
     }
 
     @GetMapping({ "company", "company/{identifier}" })
     public String company(@PathVariable(required = false) String identifier, Model model) {
         final String key = "COMPANY";
-        toModel(model, v -> navigator(v, key, identifier, c -> FetchCompany.value(c, v.getCompany())));
+        mixVo(model, v -> navigator(v, key, identifier, c -> FetchCompany.value(c, v.getCompany())));
         return VIEW_NAVIGATOR;
     }
 
     @GetMapping({ "professional", "professional/{identifier}" })
     public String professional(@PathVariable(required = false) String identifier, Model model) {
         final String key = "PROFESSIONAL";
-        toModel(model, v -> navigator(v, key, identifier, c -> FetchAdditional.value(c, additionalService.one())));
+        mixVo(model, v -> navigator(v, key, identifier, c -> FetchAdditional.value(c, additionalService.one())));
         return VIEW_NAVIGATOR;
     }
 
     @GetMapping({ "cases", "cases/{identifier}" })
     public String cases(@PathVariable(required = false) String identifier, Model model) {
         final String key = "CASES";
-        toModel(model, v -> navigator(v, key, identifier, c -> FetchAdditional.value(c, additionalService.one())));
+        mixVo(model, v -> navigator(v, key, identifier, c -> FetchAdditional.value(c, additionalService.one())));
         return VIEW_NAVIGATOR;
     }
 
     @GetMapping({ "news", "news/{identifier}" })
     public String news(@PathVariable(required = false) String identifier, Model model) {
         final String key = "NEWS";
-        toModel(model, v -> navigator(v, key, identifier, null).setNews(newsService.list(NewsType.value(identifier))));
+        mixVo(model, v -> navigator(v, key, identifier, null).setNews(newsService.list(NewsType.value(identifier))));
         return VIEW_NAVIGATOR;
     }
 
     @GetMapping({ "culture", "culture/{identifier}" })
     public String culture(@PathVariable(required = false) String identifier, Model model) {
         final String key = "CULTURE";
-        toModel(model, v -> navigator(v, key, identifier, c -> FetchAdditional.value(c, additionalService.one())));
+        mixVo(model, v -> navigator(v, key, identifier, c -> FetchAdditional.value(c, additionalService.one())));
         return VIEW_NAVIGATOR;
     }
 
-    private void toModel(Model model, Consumer<PortalVO> set) {
-        PortalVO vo = vo();
-        set.accept(vo);
-        model.addAttribute(vo);
+    @GetMapping("contact")
+    public String contact(Model model) {
+        mixVo(model, v -> {});
+        return "hbis/contact";
     }
 
-    private PortalVO vo() {
+    private void mixVo(Model model, Consumer<PortalVO> set) {
         /**
          * Compatible access: / or /hbis
          */
@@ -124,7 +124,9 @@ public class PortalController {
 
         List<Menu> menus = menuService.tree(navCode).stream().findFirst().map(Menu::getChildren).orElse(Collections.emptyList());
 
-        return new PortalVO(site, menus, company, advertService.listVO());
+        PortalVO vo = new PortalVO(site, menus, company, advertService.listVO());
+        Optional.ofNullable(set).ifPresent(s -> s.accept(vo));
+        model.addAttribute(vo);
     }
 
     private PortalVO navigator(PortalVO vo, String key, String identifier, Function<String, String> content) {
