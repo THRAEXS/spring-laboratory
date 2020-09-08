@@ -42,6 +42,9 @@
                     </a>
                     <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right">
                         <a href="javascript: void(0);" class="dropdown-item" onclick="handleMenuClick(this)" data-url="/profile">
+                            <i class="fas fa-user mr-2"></i> [[${user.getNickname() ?: user.getUsername() }]]
+                        </a>
+                        <a href="javascript: void(0);" class="dropdown-item" onclick="handleMenuClick(this)" data-url="/profile">
                             <i class="fas fa-cog mr-2"></i> 资料修改
                         </a>
                         <a href="javascript: void(0);" class="dropdown-item" onclick="handleLogout()">
@@ -63,18 +66,6 @@
 
             <!-- Sidebar -->
             <div class="sidebar">
-                <!-- Sidebar user panel (optional) -->
-                <div class="user-panel mt-3 pb-3 mb-3 d-flex">
-                    <div class="image">
-                        <img src="/AdminLTE/dist/img/user4-128x128.jpg"
-                             class="img-circle elevation-2" alt="User Image">
-                    </div>
-                    <div class="info">
-                        <!--<a href="javascript: void(0"; class="d-block" sec:authentication="name">UNKNOWN</a>-->
-                        <a href="javascript: void(0);" class="d-block" th:text="${user.getNickname() ?: user.getUsername() }">UNKNOWN</a>
-                    </div>
-                </div>
-
                 <!-- Sidebar Menu -->
                 <nav class="mt-2">
                     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
