@@ -17,10 +17,14 @@ import org.thraex.business.hbis.service.NewsService;
 import org.thraex.business.hbis.vo.PortalVO;
 import org.thraex.platform.entity.Menu;
 import org.thraex.platform.service.MenuService;
+import org.thraex.util.Joiner;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.stream.Stream;
 
 /**
  * @author 鬼王
@@ -30,6 +34,10 @@ import java.util.Optional;
 @RequestMapping("hbis")
 public class PortalController {
 
+    private final String DELIMITER = "_";
+
+    private static final String VIEW_NAVIGATOR = "hbis/navigator";
+
     @Value("${hbis.nav-code}")
     private String navCode;
 
@@ -38,12 +46,11 @@ public class PortalController {
     private MenuService menuService;
     private AdvertService advertService;
     private NewsService newsService;
-    private CompanyService companyService;
     private CaseService caseService;
     private AdditionalService additionalService;
 
-    private Company company;
-    private Additional additional;
+    private static Company company;
+    private static Additional additional;
 
     public PortalController(SiteProperties sitProperties,
                             MenuService menuService,
@@ -56,15 +63,14 @@ public class PortalController {
         this.menuService = menuService;
         this.advertService = advertService;
         this.newsService = newsService;
-        this.companyService = companyService;
         this.caseService = caseService;
         this.additionalService = additionalService;
 
-        this.company = companyService.oneOrDefault();
-        this.additional = additionalService.one();
+        company = companyService.oneOrDefault();
+        additional = additionalService.one();
     }
 
-    private PortalVO base() {
+    private PortalVO vo() {
         /**
          * Compatible access: / or /hbis
          */
@@ -76,40 +82,115 @@ public class PortalController {
         return new PortalVO(site, menus, company, advertService.listVO());
     }
 
+    private void toModel(Model model, Consumer<PortalVO> set) {
+        PortalVO vo = vo();
+        set.accept(vo);
+        model.addAttribute(vo);
+    }
+
     @GetMapping
     public String index(Model model) {
-        model.addAttribute(base().setNews(newsService.list(5)).setCases(caseService.list(6)));
+        toModel(model, v -> v.setNews(newsService.list(5)).setCases(caseService.list(6)));
         return "hbis/index";
     }
 
-    @GetMapping({ "company", "company/{identifier}"})
+    private PortalVO navigator(PortalVO vo, String key, String identifier, Function<String, String> content) {
+        String root = Joiner.join(DELIMITER, navCode, key);
+
+        String suffix = Optional.ofNullable(identifier).map(String::toUpperCase)
+                .map(i -> Joiner.join(DELIMITER, key, i)).orElse(key);
+        String active = Joiner.join(DELIMITER, Stream.of(navCode, suffix));
+
+        vo.getNavigator().setNavs(menuService.list(root)).setActive(active).setContent(content.apply(suffix));
+
+        return vo;
+    }
+
+    private enum FetchCompany {
+
+        COMPANY(c -> c.getIntroduction()),
+        COMPANY_CP(c -> c.getSituation()),
+        COMPANY_ORG(c -> c.getOrganization()),
+        COMPANY_SCOPE(c -> c.getScope()),
+        COMPANY_PERSONNEL(c -> c.getPersonnel()),
+        COMPANY_DC(c -> c.getHistory());
+
+        private final Function<Company, String> get;
+
+        FetchCompany(Function<Company, String> get) {
+            this.get = get;
+        }
+
+        public String value() {
+            return get.apply(company);
+        }
+
+    }
+
+    private enum FetchAdditional {
+
+        PROFESSIONAL(a -> a.getProfessional()),
+        PROFESSIONAL_PIT(a -> a.getPit()),
+        PROFESSIONAL_PAT(a -> a.getPat()),
+        PROFESSIONAL_PCT(a -> a.getPct()),
+        PROFESSIONAL_PNT(a -> a.getPnt()),
+        PROFESSIONAL_PEG(a -> a.getPeg()),
+        CASES(a -> a.getCases()),
+        CASES_CIS(a -> a.getCis()),
+        CASES_CAS(a -> a.getCas()),
+        CASES_CCS(a -> a.getCcs()),
+        CASES_CMS(a -> a.getCms()),
+        CASES_CEG(a -> a.getCeg()),
+        CULTURE(a -> a.getCulture()),
+        CULTURE_CEV(a -> a.getCev()),
+        CULTURE_CRA(a -> a.getCra()),
+        CULTURE_CTB(a -> a.getCtb());
+
+        private final Function<Additional, String> get;
+
+        FetchAdditional(Function<Additional, String> get) {
+            this.get = get;
+        }
+
+        public String value() {
+            return get.apply(additional);
+        }
+
+    }
+
+    @GetMapping({ "company", "company/{identifier}" })
     public String company(@PathVariable(required = false) String identifier, Model model) {
-        model.addAttribute(base().setIdentifier(identifier));
-        return "hbis/company";
+        final String key = "COMPANY";
+        toModel(model, v -> navigator(v, key, identifier, c -> FetchCompany.valueOf(c).value()));
+        return VIEW_NAVIGATOR;
     }
 
-    @GetMapping({ "professional", "professional/{identifier}"})
+    @GetMapping({ "professional", "professional/{identifier}" })
     public String professional(@PathVariable(required = false) String identifier, Model model) {
-        model.addAttribute(base().setIdentifier(identifier));
-        return "hbis/professional";
+        final String key = "PROFESSIONAL";
+        toModel(model, v -> navigator(v, key, identifier, c -> FetchAdditional.valueOf(c).value()));
+        return VIEW_NAVIGATOR;
     }
 
-    @GetMapping({ "cases", "cases/{identifier}"})
+    @GetMapping({ "cases", "cases/{identifier}" })
     public String cases(@PathVariable(required = false) String identifier, Model model) {
-        model.addAttribute(base().setIdentifier(identifier));
-        return "hbis/cases";
+        final String key = "CASES";
+        toModel(model, v -> navigator(v, key, identifier, c -> FetchAdditional.valueOf(c).value()));
+        return VIEW_NAVIGATOR;
     }
 
-    @GetMapping({ "news", "news/{identifier}"})
+    @GetMapping({ "news", "news/{identifier}" })
     public String news(@PathVariable(required = false) String identifier, Model model) {
-        model.addAttribute(base().setIdentifier(identifier));
-        return "hbis/news";
+        final String key = "NEWS";
+        toModel(model, v -> navigator(v, key, identifier, c -> FetchAdditional.valueOf(c).value()));
+        return VIEW_NAVIGATOR;
     }
 
-    @GetMapping({ "culture", "culture/{identifier}"})
+    @GetMapping({ "culture", "culture/{identifier}" })
     public String culture(@PathVariable(required = false) String identifier, Model model) {
-        model.addAttribute(base().setIdentifier(identifier));
-        return "hbis/culture";
+        final String key = "CULTURE";
+        toModel(model, v -> navigator(v, key, identifier, c -> FetchAdditional.valueOf(c).value()));
+        return VIEW_NAVIGATOR;
     }
 
 }

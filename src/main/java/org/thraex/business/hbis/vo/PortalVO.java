@@ -33,11 +33,14 @@ public class PortalVO implements Serializable {
 
     private List<Case> cases;
 
-    private String identifier;
+    private Navigator navigator;
 
-    public PortalVO() { }
+    public PortalVO() {
+        this.navigator = new Navigator();
+    }
 
     public PortalVO(SiteProperties.Portal site, List<Menu> navs) {
+        this();
         this.site = site;
         this.navs = navs;
     }
@@ -50,6 +53,18 @@ public class PortalVO implements Serializable {
     public PortalVO(SiteProperties.Portal site, List<Menu> navs, Company company, List<AdvertVO> adverts) {
         this(site, navs, adverts);
         this.company = company;
+    }
+
+    @Data
+    @Accessors(chain = true)
+    public class Navigator {
+
+        private List<Menu> navs;
+
+        private String active;
+
+        private String content;
+
     }
 
 }

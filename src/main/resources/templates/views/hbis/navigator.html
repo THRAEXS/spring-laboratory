@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="hbis/base :: app_template(~{::.container-item})">
+<body>
+    <div class="card card-outline card-primary mt-3 container-item" th:with="navigator = ${portalVO.navigator}">
+        <div class="card-body p-2" style="min-height: 500px;">
+            <div class="row">
+                <div class="col-2">
+                    <div class="nav flex-column nav-tabs h-100 pl-2" role="tablist" aria-orientation="vertical">
+                        <a class="nav-link" role="tab"
+                           th:each="item, n : ${navigator.navs}"
+                           th:with="active = ${navigator.active.equals(item.code)}"
+                           th:classappend="${active} ? 'active'"
+                           th:href="${item.url}"
+                           th:aria-selected="${active}">
+                            <i class="fas mr-2" th:classappend="${n.index == 0} ? 'fa-list-ul' : 'fa-chevron-right'"></i>
+                            [[${item.name}]]
+                        </a>
+                    </div>
+                </div>
+                <div class="col-10">
+                    <div th:utext="${navigator.content}"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
