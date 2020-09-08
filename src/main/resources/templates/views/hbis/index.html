@@ -8,7 +8,9 @@
                     <h3 class="card-title font-weight-bold">公司简介</h3>
 
                     <div class="card-tools">
-                        <button type="button" class="btn btn-tool"><i class="fas fa-info-circle"></i></button>
+                        <button type="button" class="btn btn-tool" onclick="window.location.href = '/hbis/company'">
+                            <i class="fas fa-info-circle"></i>
+                        </button>
                     </div>
                     <!-- /.card-tools -->
                 </div>
@@ -34,7 +36,9 @@
                     <h3 class="card-title font-weight-light">新闻资讯</h3>
 
                     <div class="card-tools">
-                        <button type="button" class="btn btn-tool"><i class="fas fa-info-circle"></i></button>
+                        <button type="button" class="btn btn-tool" onclick="window.location.href = '/hbis/news'">
+                            <i class="fas fa-info-circle"></i>
+                        </button>
                     </div>
                     <!-- /.card-tools -->
                 </div>
@@ -42,7 +46,7 @@
                 <div class="card-body">
                     <div style="min-height: 160px;">
                         <div th:each="n : ${portalVO.news}">
-                            <a href="javascript: void(0);" style="font: 12px/26px simsun, Arial,Verdana;color: #505050;">
+                            <a th:href="|/hbis/news/${n.type}/${n.id}|" style="font: 12px/26px simsun, Arial,Verdana;color: #505050;">
                                 <i class="fas fa-envelope mr-2"></i> [[${n.title}]]
                                 <span class="float-right text-muted text-sm"
                                       th:text="${#temporals.format(n.createTime, 'MM-dd')}"></span>
@@ -64,14 +68,16 @@
                     <h3 class="card-title font-weight-light">项目展示</h3>
 
                     <div class="card-tools">
-                        <button type="button" class="btn btn-tool"><i class="fas fa-info-circle"></i></button>
+                        <button type="button" class="btn btn-tool" onclick="window.location.href = '/hbis/cases'">
+                            <i class="fas fa-info-circle"></i>
+                        </button>
                     </div>
                     <!-- /.card-tools -->
                 </div>
                 <!-- /.card-header -->
                 <div class="card-body">
                     <div class="row">
-                        <div class="col-2" th:each="c : ${portalVO.cases}">
+                        <div class="col-2" th:each="c : ${portalVO.cases}" style="cursor: pointer;" onclick="window.location.href = '/hbis/cases'">
                             <img th:src="${c.cover}" width="150" height="110"/>
                             <label style="font: 12px Verdana, Arial, Helvetica, sans-serif;color: #505050;">[[${c.name}]]</label>
                         </div>

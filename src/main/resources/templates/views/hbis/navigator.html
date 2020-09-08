@@ -22,11 +22,27 @@
 
                     <div th:each="n : ${portalVO.news}">
                         <div class="dropdown-divider"></div>
-                        <a href="javascript: void(0);" style="font: 16px/26px simsun, Arial,Verdana;color: #505050;">
+                        <a th:href="|/hbis/news/${n.type}/${n.id}|" style="font: 16px/26px simsun, Arial,Verdana;color: #505050;">
                             <i class="fas fa-envelope mr-2"></i> [[${n.title}]]
                             <span class="float-right text-muted text-md"
                                   th:text="${#temporals.format(n.createTime, 'yyyy-MM-dd')}"></span>
                         </a>
+                    </div>
+
+                    <div class="card" th:if="${portalVO.newsDetail != null}" th:with="nd = ${portalVO.newsDetail}">
+                        <div class="card-header">
+                            <h2 class="card-title font-weight-bold" th:text="${nd} ? ${nd.title}"></h2>
+                        </div>
+                        <div class="card-body">
+                            <div class="row text-center">
+                                <div class="col-12">
+                                    作者：<label th:text="${nd} ? ${nd.author}"></label>
+                                    发布于：<label class="ml-1 mr-1" th:text="${nd} ? ${#temporals.format(nd.createTime, 'yyyy-MM-dd')}"></label>
+                                    点击数：<label th:text="${nd} ? ${nd.hits}"></label>
+                                </div>
+                            </div>
+                            <div th:utext="${nd} ? ${nd.content}"></div>
+                        </div>
                     </div>
                 </div>
             </div>

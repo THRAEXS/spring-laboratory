@@ -1,11 +1,5 @@
 package org.hbis.business.hbis.controller;
 
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.hbis.base.properties.SiteProperties;
 import org.hbis.business.hbis.entity.Additional;
 import org.hbis.business.hbis.entity.Company;
@@ -18,9 +12,16 @@ import org.hbis.business.hbis.vo.PortalVO;
 import org.hbis.platform.entity.Menu;
 import org.hbis.platform.service.MenuService;
 import org.hbis.util.Joiner;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -93,10 +94,18 @@ public class PortalController {
         return VIEW_NAVIGATOR;
     }
 
-    @GetMapping({ "news", "news/{identifier}" })
-    public String news(@PathVariable(required = false) String identifier, Model model) {
+    @GetMapping({ "news", "news/{identifier}", "news/{type}/{nid}" })
+    public String news(@PathVariable(required = false) String identifier,
+                       @PathVariable(required = false) Integer type,
+                       @PathVariable(required = false) String nid,
+                       Model model) {
         final String key = "NEWS";
-        mixVo(model, v -> navigator(v, key, identifier, null).setNews(newsService.list(NewsType.value(identifier))));
+
+        Consumer<PortalVO> set = Objects.nonNull(type) ?
+                v -> navigator(v, key, NewsType.valueOf(type).name(), null).setNewsDetail(newsService.getById(nid))
+                : v -> navigator(v, key, identifier, null).setNews(newsService.list(NewsType.value(identifier)));
+        mixVo(model, set);
+
         return VIEW_NAVIGATOR;
     }
 
@@ -214,10 +223,10 @@ public class PortalController {
         CD(0),
         ID(10);
 
-        private final Integer value;
+        private final int code;
 
-        NewsType(int value) {
-            this.value = value;
+        NewsType(int code) {
+            this.code = code;
         }
 
         public static Integer value(String type) {
@@ -225,9 +234,13 @@ public class PortalController {
                     .map(t -> Stream.of(values())
                             .filter(it -> it.name().equals(t.toUpperCase()))
                             .findFirst()
-                            .map(it -> it.value)
+                            .map(it -> it.code)
                             .orElse(null))
                     .orElse(null);
+        }
+
+        public static NewsType valueOf(int code) {
+            return Stream.of(values()).filter(it -> it.code == code).findFirst().orElse(null);
         }
 
     }

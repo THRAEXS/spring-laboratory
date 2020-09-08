@@ -31,6 +31,8 @@ public class PortalVO implements Serializable {
 
     private List<News> news;
 
+    private News newsDetail;
+
     private List<Case> cases;
 
     private Navigator navigator;
