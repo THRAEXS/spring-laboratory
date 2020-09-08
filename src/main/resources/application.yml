@@ -40,10 +40,14 @@ thraex:
     resources:
       - paths: ${thraex.file.access-prefix}/**
         locations: file://${thraex.file.directory}/
-      - paths:
-          - /favicon.ico
-          - /assets/**
+#      - paths:
+#          - /favicon.ico
+#          - /assets/**
+#        locations: classpath:/templates/assets/
+      - paths: /assets/**
         locations: classpath:/templates/assets/
+      - paths: /favicon.ico
+        locations: ${thraex.favicon:classpath:/templates/assets/}
       - paths: /vue/**
         locations: ${thraex.mvc.webjars}/vue/2.6.11/
       - paths: /AdminLTE/**
