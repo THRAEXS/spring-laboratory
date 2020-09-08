@@ -65,6 +65,10 @@ thraex:
       role: role
       grant: grant
       profile: profile
+      login: login
+  site:
+    permits:
+      - /AdminLTE/**
   file:
     directory: ${user.home}/thraex-files
     access-prefix: /assets/files
