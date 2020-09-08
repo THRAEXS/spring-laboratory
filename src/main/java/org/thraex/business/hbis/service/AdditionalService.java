@@ -8,4 +8,7 @@ import org.thraex.business.hbis.entity.Additional;
  * @date 2020/09/03 17:15
  */
 public interface AdditionalService extends IService<Additional> {
+
+    Additional one();
+
 }

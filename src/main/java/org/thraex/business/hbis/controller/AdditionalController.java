@@ -1,6 +1,5 @@
 package org.thraex.business.hbis.controller;
 
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,7 +21,7 @@ public class AdditionalController extends Controller<AdditionalService> {
 
     @GetMapping
     public ResponseEntity<Additional> one() {
-        return ResponseEntity.ok(service.getOne(Wrappers.<Additional>lambdaQuery()));
+        return ResponseEntity.ok(service.one());
     }
 
     @PostMapping

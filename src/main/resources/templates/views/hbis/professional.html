@@ -1,10 +1,9 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" th:replace="hbis/base :: app_template(~{::.container-item})">
 <body>
-    <div class="row container-item mt-3">
+    <div class="container-item">
         Identifier: <div>[[${portalVO.identifier}]]</div>
-        <div>[[${portalVO.company.name}]]</div>
-        <div th:utext="${portalVO.company.organization}">[[${portalVO.company.organization}]]</div>
+        professional
     </div>
 </body>
 </html>

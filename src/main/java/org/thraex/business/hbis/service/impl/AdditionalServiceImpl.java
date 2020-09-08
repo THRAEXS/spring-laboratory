@@ -1,5 +1,6 @@
 package org.thraex.business.hbis.service.impl;
 
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 import org.thraex.business.hbis.entity.Additional;
@@ -12,4 +13,10 @@ import org.thraex.business.hbis.service.AdditionalService;
  */
 @Service
 public class AdditionalServiceImpl extends ServiceImpl<AdditionalMapper, Additional> implements AdditionalService {
+
+    @Override
+    public Additional one() {
+        return this.getOne(Wrappers.lambdaQuery());
+    }
+
 }

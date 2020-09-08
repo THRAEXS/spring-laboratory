@@ -33,6 +33,8 @@ public class PortalVO implements Serializable {
 
     private List<Case> cases;
 
+    private String identifier;
+
     public PortalVO() { }
 
     public PortalVO(SiteProperties.Portal site, List<Menu> navs) {
@@ -43,6 +45,11 @@ public class PortalVO implements Serializable {
     public PortalVO(SiteProperties.Portal site, List<Menu> navs, List<AdvertVO> adverts) {
         this(site, navs);
         this.adverts = adverts;
+    }
+
+    public PortalVO(SiteProperties.Portal site, List<Menu> navs, Company company, List<AdvertVO> adverts) {
+        this(site, navs, adverts);
+        this.company = company;
     }
 
 }

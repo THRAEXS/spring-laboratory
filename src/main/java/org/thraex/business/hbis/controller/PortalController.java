@@ -1,13 +1,15 @@
 package org.thraex.business.hbis.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.thraex.base.properties.SiteProperties;
+import org.thraex.business.hbis.entity.Additional;
 import org.thraex.business.hbis.entity.Company;
+import org.thraex.business.hbis.service.AdditionalService;
 import org.thraex.business.hbis.service.AdvertService;
 import org.thraex.business.hbis.service.CaseService;
 import org.thraex.business.hbis.service.CompanyService;
@@ -28,52 +30,86 @@ import java.util.Optional;
 @RequestMapping("hbis")
 public class PortalController {
 
-    @Autowired
-    private SiteProperties sitProperties;
-
     @Value("${hbis.nav-code}")
     private String navCode;
 
-    @Autowired
+    private SiteProperties sitProperties;
+
     private MenuService menuService;
-
-    @Autowired
     private AdvertService advertService;
-
-    @Autowired
     private NewsService newsService;
-
-    @Autowired
     private CompanyService companyService;
-
-    @Autowired
     private CaseService caseService;
+    private AdditionalService additionalService;
+
+    private Company company;
+    private Additional additional;
+
+    public PortalController(SiteProperties sitProperties,
+                            MenuService menuService,
+                            AdvertService advertService,
+                            NewsService newsService,
+                            CompanyService companyService,
+                            CaseService caseService,
+                            AdditionalService additionalService) {
+        this.sitProperties = sitProperties;
+        this.menuService = menuService;
+        this.advertService = advertService;
+        this.newsService = newsService;
+        this.companyService = companyService;
+        this.caseService = caseService;
+        this.additionalService = additionalService;
+
+        this.company = companyService.oneOrDefault();
+        this.additional = additionalService.one();
+    }
 
     private PortalVO base() {
         /**
          * Compatible access: / or /hbis
          */
         SiteProperties.Portal site = sitProperties.getPortal();
-        Optional.ofNullable(companyService.oneOrDefault()).map(Company::getName).ifPresent(n -> site.setTitle(n));
+        Optional.of(company).map(Company::getName).ifPresent(n -> site.setTitle(n));
 
         List<Menu> menus = menuService.tree(navCode).stream().findFirst().map(Menu::getChildren).orElse(Collections.emptyList());
 
-        return new PortalVO(site, menus, advertService.listVO());
+        return new PortalVO(site, menus, company, advertService.listVO());
     }
 
     @GetMapping
     public String index(Model model) {
-        model.addAttribute(base()
-                .setCompany(companyService.oneOrDefault())
-                .setNews(newsService.list(5))
-                .setCases(caseService.list(6)));
+        model.addAttribute(base().setNews(newsService.list(5)).setCases(caseService.list(6)));
         return "hbis/index";
     }
 
-    @GetMapping("company")
-    public String company(Model model) {
-        model.addAttribute(base().setCompany(companyService.oneOrDefault()));
+    @GetMapping({ "company", "company/{identifier}"})
+    public String company(@PathVariable(required = false) String identifier, Model model) {
+        model.addAttribute(base().setIdentifier(identifier));
         return "hbis/company";
+    }
+
+    @GetMapping({ "professional", "professional/{identifier}"})
+    public String professional(@PathVariable(required = false) String identifier, Model model) {
+        model.addAttribute(base().setIdentifier(identifier));
+        return "hbis/professional";
+    }
+
+    @GetMapping({ "cases", "cases/{identifier}"})
+    public String cases(@PathVariable(required = false) String identifier, Model model) {
+        model.addAttribute(base().setIdentifier(identifier));
+        return "hbis/cases";
+    }
+
+    @GetMapping({ "news", "news/{identifier}"})
+    public String news(@PathVariable(required = false) String identifier, Model model) {
+        model.addAttribute(base().setIdentifier(identifier));
+        return "hbis/news";
+    }
+
+    @GetMapping({ "culture", "culture/{identifier}"})
+    public String culture(@PathVariable(required = false) String identifier, Model model) {
+        model.addAttribute(base().setIdentifier(identifier));
+        return "hbis/culture";
     }
 
 }

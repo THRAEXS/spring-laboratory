@@ -29,10 +29,10 @@
 
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item dropdown dropdown-hover" th:each="item : ${portalVO.navs}">
-                        <a class="nav-link" data-toggle="dropdown" href="javascript: void(0);">[[${item.name}]]</a>
+                        <a class="nav-link" th:href="${item.url}">[[${item.name}]]</a>
                         <ul class="dropdown-menu dropdown-menu-right border-0 shadow" th:if="${item.children.size() > 0}">
                             <li th:each="child : ${item.children}">
-                                <a href="javascript: void(0);" class="dropdown-item text-center">[[${child.name}]]</a>
+                                <a th:href="${child.url}" class="dropdown-item text-center">[[${child.name}]]</a>
                             </li>
                         </ul>
                     </li>
@@ -69,11 +69,6 @@
         <!-- Main Footer -->
         <footer class="main-footer bg-gradient-dark">
             <div class="container">
-                <!-- To the right -->
-                <!--<div class="float-right d-none d-sm-inline">
-                    <a href="javascript: void(0);">联系我们</a>
-                </div>-->
-                <!-- Default to the left -->
                 版权所有 <strong>Copyright &copy; 2020 <a href="http://www.xinda-keji.com" th:text="${portalVO.site.title}"></a></strong>
             </div>
         </footer>
