@@ -19,6 +19,15 @@
                 </div>
                 <div class="col-10">
                     <div th:utext="${navigator.content}"></div>
+
+                    <div th:each="n : ${portalVO.news}">
+                        <div class="dropdown-divider"></div>
+                        <a href="javascript: void(0);" style="font: 16px/26px simsun, Arial,Verdana;color: #505050;">
+                            <i class="fas fa-envelope mr-2"></i> [[${n.title}]]
+                            <span class="float-right text-muted text-md"
+                                  th:text="${#temporals.format(n.createTime, 'yyyy-MM-dd')}"></span>
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
