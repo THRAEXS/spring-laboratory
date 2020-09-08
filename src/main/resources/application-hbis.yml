@@ -4,7 +4,7 @@ spring:
 
 logging:
   level:
-    org.thraex.business.hbis.mapper: debug
+    org.hbis.business.hbis.mapper: debug
 
 thraex:
   mvc:

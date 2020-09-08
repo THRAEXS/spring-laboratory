@@ -34,7 +34,7 @@ mybatis-plus:
 
 logging:
   level:
-    org.thraex.platform.mapper: debug
+    org.hbis.platform.mapper: debug
 
 thraex:
   mvc:

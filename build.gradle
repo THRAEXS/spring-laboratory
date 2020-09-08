@@ -7,9 +7,9 @@ plugins {
 
 //apply plugin: 'io.spring.dependency-management'
 
-group = 'org.thraex'
+group = 'org.hbis'
 version = '1.0.0'
-description = 'Spring Laboratory'
+description = 'HBIS'
 
 java {
     sourceCompatibility = JavaVersion.VERSION_1_8
