@@ -13,6 +13,8 @@ public interface MenuService extends IService<Menu> {
 
     List<Menu> mock();
 
+    List<Menu> list(String code);
+
     List<Menu> tree();
 
     List<Menu> tree(List<String> ids);

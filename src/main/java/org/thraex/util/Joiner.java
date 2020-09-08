@@ -17,7 +17,7 @@ public abstract class Joiner {
         return join(delimiter, items.stream());
     }
 
-    public static String join(CharSequence delimiter, String[] items) {
+    public static String join(CharSequence delimiter, String... items) {
         return join(delimiter, Stream.of(items));
     }
 

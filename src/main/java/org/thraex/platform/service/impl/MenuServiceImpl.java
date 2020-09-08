@@ -43,6 +43,16 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
     }
 
     @Override
+    public List<Menu> list(String code) {
+        return Optional.ofNullable(code)
+                .map(c -> this.getOne(Wrappers.<Menu>lambdaQuery().eq(Menu::getCode, c)))
+                .map(m -> m.getLevelCode())
+                .map(l -> this.list(Wrappers.<Menu>lambdaQuery().likeRight(Menu::getLevelCode, l)
+                        .orderByAsc(Menu::getLevelCode)))
+                .orElse(Collections.emptyList());
+    }
+
+    @Override
     public List<Menu> tree() {
         return toTree(this.list(Wrappers.<Menu>lambdaQuery().orderByAsc(Menu::getLevelCode)));
     }
@@ -58,14 +68,7 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
 
     @Override
     public List<Menu> tree(String code) {
-        List<Menu> list = Optional.ofNullable(code)
-                .map(c -> this.getOne(Wrappers.<Menu>lambdaQuery().eq(Menu::getCode, c)))
-                .map(m -> m.getLevelCode())
-                .map(l -> this.list(Wrappers.<Menu>lambdaQuery().likeRight(Menu::getLevelCode, l)
-                        .orderByAsc(Menu::getLevelCode)))
-                .orElse(Collections.emptyList());
-
-        return toTree(list);
+        return toTree(list(code));
     }
 
     private List<Menu> toTree(List<Menu> list) {
