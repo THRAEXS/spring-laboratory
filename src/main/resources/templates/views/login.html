@@ -17,23 +17,78 @@
     <link rel="stylesheet" href="/AdminLTE/dist/css/adminlte.min.css">
     <!-- Google Font: Source Sans Pro -->
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+    <style type="text/css">
+        .login-page {
+            /*bg*/
+            background-color: #282923!important;
+            /*bg-dialog*/
+            /*background-color: #181915!important;*/
+            /*bg-selected*/
+            /*#3a3b38*/
+            /*bg-tab*/
+            /*#20211c*/
+            /*color-font*/
+            /*#c6c6c5*/
+            /*color-font-unselected*/
+            /*#a9a9a7*/
+            /*bg-btn*/
+            /*#353533*/
+            /*btn-hover*/
+            /*#4b4b49*/
+            height: 70vh;
+        }
+        .card .card-body {
+            background-color: #181915!important;
+        }
+        /*.btn-primary {*/
+        /*  !*background-color: #353533!important;*!*/
+        /*  !*border-color: #353533;*!*/
+        /*}*/
+        /*.btn-primary {*/
+        /*  color: #fff;*/
+        /*  background-color: #353533;*/
+        /*  border-color: #353533;*/
+        /*  box-shadow: none;*/
+        /*}*/
+
+        .btn-primary {
+            /*color: #ffffff;*/
+            background-color: #353533;
+            border-color: #353533;
+            /*box-shadow: none;*/
+        }
+
+        .btn-primary:hover {
+            /*color: #ffffff;*/
+            background-color: #4b4b49;
+            border-color: #4b4b49;
+            /*border-color: #0062cc;*/
+        }
+
+        .btn-primary:focus {
+            /*color: #ffffff;*/
+            background-color: #4b4b49;
+            border-color: #4b4b49;
+            /*border-color: #0062cc;*/
+            /*box-shadow: none, 0 0 0 0 rgba(38, 143, 255, 0.5);*/
+        }
+    </style>
 </head>
 <body class="hold-transition login-page">
     <div class="login-box">
-        <div class="login-logo">
-            <a href="/AdminLTE/index2.html"><b>Admin</b>LTE</a>
+        <div class="login-logo pace-progress-color-red">
+            <b class="mr-2">THRAEX</b>Admin
         </div>
-        <!-- /.login-logo -->
         <div class="card">
             <div class="card-body login-card-body">
-                <p class="login-box-msg">Sign in to start your session</p>
+                <p class="login-box-msg">Error</p>
 
-                <form action="/AdminLTE/index3.html" method="post">
+                <form action="/login" method="post">
                     <div class="input-group mb-3">
-                        <input type="email" class="form-control" placeholder="Email">
+                        <input type="email" class="form-control" placeholder="Username">
                         <div class="input-group-append">
                             <div class="input-group-text">
-                                <span class="fas fa-envelope"></span>
+                                <span class="fas fa-user"></span>
                             </div>
                         </div>
                     </div>
@@ -46,44 +101,14 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-8">
-                            <div class="icheck-primary">
-                                <input type="checkbox" id="remember">
-                                <label for="remember">
-                                    Remember Me
-                                </label>
-                            </div>
+                        <div class="col-12">
+                            <button type="submit" class="btn btn-primary btn-block">登&nbsp;&nbsp;&nbsp;&nbsp;录</button>
                         </div>
-                        <!-- /.col -->
-                        <div class="col-4">
-                            <button type="submit" class="btn btn-primary btn-block">Sign In</button>
-                        </div>
-                        <!-- /.col -->
                     </div>
                 </form>
-
-                <div class="social-auth-links text-center mb-3">
-                    <p>- OR -</p>
-                    <a href="#" class="btn btn-block btn-primary">
-                        <i class="fab fa-facebook mr-2"></i> Sign in using Facebook
-                    </a>
-                    <a href="#" class="btn btn-block btn-danger">
-                        <i class="fab fa-google-plus mr-2"></i> Sign in using Google+
-                    </a>
-                </div>
-                <!-- /.social-auth-links -->
-
-                <p class="mb-1">
-                    <a href="forgot-password.html">I forgot my password</a>
-                </p>
-                <p class="mb-0">
-                    <a href="register.html" class="text-center">Register a new membership</a>
-                </p>
             </div>
-            <!-- /.login-card-body -->
         </div>
     </div>
-    <!-- /.login-box -->
 
     <!-- jQuery -->
     <script src="/AdminLTE/plugins/jquery/jquery.min.js"></script>
