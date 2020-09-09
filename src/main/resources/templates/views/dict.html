@@ -138,7 +138,7 @@
                 },
                 handleSave() {
                     this.$refs.form.validate(valid => valid && (() => {
-                        console.log('Menu form data:', JSON.stringify(this.form));
+                        console.log('Dict form data:', JSON.stringify(this.form));
                         this.axios.post(this.api, this.form).then(data => {
                             this.transfer(data, this.form);
                             this.getTree().then(() => this.$refs.tree.setCurrentKey(data.id));
