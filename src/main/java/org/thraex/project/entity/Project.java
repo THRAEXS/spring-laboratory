@@ -1,10 +1,14 @@
 package org.thraex.project.entity;
 
+import com.baomidou.mybatisplus.annotation.TableLogic;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import lombok.experimental.Accessors;
 import org.thraex.base.entity.Entity;
+import org.thraex.platform.entity.Dict;
+
+import java.math.BigDecimal;
 
 /**
  * @author 鬼王
@@ -19,37 +23,42 @@ public class Project extends Entity<Project> {
     private static final long serialVersionUID = 1L;
 
     /**
+     * 项目编号
+     */
+    private String itemNo;
+
+    /**
      * 项目名称
      */
     private String name;
 
     /**
-     * 所属行业
+     * 所属行业. {@link Dict#getId()}
      */
     private String industry;
 
     /**
-     * 进展阶段
+     * 进展阶段. {@link Dict#getId()}
      */
     private String stage;
 
     /**
-     * 总投资
+     * 总投资(万)
      */
-    private String investment;
+    private BigDecimal investment;
 
     /**
-     * 资金分类
+     * 资金分类. {@link Dict#getId()}
      */
     private String fund;
 
     /**
      * 年度
      */
-    private String year;
+    private Long year;
 
     /**
-     * 年度
+     * 工期建设单位
      */
     private String company;
 
@@ -87,5 +96,8 @@ public class Project extends Entity<Project> {
      * 电话
      */
     private String phone;
+
+    @TableLogic
+    private int deleted;
 
 }

@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="template-v2 :: app_template(~{::title}, ~{::title/text()}, ~{}, ~{}, ~{::div.container-item}, ~{::script})">
+<head>
+    <title>项目编辑</title>
+</head>
+<body>
+    <div class="container-item">
+        <el-form ref="form" :model="form" :rules="rules" label-width="auto">
+            <div class="row">
+                <div class="col-6">
+                    <el-form-item prop="itemNo" label="项目编号">
+                        <el-input v-model.trim="form.itemNo"></el-input>
+                    </el-form-item>
+                </div>
+                <div class="col-6">
+                    <el-form-item prop="name" label="项目名称">
+                        <el-input v-model.trim="form.name"></el-input>
+                    </el-form-item>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-3">
+                    <el-form-item prop="industry" label="所属行业">
+                        <el-select v-model="form.industry" placeholder="请选择">
+                            <el-option
+                                v-for="item in dict.INDUSTRY"
+                                :key="item.id"
+                                :label="item.name"
+                                :value="item.id">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+                </div>
+                <div class="col-3">
+                    <el-form-item prop="stage" label="进展阶段">
+                        <el-select v-model="form.stage" placeholder="请选择">
+                            <el-option
+                                v-for="item in dict.STAGE"
+                                :key="item.id"
+                                :label="item.name"
+                                :value="item.id">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+                </div>
+                <div class="col-3">
+                    <el-form-item prop="fund" label="资金分类">
+                        <el-select v-model="form.fund" placeholder="请选择">
+                            <el-option
+                                v-for="item in dict.FUND"
+                                :key="item.id"
+                                :label="item.name"
+                                :value="item.id">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+                </div>
+                <div class="col-3">
+                    <el-form-item prop="year" label="年度">
+                        <el-date-picker
+                                v-model="form.year"
+                                type="year"
+                                value-format="yyyy"
+                                :editable="false"
+                                placeholder="选择年">
+                        </el-date-picker>
+                    </el-form-item>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6">
+                    <el-form-item prop="investment" label="总投资">
+                        <el-input v-model.number="form.investment">
+                            <template slot="append">万元</template>
+                        </el-input>
+                    </el-form-item>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6">
+                    <el-form-item prop="company" label="工期建设单位">
+                        <el-input v-model.trim="form.company"></el-input>
+                    </el-form-item>
+                </div>
+                <div class="col-6">
+                    <el-form-item prop="approvalNo" label="审批文号">
+                        <el-input v-model.trim="form.approvalNo"></el-input>
+                    </el-form-item>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6">
+                    <el-form-item prop="approvalOffice" label="审批机关">
+                        <el-input v-model.trim="form.approvalOffice"></el-input>
+                    </el-form-item>
+                </div>
+                <div class="col-6">
+                    <el-form-item prop="place" label="建设地点">
+                        <el-input v-model.trim="form.place"></el-input>
+                    </el-form-item>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6">
+                    <el-form-item prop="region" label="所属地区">
+                        <el-input v-model.trim="form.region"></el-input>
+                    </el-form-item>
+                </div>
+                <div class="col-6">
+                    <el-form-item prop="unit" label="主管单位">
+                        <el-input v-model.trim="form.unit"></el-input>
+                    </el-form-item>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6">
+                    <el-form-item prop="leader" label="项目负责人">
+                        <el-input v-model.trim="form.leader"></el-input>
+                    </el-form-item>
+                </div>
+                <div class="col-6">
+                    <el-form-item prop="phone" label="电话">
+                        <el-input v-model.trim="form.phone"></el-input>
+                    </el-form-item>
+                </div>
+            </div>
+            <el-form-item class="text-right">
+                <el-button type="primary" class="btn-sublime" @click="handleSave">保存</el-button>
+            </el-form-item>
+        </el-form>
+    </div>
+    <script type="text/javascript" th:inline="javascript">
+        Factory.Vue.build({
+            data() {
+                const lenLimit = max => ({ max, message: '长度超出范围' });
+                return {
+                    axios: Factory.Request,
+                    api: '/api/projects',
+                    form: {
+                        id: [[${id}]],
+                        itemNo: null,
+                        name: null,
+                        industry: null,
+                        stage: null,
+                        investment: null,
+                        fund: null,
+                        year: null,
+                        company: null,
+                        approvalNo: null,
+                        approvalOffice: null,
+                        place: null,
+                        region: null,
+                        unit: null,
+                        leader: null,
+                        phone: null,
+                    },
+                    rules: {
+                        itemNo: [
+                            { required: true, message: '请输入项目编号' },
+                            lenLimit(50)
+                        ],
+                        name: [
+                            { required: true, message: '请输入项目名称' },
+                            lenLimit(50)
+                        ],
+                        industry: [
+                            { required: true, message: '请选择所属行业' }
+                        ],
+                        stage: [
+                            { required: true, message: '请选择进展阶段' }
+                        ],
+                        investment: [
+                            { required: true, message: '请输入总投资' },
+                            { type: 'number', message: '请输入有效值' }
+                        ],
+                        fund: [
+                            { required: true, message: '请选择资金分类' }
+                        ],
+                        year: [
+                            { required: true, message: '请选择年份' }
+                        ],
+                        company: [
+                            { required: true, message: '请输入工期建设单位' },
+                            lenLimit(50)
+                        ],
+                        approvalNo: [
+                            { required: true, message: '请输入审批文号' },
+                            lenLimit(20)
+                        ],
+                        approvalOffice: [
+                            { required: true, message: '请输入审批机关' },
+                            lenLimit(50)
+                        ],
+                        place: [
+                            { required: true, message: '请输入建设地点' },
+                            lenLimit(50)
+                        ],
+                        region: [
+                            { required: true, message: '请输入所属地区' },
+                            lenLimit(50)
+                        ],
+                        unit: [
+                            { required: true, message: '请输入主管单位' },
+                            lenLimit(50)
+                        ],
+                        leader: [
+                            { required: true, message: '请输入项目负责人' },
+                            lenLimit(20)
+                        ],
+                        phone: [
+                            { required: true, message: '请输入电话' },
+                            lenLimit(20)
+                        ],
+                    },
+                    dict: { FUND: [], STAGE: [], INDUSTRY: [] }
+                };
+            },
+            created() {
+                this.form.id && this.axios.get(`${this.api}/project/${this.form.id}`).then(data => {
+                    for (let k of Object.keys(this.form)) {
+                        this.$set(this.form, k, k === 'year' ? data[k].toString() : data[k]);
+                    }
+                });
+
+                for (let k of Object.keys(this.dict)) {
+                    this.axios.get(`/api/dict/children/DICT_${k}`).then(data => this.$set(this.dict, k, data));
+                }
+            },
+            methods: {
+                handleSave() {
+                    this.$refs.form.validate(valid => valid && (() => {
+                        const method = this.form.id ? this.axios.put : this.axios.post;
+                        method(this.api, this.form).then(() => {
+                            window.location.href = '/project/list';
+                        });
+                    })());
+                }
+            }
+        });
+    </script>
+</body>
+</html>

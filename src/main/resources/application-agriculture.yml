@@ -10,4 +10,4 @@ thraex:
   mvc:
     views:
       project-list: project/list
-      project-add: project/add
+      project-edit: project/edit
