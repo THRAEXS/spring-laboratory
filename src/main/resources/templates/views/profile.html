@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-      th:replace="template :: app_template(~{::title}, ~{::div.content-wrapper}, ~{::script})">
+      th:replace="template-v2 :: app_template(~{::title}, ~{::title/text()}, ~{}, ~{}, ~{::div.container-item}, ~{::script})">
 <head>
-    <title>Profile</title>
+    <title>用户资料</title>
 </head>
 <body>
-    <div class="content-wrapper">
+    <div class="container-item">
         <el-card class="min-h-3">
             <el-row>
                 <el-col :offset="8" :span="8">
@@ -20,7 +20,7 @@
                             <el-input type="password" v-model="form.checkPassword" show-password autocomplete="off"></el-input>
                         </el-form-item>
                         <el-form-item class="txt-r">
-                            <el-button type="primary" @click="handleSave">保存</el-button>
+                            <el-button type="primary" class="btn-sublime" @click="handleSave">保存</el-button>
                         </el-form-item>
                     </el-form>
                 </el-col>

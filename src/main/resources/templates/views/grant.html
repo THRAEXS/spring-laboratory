@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-      th:replace="template :: app_template(~{::title}, ~{::div.content-wrapper}, ~{::script})">
+      th:replace="template-v2 :: app_template(~{::title}, ~{::title/text()}, ~{}, ~{}, ~{::div.container-item}, ~{::script})">
 <head>
-    <title>Grant</title>
+    <title>用户授权</title>
 </head>
 <body>
-    <div class="content-wrapper">
+    <div class="container-item">
         <el-row :gutter="page.gutter">
             <el-col :span="8">
                 <el-card class="min-h-3">

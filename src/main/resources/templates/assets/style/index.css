@@ -1,6 +1,6 @@
-body {
-    margin: 15px!important;
-}
+/*body {*/
+/*    margin: 15px!important;*/
+/*}*/
 
 .min-h-1 { min-height: 400px; }
 .min-h-2 { min-height: 500px; }
@@ -19,4 +19,24 @@ body {
     justify-content: space-between;
     font-size: 14px;
     padding-left: 8px;
+}
+
+.btn-sublime {
+    background-color: #353533;
+    border-color: #353533;
+}
+
+.btn-sublime:hover {
+    background-color: #4b4b49;
+    border-color: #4b4b49;
+}
+
+.btn-sublime:focus {
+    background-color: #4b4b49;
+    border-color: #4b4b49;
+}
+
+.btn-sublime:disabled {
+    background-color: #4b4b49;
+    border-color: #4b4b49;
 }

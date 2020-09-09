@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-      th:fragment="app_template(title, links, styles, contents, scripts)">
+      th:fragment="app_template(title, ctitle, links, styles, contents, scripts)">
 <head>
     <title th:replace="${title}">Page Title</title>
 
@@ -24,12 +24,24 @@
     <th:block th:replace="${links}" />
 
     <link rel="stylesheet" href="/element-ui/lib/theme-chalk/index.css">
+    <link rel="stylesheet" href="/assets/style/index.css">
 
     <th:block th:replace="${styles}" />
 </head>
 <body class="hold-transition">
     <div id="app" class="wrapper">
-        <th:block th:replace="${contents}"/>
+        <section class="content p-1">
+            <div class="container-fluid">
+                <div class="card card-outline card-primary" style="border-color: #282923!important;">
+                    <div class="card-header">
+                        <h3 class="card-title font-weight-bold" th:text="${ctitle}"></h3>
+                    </div>
+                    <div class="card-body p-2" style="min-height: 600px;">
+                        <th:block th:replace="${contents}"/>
+                    </div>
+                </div>
+            </div>
+        </section>
     </div>
 
     <!-- REQUIRED SCRIPTS -->
