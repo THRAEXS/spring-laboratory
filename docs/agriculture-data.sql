@@ -1,0 +1,24 @@
+INSERT INTO agriculture.tbl_user (id, nickname, username, password, enabled, create_by, create_time, update_by, update_time) VALUES ('7fe5897436c001df9edfcfd3e3d869ac', 'Master', 'master', '$2a$10$qOc2obSTRpB/FYobTideReJ88Xz8tvi05YIdkTaPcrjWf91Tw.pya', 1, 'admin', '2020-09-09 07:27:10', null, null);
+
+INSERT INTO agriculture.tbl_menu (id, name, code, url, pid, level_code, remark, disabled, create_by, create_time, update_by, update_time) VALUES ('0aaab910cde409ca44073704672ab041', '角色管理', 'MENU_ROLE', '/role', 'a10a60d2a8e7fd120970efa28bc6883b', '0000000100000003', null, 0, 'admin', '2020-08-28 13:09:11', null, null);
+INSERT INTO agriculture.tbl_menu (id, name, code, url, pid, level_code, remark, disabled, create_by, create_time, update_by, update_time) VALUES ('1b54507585eeca8f746aa1ec26c29d5c', '菜单管理', 'MENU_MENU', '/menu', 'a10a60d2a8e7fd120970efa28bc6883b', '0000000100000002', null, 0, 'admin', '2020-08-28 13:08:09', null, null);
+INSERT INTO agriculture.tbl_menu (id, name, code, url, pid, level_code, remark, disabled, create_by, create_time, update_by, update_time) VALUES ('2cf0870e4bd7b64195c25463fe2af516', '项目管理', 'MENU_PROJECT', '', null, '00000002', '', 0, 'admin', '2020-09-09 07:30:54', 'admin', '2020-09-09 07:32:38');
+INSERT INTO agriculture.tbl_menu (id, name, code, url, pid, level_code, remark, disabled, create_by, create_time, update_by, update_time) VALUES ('4ed665e0d20048daf56c60e62262a899', '项目查询', 'MENU_PROJECT_QUERY', '/project/query', '2cf0870e4bd7b64195c25463fe2af516', '0000000200000001', '', 0, 'admin', '2020-09-09 07:33:17', null, null);
+INSERT INTO agriculture.tbl_menu (id, name, code, url, pid, level_code, remark, disabled, create_by, create_time, update_by, update_time) VALUES ('7a6379a486a5245b877d68b830b77c2d', '用户授权', 'MENU_GRANT', '/grant', 'a10a60d2a8e7fd120970efa28bc6883b', '0000000100000004', '', 0, 'admin', '2020-09-09 09:12:29', 'admin', '2020-09-09 09:14:24');
+INSERT INTO agriculture.tbl_menu (id, name, code, url, pid, level_code, remark, disabled, create_by, create_time, update_by, update_time) VALUES ('a10a60d2a8e7fd120970efa28bc6883b', '系统管理', 'MENU_SETTING', '', null, '00000001', null, 0, 'admin', '2020-08-28 13:07:51', 'admin', '2020-09-09 09:25:30');
+INSERT INTO agriculture.tbl_menu (id, name, code, url, pid, level_code, remark, disabled, create_by, create_time, update_by, update_time) VALUES ('a2ebef150e63efc88b6bf2f45af0d4aa', '用户管理', 'MENU_USER', '/user', 'a10a60d2a8e7fd120970efa28bc6883b', '0000000100000001', null, 0, 'admin', '2020-08-28 13:08:54', null, null);
+INSERT INTO agriculture.tbl_menu (id, name, code, url, pid, level_code, remark, disabled, create_by, create_time, update_by, update_time) VALUES ('fc665bd3130910620f20e7289c84ed2d', '项目添加', 'MENU_PROJECT_ADD', '/project/add', '2cf0870e4bd7b64195c25463fe2af516', '0000000200000002', '', 0, 'admin', '2020-09-09 07:33:51', null, null);
+
+INSERT INTO agriculture.tbl_role (id, name, code, remark, create_by, create_time, update_by, update_time) VALUES ('58ddea5881aa61470c3eef3b67922541', '普通用户', 'GENERAL', '', 'admin', '2020-08-28 15:06:04', 'admin', '2020-09-09 08:05:20');
+INSERT INTO agriculture.tbl_role (id, name, code, remark, create_by, create_time, update_by, update_time) VALUES ('f99c160529467ebcbbdf9853ed000515', '管理员', 'ADMIN', '', 'admin', '2020-08-28 14:43:33', null, null);
+
+INSERT INTO agriculture.tbl_user_role (id, uid, rid) VALUES ('dcc621da46987b1f18427e5ad2e1759e', '7fe5897436c001df9edfcfd3e3d869ac', 'f99c160529467ebcbbdf9853ed000515');
+
+INSERT INTO agriculture.tbl_role_menu (id, rid, mid) VALUES ('2502524bc0cdb175291236720b9f53b5', '58ddea5881aa61470c3eef3b67922541', 'fc665bd3130910620f20e7289c84ed2d');
+INSERT INTO agriculture.tbl_role_menu (id, rid, mid) VALUES ('2ceb12a27b82fbc3dab0d6073a08f1b2', '58ddea5881aa61470c3eef3b67922541', '4ed665e0d20048daf56c60e62262a899');
+INSERT INTO agriculture.tbl_role_menu (id, rid, mid) VALUES ('3e62f5b9d02606cb269f82bec7d4a111', 'f99c160529467ebcbbdf9853ed000515', '7a6379a486a5245b877d68b830b77c2d');
+INSERT INTO agriculture.tbl_role_menu (id, rid, mid) VALUES ('406f2e1fe03549f6f6281748d6a18b56', '58ddea5881aa61470c3eef3b67922541', '2cf0870e4bd7b64195c25463fe2af516');
+INSERT INTO agriculture.tbl_role_menu (id, rid, mid) VALUES ('9c84a8eab46c632b8aa96971daf8d74a', 'f99c160529467ebcbbdf9853ed000515', 'a2ebef150e63efc88b6bf2f45af0d4aa');
+INSERT INTO agriculture.tbl_role_menu (id, rid, mid) VALUES ('e15f95dc39fb591d9559cba094999e1d', 'f99c160529467ebcbbdf9853ed000515', '0aaab910cde409ca44073704672ab041');
+INSERT INTO agriculture.tbl_role_menu (id, rid, mid) VALUES ('e7e3eb08fdc84d335de9c0d038c730ad', 'f99c160529467ebcbbdf9853ed000515', '1b54507585eeca8f746aa1ec26c29d5c');
+INSERT INTO agriculture.tbl_role_menu (id, rid, mid) VALUES ('f810119abc68cecef22f8e94fe246b13', 'f99c160529467ebcbbdf9853ed000515', 'a10a60d2a8e7fd120970efa28bc6883b');
