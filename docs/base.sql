@@ -31,6 +31,20 @@ CREATE TABLE `thraex-admin`.tbl_menu (
     update_time DATETIME
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8;
 
+DROP TABLE IF EXISTS `thraex-admin`.tbl_dict;
+CREATE TABLE `thraex-admin`.tbl_dict (
+    id VARCHAR(36) NOT NULL PRIMARY KEY,
+    name VARCHAR(100),
+    code VARCHAR(100),
+    pid VARCHAR(36),
+    level_code VARCHAR(200),
+    remark VARCHAR(200),
+    create_by VARCHAR(36),
+    create_time DATETIME,
+    update_by VARCHAR(36),
+    update_time DATETIME
+) ENGINE = InnoDB DEFAULT CHARSET = utf8;
+
 DROP TABLE IF EXISTS `thraex-admin`.tbl_role;
 CREATE TABLE `thraex-admin`.tbl_role (
     id VARCHAR(36) NOT NULL PRIMARY KEY,

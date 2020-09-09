@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="template-v2 :: app_template(~{::title}, ~{::title/text()}, ~{}, ~{}, ~{::div.container-item}, ~{::script})">
+<head>
+    <title>字典管理</title>
+</head>
+<body>
+    <div class="container-item">
+        <el-row :gutter="page.gutter">
+            <el-col :span="6">
+                <el-card class="min-h-3">
+                    <el-tree
+                        ref="tree"
+                        :data="data"
+                        :props="defaultProps"
+                        node-key="id"
+                        default-expand-all
+                        highlight-current
+                        @node-click="handleNodeClick">
+                        <span class="custom-tree-node" slot-scope="{ node, data }">
+                            <span>{{ node.label }}</span>
+                            <span>
+                                <el-button
+                                    type="text"
+                                    size="mini"
+                                    icon="el-icon-plus"
+                                    @click="handleAdd($event, data)">
+                                </el-button>
+                                <el-button
+                                    type="text"
+                                    size="mini"
+                                    icon="el-icon-delete"
+                                    style="color: red;"
+                                    @click="handleRemove($event, data)">
+                                </el-button>
+                            </span>
+                        </span>
+                    </el-tree>
+                </el-card>
+            </el-col>
+            <el-col :span="18">
+                <el-card class="min-h-3">
+                    <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+                        <el-form-item prop="name" label="名称">
+                            <el-input v-model.trim="form.name"></el-input>
+                        </el-form-item>
+                        <el-form-item prop="code" label="编码">
+                            <el-input v-model.trim="form.code"></el-input>
+                        </el-form-item>
+                        <el-form-item label="父节点">
+                            <el-tag type="success">{{ getParentName(form.pid) }}</el-tag>
+                        </el-form-item>
+                        <el-form-item prop="levelCode" label="层级编码">
+                            <el-input v-model.trim="form.levelCode" :disabled="true"></el-input>
+                        </el-form-item>
+                        <el-form-item prop="remark" label="备注">
+                            <el-input type="textarea" :rows="2" v-model.trim="form.remark"></el-input>
+                        </el-form-item>
+                        <el-form-item class="txt-r">
+                            <el-button type="danger" @click="handleClear">清空</el-button>
+                            <el-button type="primary" class="btn-sublime" @click="handleSave">保存</el-button>
+                        </el-form-item>
+                    </el-form>
+                </el-card>
+            </el-col>
+        </el-row>
+    </div>
+
+    <script type="text/javascript">
+        Factory.Vue.build({
+            data() {
+                const entity = { id: '', name: '', code: '', pid: '', levelCode: '', remark: '' };
+                const lenLimit = max => ({ max, message: '长度超出范围' });
+
+                return {
+                    axios: Factory.Request,
+                    api: '/api/dict',
+                    page: {
+                        gutter: 15
+                    },
+                    list: [],
+                    data: [],
+                    defaultProps: {
+                        label: 'name'
+                    },
+                    entity,
+                    form: Object.assign({}, entity),
+                    rules: {
+                        name: [
+                            { required: true, message: '请输入名称' },
+                            lenLimit(50)
+                        ],
+                        code: [
+                            { required: true, message: '请输入编码' },
+                            { validator: (rule, value, callback) => {
+                                    const params = { id: this.form.id, code: value };
+                                    this.axios.get(`${this.api}/unique`, { params })
+                                        .then(data => callback(data ? undefined : '编码存在'));
+                                }, trigger: 'blur'
+                            },
+                            lenLimit(50)
+                        ],
+                        remark: lenLimit(100)
+                    }
+                }
+            },
+            created() {
+                this.axios.get(this.api).then(data => { this.list = data; });
+                this.getTree();
+            },
+            methods: {
+                getTree() {
+                    return new Promise(resolve => {
+                        this.axios.get(`${this.api}/tree`).then(data => {
+                            this.data = data;
+                            resolve(data);
+                        });
+                    });
+                },
+                getParentName(pid) {
+                    return (this.list.find(it => it.id === pid) || { name: 'None' }).name;
+                },
+                handleNodeClick(data) {
+                    this.transfer(data, this.form);
+                },
+                handleAdd(event, data) {
+                    event.stopPropagation();
+                    this.transfer(Object.assign({}, this.entity, { pid: data.id }), this.form);
+                },
+                handleRemove(event, data) {
+                    event.stopPropagation();
+                    this.axios.delete(this.api, {
+                        params: { levelCode: data.levelCode }
+                    }).then(() => {
+                        this.handleClear();
+                        this.getTree();
+                    });
+                },
+                handleSave() {
+                    this.$refs.form.validate(valid => valid && (() => {
+                        console.log('Menu form data:', JSON.stringify(this.form));
+                        this.axios.post(this.api, this.form).then(data => {
+                            this.transfer(data, this.form);
+                            this.getTree().then(() => this.$refs.tree.setCurrentKey(data.id));
+                        });
+                    })());
+                },
+                handleClear() {
+                    this.$refs.form.resetFields();
+                    this.form = Object.assign({}, this.entity);
+                },
+                transfer(raw, target) {
+                    Object.keys(this.entity).forEach(k => this.$set(target, k, raw[k]));
+                }
+            }
+        });
+    </script>
+</body>
+</html>

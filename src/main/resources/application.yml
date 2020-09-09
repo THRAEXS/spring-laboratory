@@ -61,6 +61,7 @@ thraex:
     views:
       dashboard: dashboard
       menu: menu
+      dict: dict
       user: user
       role: role
       grant: grant
