@@ -7,3 +7,7 @@ thraex:
     admin:
       title: 保定市唐县农业农村局信息管理系统
       brand: 农业农村局
+  mvc:
+    views:
+      project-list: project/list
+      project-add: project/add
