@@ -6,26 +6,24 @@
 </head>
 <body>
     <div class="container-item">
-        <el-card class="min-h-3">
-            <el-row>
-                <el-col :offset="8" :span="8">
-                    <el-form ref="form" :model="form" :rules="rules" :disabled="disabled" label-width="80px">
-                        <el-form-item label="昵称" prop="nickname">
-                            <el-input v-model.trim="form.nickname"></el-input>
-                        </el-form-item>
-                        <el-form-item label="密码" prop="newPassword">
-                            <el-input type="password" v-model="form.newPassword" show-password autocomplete="off"></el-input>
-                        </el-form-item>
-                        <el-form-item label="确认密码" prop="checkPassword">
-                            <el-input type="password" v-model="form.checkPassword" show-password autocomplete="off"></el-input>
-                        </el-form-item>
-                        <el-form-item class="txt-r">
-                            <el-button type="primary" class="btn-sublime" @click="handleSave">保存</el-button>
-                        </el-form-item>
-                    </el-form>
-                </el-col>
-            </el-row>
-        </el-card>
+        <el-row class="min-h-3">
+            <el-col :offset="8" :span="8">
+                <el-form ref="form" :model="form" :rules="rules" :disabled="disabled" label-width="80px">
+                    <el-form-item label="昵称" prop="nickname">
+                        <el-input v-model.trim="form.nickname"></el-input>
+                    </el-form-item>
+                    <el-form-item label="密码" prop="newPassword">
+                        <el-input type="password" v-model="form.newPassword" show-password autocomplete="off"></el-input>
+                    </el-form-item>
+                    <el-form-item label="确认密码" prop="checkPassword">
+                        <el-input type="password" v-model="form.checkPassword" show-password autocomplete="off"></el-input>
+                    </el-form-item>
+                    <el-form-item class="txt-r">
+                        <el-button type="primary" class="btn-sublime" @click="handleSave">保存</el-button>
+                    </el-form-item>
+                </el-form>
+            </el-col>
+        </el-row>
     </div>
     <script type="text/javascript">
         Factory.Vue.build({
