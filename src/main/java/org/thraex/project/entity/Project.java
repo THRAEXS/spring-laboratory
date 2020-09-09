@@ -98,6 +98,6 @@ public class Project extends Entity<Project> {
     private String phone;
 
     @TableLogic
-    private int deleted;
+    private Integer deleted;
 
 }

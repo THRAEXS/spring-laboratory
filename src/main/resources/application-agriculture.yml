@@ -2,6 +2,10 @@ spring:
   datasource:
     url: jdbc:mysql://localhost:3306/agriculture?characterEncoding=utf-8
 
+logging:
+  level:
+    org.thraex.project.mapper: debug
+
 thraex:
   site:
     admin:

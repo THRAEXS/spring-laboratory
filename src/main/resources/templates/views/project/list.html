@@ -1,14 +1,247 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-      th:replace="template-v2 :: app_template(~{::title}, ~{::title/text()}, ~{}, ~{}, ~{::div.container-item}, ~{::script})">
+      th:replace="template-v2 :: app_template(~{::title}, ~{::title/text()}, ~{}, ~{::style}, ~{::div.container-item}, ~{::script})">
 <head>
     <title>项目查询</title>
+    <style type="text/css">
+        .condition .el-card__body {
+            padding: 0!important;
+        }
+        .condition .el-form-item {
+            margin-bottom: 0!important;
+        }
+    </style>
 </head>
 <body>
     <div class="container-item">
-        QUERY
+        <div class="row condition">
+            <div class="col-12">
+                <el-card class="p-2">
+                    <el-form label-width="120px">
+                        <div class="row">
+                            <div class="col-4">
+                                <el-form-item label="项目编号">
+                                    <el-input
+                                        v-model.trim="list.query.params.itemNo"
+                                        @input="search"
+                                        clearable
+                                        suffix-icon="el-icon-search"></el-input>
+                                </el-form-item>
+                            </div>
+                            <div class="col-4">
+                                <el-form-item label="项目名称">
+                                    <el-input
+                                        v-model.trim="list.query.params.name"
+                                        @input="search"
+                                        clearable
+                                        suffix-icon="el-icon-search"></el-input>
+                                </el-form-item>
+                            </div>
+                            <div class="col-4">
+                                <el-form-item label="年度">
+                                    <el-date-picker
+                                        v-model="list.query.params.year"
+                                        type="year"
+                                        value-format="yyyy"
+                                        :editable="false"
+                                        @change="search"
+                                        placeholder="选择年">
+                                    </el-date-picker>
+                                </el-form-item>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-4">
+                                <el-form-item label="所属行业">
+                                    <el-select v-model="list.query.params.industry" placeholder="请选择" clearable @change="search">
+                                        <el-option
+                                            v-for="item in dict.INDUSTRY"
+                                            :key="item.id"
+                                            :label="item.name"
+                                            :value="item.id">
+                                        </el-option>
+                                    </el-select>
+                                </el-form-item>
+                            </div>
+                            <div class="col-4">
+                                <el-form-item label="进展阶段">
+                                    <el-select v-model="list.query.params.stage" placeholder="请选择" clearable @change="search">
+                                        <el-option
+                                            v-for="item in dict.STAGE"
+                                            :key="item.id"
+                                            :label="item.name"
+                                            :value="item.id">
+                                        </el-option>
+                                    </el-select>
+                                </el-form-item>
+                            </div>
+                            <div class="col-4">
+                                <el-form-item label="资金分类">
+                                    <el-select v-model="list.query.params.fund" placeholder="请选择" clearable @change="search">
+                                        <el-option
+                                            v-for="item in dict.FUND"
+                                            :key="item.id"
+                                            :label="item.name"
+                                            :value="item.id">
+                                        </el-option>
+                                    </el-select>
+                                </el-form-item>
+                            </div>
+                        </div>
+                    </el-form>
+                </el-card>
+            </div>
+        </div>
+        <div class="row mt-2 mb-2">
+            <div class="col-12">
+                <el-card>
+                    <el-table
+                        :data="list.data"
+                        v-loading.body="list.loading"
+                        fit
+                        stripe
+                        border
+                        highlight-current-row
+                        :height="500">
+                        <el-table-column :index="indexCalc" type="index" width="50" align="center"></el-table-column>
+                        <el-table-column prop="itemNo" label="项目编号" align="center" min-width="100"></el-table-column>
+                        <el-table-column prop="name" label="项目名称" align="center" min-width="100"></el-table-column>
+                        <el-table-column label="所属行业" align="center" min-width="100">
+                            <template slot-scope="scope">
+                                {{ getDictName(dict.INDUSTRY, scope.row.industry) }}
+                            </template>
+                        </el-table-column>
+                        <el-table-column label="进展阶段" align="center" min-width="100">
+                            <template slot-scope="scope">
+                                {{ getDictName(dict.STAGE, scope.row.stage) }}
+                            </template>
+                        </el-table-column>
+                        <el-table-column prop="investment" label="总投资" align="center" min-width="100"></el-table-column>
+                        <el-table-column label="资金分类" align="center" min-width="100">
+                            <template slot-scope="scope">
+                                {{ getDictName(dict.FUND, scope.row.fund) }}
+                            </template>
+                        </el-table-column>
+                        <el-table-column prop="year" label="年度" align="center" min-width="50"></el-table-column>
+                        <el-table-column prop="company" label="建设单位" align="center" min-width="100"></el-table-column>
+                        <el-table-column prop="approvalNo" label="审批文号" align="center" min-width="100"></el-table-column>
+                        <el-table-column prop="approvalOffice" label="审批机关" align="center" min-width="100"></el-table-column>
+                        <el-table-column prop="place" label="建设地点" align="center" min-width="100"></el-table-column>
+                        <el-table-column prop="region" label="所属地区" align="center" min-width="100"></el-table-column>
+                        <el-table-column prop="unit" label="主管单位" align="center" min-width="100"></el-table-column>
+                        <el-table-column prop="leader" label="项目负责人" align="center" min-width="100"></el-table-column>
+                        <el-table-column prop="phone" label="电话" align="center" min-width="100"></el-table-column>
+                        <el-table-column
+                            fixed="right"
+                            label="操作"
+                            width="100"
+                            align="center">
+                            <template slot-scope="scope">
+                                <el-button
+                                    type="success"
+                                    icon="el-icon-edit"
+                                    size="mini"
+                                    circle
+                                    @click="handleEdit(scope.row)">
+                                </el-button>
+                                <el-button
+                                    type="danger"
+                                    icon="el-icon-delete"
+                                    size="mini"
+                                    circle
+                                    @click="handleDelete(scope.$index, scope.row.id)">
+                                </el-button>
+                            </template>
+                        </el-table-column>
+                    </el-table>
+                </el-card>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <el-card>
+                    <el-pagination
+                        layout="total, sizes, prev, pager, next, jumper"
+                        :page-sizes="[10, 20, 50, 100, 500]"
+                        :page-size="list.query.size"
+                        :current-page.sync="list.query.page"
+                        :total="list.total"
+                        @size-change="handleSizeChange"
+                        @current-change="handleCurrentChange">
+                    </el-pagination>
+                </el-card>
+            </div>
+        </div>
     </div>
     <script type="text/javascript">
+        Factory.Vue.build({
+            data: {
+                axios: Factory.Request,
+                api: '/api/projects',
+                list: {
+                    data: [],
+                    total: 0,
+                    loading: false,
+                    query: {
+                        page: 1,
+                        size: 10,
+                        params: {
+                            itemNo: null,
+                            name: null,
+                            industry: null,
+                            stage: null,
+                            fund: null,
+                            year: null
+                        }
+                    }
+                },
+                dict: { FUND: [], STAGE: [], INDUSTRY: [] }
+            },
+            created() {
+                for (let k of Object.keys(this.dict)) {
+                    this.axios.get(`/api/dict/children/DICT_${k}`).then(data => this.$set(this.dict, k, data));
+                }
+
+                this.search();
+            },
+            methods: {
+                getDictName(dict, id) {
+                    const d = dict.find(it => it.id === id);
+                    return d ? d.name : null;
+                },
+                search() {
+                    this.list.loading = true;
+                    this.axios.get(this.api, {
+                        params: this.list.query,
+                        paramsSerializer: params => Qs.stringify(params, { allowDots: false })
+                    }).then(({ records: data, total }) => {
+                        this.list.data = data;
+                        this.list.total = total;
+                    }).finally(() => {
+                        this.list.loading = false;
+                    });
+                },
+                indexCalc(ind) {
+                    const { page, size } = this.list.query;
+                    return (page - 1) * size + (ind + 1);
+                },
+                handleSizeChange(val) {
+                    this.list.query.size = val;
+                    this.search();
+                },
+                handleCurrentChange(val) {
+                    this.list.query.page = val;
+                    this.search();
+                },
+                handleEdit({ id }) {
+                    window.location.href = `/project/edit/${id}`;
+                },
+                handleDelete(ind, id) {
+                    this.list.data.splice(ind, 1);
+                    this.axios.delete(this.api, { params: { id } });
+                }
+            }
+        });
     </script>
 </body>
 </html>
