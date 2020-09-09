@@ -1,0 +1,9 @@
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/agriculture?characterEncoding=utf-8
+
+thraex:
+  site:
+    admin:
+      title: 保定市唐县农业农村局信息管理系统
+      brand: 农业农村局
