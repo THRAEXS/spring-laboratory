@@ -1,3 +1,0 @@
-INSERT INTO agriculture.tbl_role (id, name, code, remark, create_by, create_time, update_by, update_time) VALUES ('58ddea5881aa61470c3eef3b67922541', '普通用户', 'GENERAL', '', 'admin', '2020-08-28 15:06:04', 'admin', '2020-09-09 08:05:20');
-INSERT INTO agriculture.tbl_role (id, name, code, remark, create_by, create_time, update_by, update_time) VALUES ('82609fd30de07df89c9c587327d9d50a', '项目管理员', 'PROJECT_ADMIN', '', 'admin', '2020-09-09 17:30:37', 'admin', '2020-09-09 17:30:56');
-INSERT INTO agriculture.tbl_role (id, name, code, remark, create_by, create_time, update_by, update_time) VALUES ('f99c160529467ebcbbdf9853ed000515', '管理员', 'ADMIN', '', 'admin', '2020-08-28 14:43:33', null, null);
