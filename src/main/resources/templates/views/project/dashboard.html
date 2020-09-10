@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -24,8 +24,69 @@
         <!-- Main content -->
         <section class="content p-2">
             <div class="container-fluid">
-                <!-- Main row -->
+                <!-- Small boxes (Stat box) -->
                 <div class="row">
+                    <div class="col-lg-3 col-6" th:with="item = ${boxes[0]}">
+                        <!-- small box -->
+                        <div class="small-box bg-info">
+                            <div class="inner">
+                                <h3>[[${item.proportion}]]<sup style="font-size: 20px">%</sup></h3>
+
+                                <p>[[${item.count}]]</p>
+                            </div>
+                            <div class="icon">
+                                <i class="ion ion-pie-graph"></i>
+                            </div>
+                            <b class="small-box-footer">[[${item.name}]]</b>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-6" th:with="item = ${boxes[1]}">
+                        <!-- small box -->
+                        <div class="small-box bg-success">
+                            <div class="inner">
+                                <h3>[[${item.proportion}]]<sup style="font-size: 20px">%</sup></h3>
+
+                                <p>[[${item.count}]]</p>
+                            </div>
+                            <div class="icon">
+                                <i class="ion ion-pie-graph"></i>
+                            </div>
+                            <b class="small-box-footer">[[${item.name}]]</b>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-6" th:with="item = ${boxes[2]}">
+                        <!-- small box -->
+                        <div class="small-box bg-warning">
+                            <div class="inner">
+                                <h3>[[${item.proportion}]]<sup style="font-size: 20px">%</sup></h3>
+
+                                <p>[[${item.count}]]</p>
+                            </div>
+                            <div class="icon">
+                                <i class="ion ion-pie-graph"></i>
+                            </div>
+                            <b class="small-box-footer">[[${item.name}]]</b>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-6" th:with="item = ${boxes[3]}">
+                        <!-- small box -->
+                        <div class="small-box bg-danger">
+                            <div class="inner">
+                                <h3>[[${item.proportion}]]<sup style="font-size: 20px">%</sup></h3>
+
+                                <p>[[${item.count}]]</p>
+                            </div>
+                            <div class="icon">
+                                <i class="ion ion-pie-graph"></i>
+                            </div>
+                            <b class="small-box-footer">[[${item.name}]]</b>
+                        </div>
+                    </div>
+                    <!-- ./col -->
+                </div>
+                <!-- /.row -->
+                <!-- Main row -->
+                <!--<div class="row">
                     <section class="col-lg-6 connectedSortable">
                         <div class="card card-outline card-primary" style="border-color: #282923!important;">
                             <div class="card-header">
@@ -68,14 +129,14 @@
                             </div>
                         </div>
                     </section>
-                </div>
+                </div>-->
                 <div class="row">
                     <section class="col-lg-6 connectedSortable">
-                        <div class="card card-outline card-primary" style="border-color: #282923!important;">
+                        <div class="card">
                             <div class="card-header">
                                 <h3 class="card-title">
                                     <i class="fas fa-th mr-1"></i>
-                                    Pie Graph
+                                    行业投资
                                 </h3>
 
                                 <div class="card-tools">
@@ -86,18 +147,18 @@
                             </div>
                             <div class="card-body">
                                 <div class="position-relative">
-                                    <canvas id="sales-chart-bar" height="300"></canvas>
+                                    <canvas id="sales-chart-bar" height="400"></canvas>
                                 </div>
                             </div>
                         </div>
                     </section>
                     <section class="col-lg-6 connectedSortable">
                         <!-- solid sales graph -->
-                        <div class="card bg-gradient-info card-outline card-primary" style="border-color: #282923!important;">
+                        <div class="card bg-gradient-info">
                             <div class="card-header border-0">
                                 <h3 class="card-title">
                                     <i class="fas fa-th mr-1"></i>
-                                    Line Graph
+                                    年度投资趋势
                                 </h3>
 
                                 <div class="card-tools">
@@ -107,7 +168,7 @@
                                 </div>
                             </div>
                             <div class="card-body">
-                                <canvas class="chart" id="line-chart" style="min-height: 300px; height: 300px; max-height: 300px; max-width: 100%;"></canvas>
+                                <canvas class="chart" id="line-chart" style="min-height: 400px; height: 400px; max-height: 400px; max-width: 100%;"></canvas>
                             </div>
                             <!-- /.card-body -->
                         </div>
@@ -134,7 +195,7 @@
     <script src="/AdminLTE/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
     <!-- AdminLTE App -->
     <script src="/AdminLTE/dist/js/adminlte.js"></script>
-    <script type="text/javascript">
+    <script type="text/javascript" th:inline="javascript">
         (function() {
             'use strict';
 
@@ -149,8 +210,7 @@
             $('.connectedSortable .card-header, .connectedSortable .nav-tabs-custom').css('cursor', 'move');
 
             /* Chart.js Charts */
-            // Sales chart
-            var salesChartCanvas = document.getElementById('revenue-chart-canvas').getContext('2d');
+            /*var salesChartCanvas = document.getElementById('revenue-chart-canvas').getContext('2d');
             //$('#revenue-chart').get(0).getContext('2d');
 
             var salesChartData = {
@@ -207,10 +267,10 @@
                     data: salesChartData,
                     options: salesChartOptions
                 }
-            )
+            )*/
 
             // Donut Chart
-            var pieChartCanvas = $('#sales-chart-canvas').get(0).getContext('2d')
+            /*var pieChartCanvas = $('#sales-chart-canvas').get(0).getContext('2d')
             var pieData        = {
                 labels: [
                     'Instore Sales',
@@ -237,8 +297,9 @@
                 type: 'doughnut',
                 data: pieData,
                 options: pieOptions
-            });
+            });*/
 
+            // Bar
             var ticksStyle = {
                 fontColor: '#495057',
                 fontStyle: 'bold'
@@ -250,18 +311,25 @@
             var salesChart  = new Chart($salesChart, {
                 type   : 'bar',
                 data   : {
-                    labels  : ['JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'],
+                    // labels  : ['JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'],
+                    labels  : [[${bars.labels}]],
                     datasets: [
                         {
                             backgroundColor: '#007bff',
                             borderColor    : '#007bff',
-                            data           : [1000, 2000, 3000, 2500, 2700, 2500, 3000]
+                            // data           : [1000, 2000, 3000, 2500, 2700, 2500, 3000]
+                            data           : [[${bars.sum}]]
                         },
-                        {
-                            backgroundColor: '#ced4da',
-                            borderColor    : '#ced4da',
-                            data           : [700, 1700, 2700, 2000, 1800, 1500, 2000]
-                        }
+                        // {
+                        //     backgroundColor: '#007bff',
+                        //     borderColor    : '#007bff',
+                        //     data           : [1000, 2000, 3000, 2500, 2700, 2500, 3000]
+                        // },
+                        // {
+                        //     backgroundColor: '#ced4dd',
+                        //     borderColor    : '#ced4da',
+                        //     data           : [700, 1700, 2700, 2000, 1800, 1500, 2000]
+                        // }
                     ]
                 },
                 options: {
@@ -310,15 +378,16 @@
                 }
             })
 
-            // Sales graph chart
+            // Line graph chart
             var salesGraphChartCanvas = $('#line-chart').get(0).getContext('2d');
             //$('#revenue-chart').get(0).getContext('2d');
 
             var salesGraphChartData = {
-                labels  : ['2011 Q1', '2011 Q2', '2011 Q3', '2011 Q4', '2012 Q1', '2012 Q2', '2012 Q3', '2012 Q4', '2013 Q1', '2013 Q2'],
+                // labels  : ['2011 Q1', '2011 Q2', '2011 Q3', '2011 Q4', '2012 Q1', '2012 Q2', '2012 Q3', '2012 Q4', '2013 Q1', '2013 Q2'],
+                labels  : [[${lines.year}]],
                 datasets: [
                     {
-                        label               : 'Digital Goods',
+                        label               : '总投资(万)',
                         fill                : false,
                         borderWidth         : 2,
                         lineTension         : 0,
@@ -328,7 +397,8 @@
                         pointHoverRadius    : 7,
                         pointColor          : '#efefef',
                         pointBackgroundColor: '#efefef',
-                        data                : [2666, 2778, 4912, 3767, 6810, 5670, 4820, 15073, 10687, 8432]
+                        // data                : [2666, 2778, 4912, 3767, 6810, 5670, 4820, 15073, 10687, 8432]
+                        data                : [[${lines.sum}]]
                     }
                 ]
             }

@@ -2,6 +2,7 @@ package org.agriculture.project.controller;
 
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import lombok.Data;
 import org.agriculture.base.page.Query;
 import org.agriculture.platform.entity.Dict;
 import org.agriculture.platform.service.DictService;
@@ -24,10 +25,15 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.DoubleSummaryStatistics;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Random;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 /**
@@ -54,8 +60,60 @@ public class ProjectController extends org.agriculture.base.controller.Controlle
         return "project/edit";
     }
 
+    @Data
+    private class SmallBox {
+
+        private String name;
+        private long count;
+        private String proportion;
+
+        private SmallBox(String name, long count, double proportion) {
+            this.name = name;
+            this.count = count;
+            this.proportion = String.format("%.2f", proportion);
+        }
+
+    }
+
     @GetMapping("dashboard")
     public String dashboard(Model model) {
+        List<Project> all = service.list();
+        int size = all.size();
+        Double ds = Double.valueOf(size);
+
+        Map<String, DoubleSummaryStatistics> industryInvestment = all.parallelStream().collect(
+                Collectors.groupingBy(Project::getIndustry, Collectors.summarizingDouble(p -> p.getInvestment().doubleValue())));
+
+        Map<String, Object> bars = new HashMap<>(2);
+        List<Dict> industryDict = industryInvestment.keySet().stream()
+                .map(k -> DICT_INDUSTRY.stream().filter(d -> d.getId().equals(k)).findFirst().orElse(null))
+                .sorted(Comparator.comparing(Dict::getLevelCode))
+                .collect(Collectors.toList());
+        bars.put("labels", industryDict.stream().map(Dict::getName).collect(Collectors.toList()));
+        List<Double> sum = industryDict.stream().map(Dict::getId)
+                .map(i -> industryInvestment.get(i)).map(s -> s.getSum()).collect(Collectors.toList());
+        bars.put("sum", sum);
+        model.addAttribute("bars", bars);
+
+        Map<String, Long> stage = all.parallelStream().collect(
+                Collectors.groupingBy(Project::getStage, Collectors.counting()));
+
+        List<SmallBox> boxes = stage.keySet().parallelStream()
+                .map(s -> DICT_STAGE.stream().filter(d -> d.getId().equals(s)).findFirst().orElse(null))
+                .sorted(Comparator.comparing(Dict::getLevelCode))
+                .map(d -> new SmallBox(d.getName(), stage.get(d.getId()), (stage.get(d.getId()) / ds) * 100))
+                .collect(Collectors.toList());
+        model.addAttribute("boxes", boxes);
+
+        Map<Long, DoubleSummaryStatistics> yearInvestment = all.parallelStream().collect(
+                Collectors.groupingBy(Project::getYear, Collectors.summarizingDouble(p -> p.getInvestment().doubleValue())));
+
+        List<Long> year = yearInvestment.keySet().stream().sorted().collect(Collectors.toList());
+        Map<String, Object> lines = new HashMap<>(2);
+        lines.put("year", year);
+        lines.put("sum", year.stream().map(y -> yearInvestment.get(y).getSum()).collect(Collectors.toList()));
+        model.addAttribute("lines", lines);
+
         return "project/dashboard";
     }
 
@@ -73,7 +131,7 @@ public class ProjectController extends org.agriculture.base.controller.Controlle
         IntStream.range(0, total).forEach(i -> {
             int index = i + 1;
             LocalDateTime now = LocalDateTime.now();
-            int year = (2010 + new Random().nextInt(11));
+            int year = (2010 + new Random().nextInt(11) + 1);
             double v = new Random().nextDouble() * 100;
             Project item = new Project(
                     "项目编号-" + index,
