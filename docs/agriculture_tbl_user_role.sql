@@ -1,0 +1,3 @@
+INSERT INTO agriculture.tbl_user_role (id, uid, rid) VALUES ('27c166ee7d94b014b3745387e67c93f9', 'f3e83004ebccbbddc3598ce75c72bbfa', '82609fd30de07df89c9c587327d9d50a');
+INSERT INTO agriculture.tbl_user_role (id, uid, rid) VALUES ('3ff5d0f6121c40ffcbcc854329bd4f3b', 'c96b28ee6af0e14b988bcaa78f01e3d5', '58ddea5881aa61470c3eef3b67922541');
+INSERT INTO agriculture.tbl_user_role (id, uid, rid) VALUES ('48ce5db0e6d84e73c021a579f783e550', '7fe5897436c001df9edfcfd3e3d869ac', 'f99c160529467ebcbbdf9853ed000515');
