@@ -104,8 +104,8 @@
                         highlight-current-row
                         :height="500">
                         <el-table-column :index="indexCalc" type="index" width="50" align="center"></el-table-column>
-                        <el-table-column prop="itemNo" label="项目编号" align="center" min-width="100"></el-table-column>
-                        <el-table-column prop="name" label="项目名称" align="center" min-width="100"></el-table-column>
+                        <el-table-column prop="itemNo" label="项目编号" align="center" min-width="150"></el-table-column>
+                        <el-table-column prop="name" label="项目名称" align="center" min-width="150"></el-table-column>
                         <el-table-column label="所属行业" align="center" min-width="100">
                             <template slot-scope="scope">
                                 {{ getDictName(dict.INDUSTRY, scope.row.industry) }}
@@ -116,21 +116,22 @@
                                 {{ getDictName(dict.STAGE, scope.row.stage) }}
                             </template>
                         </el-table-column>
-                        <el-table-column prop="investment" label="总投资" align="center" min-width="100"></el-table-column>
+                        <el-table-column prop="investment" label="总投资(万)" align="center" min-width="100"></el-table-column>
                         <el-table-column label="资金分类" align="center" min-width="100">
                             <template slot-scope="scope">
                                 {{ getDictName(dict.FUND, scope.row.fund) }}
                             </template>
                         </el-table-column>
-                        <el-table-column prop="year" label="年度" align="center" min-width="50"></el-table-column>
-                        <el-table-column prop="company" label="建设单位" align="center" min-width="100"></el-table-column>
-                        <el-table-column prop="approvalNo" label="审批文号" align="center" min-width="100"></el-table-column>
-                        <el-table-column prop="approvalOffice" label="审批机关" align="center" min-width="100"></el-table-column>
-                        <el-table-column prop="place" label="建设地点" align="center" min-width="100"></el-table-column>
-                        <el-table-column prop="region" label="所属地区" align="center" min-width="100"></el-table-column>
-                        <el-table-column prop="unit" label="主管单位" align="center" min-width="100"></el-table-column>
-                        <el-table-column prop="leader" label="项目负责人" align="center" min-width="100"></el-table-column>
+                        <el-table-column prop="year" label="年度" align="center" min-width="70"></el-table-column>
+                        <el-table-column prop="company" label="建设单位" align="center" min-width="150"></el-table-column>
+                        <el-table-column prop="approvalNo" label="审批文号" align="center" min-width="150"></el-table-column>
+                        <el-table-column prop="approvalOffice" label="审批机关" align="center" min-width="150"></el-table-column>
+                        <el-table-column prop="place" label="建设地点" align="center" min-width="150"></el-table-column>
+                        <el-table-column prop="region" label="所属地区" align="center" min-width="150"></el-table-column>
+                        <el-table-column prop="unit" label="主管单位" align="center" min-width="150"></el-table-column>
+                        <el-table-column prop="leader" label="项目负责人" align="center" min-width="150"></el-table-column>
                         <el-table-column prop="phone" label="电话" align="center" min-width="100"></el-table-column>
+                        <el-table-column prop="createTime" label="填报时间" align="center" min-width="150"></el-table-column>
                         <el-table-column
                             fixed="right"
                             label="操作"

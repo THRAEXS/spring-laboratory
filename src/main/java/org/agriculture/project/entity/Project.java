@@ -100,4 +100,26 @@ public class Project extends Entity<Project> {
     @TableLogic
     private Integer deleted;
 
+    public Project() {
+        this.deleted = 0;
+    }
+
+    public Project(String itemNo, String name, String industry, String stage, BigDecimal investment, String fund, Long year, String company, String approvalNo, String approvalOffice, String place, String region, String unit, String leader, String phone) {
+        this.itemNo = itemNo;
+        this.name = name;
+        this.industry = industry;
+        this.stage = stage;
+        this.investment = investment;
+        this.fund = fund;
+        this.year = year;
+        this.company = company;
+        this.approvalNo = approvalNo;
+        this.approvalOffice = approvalOffice;
+        this.place = place;
+        this.region = region;
+        this.unit = unit;
+        this.leader = leader;
+        this.phone = phone;
+        this.deleted = 0;
+    }
 }
