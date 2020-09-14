@@ -24,7 +24,10 @@ const Factory = {};
 
             this.axios = axios.create(Object.assign({ timeout: 8000 }, config));
 
-            const csrf = id => document.getElementById(id).getAttribute('content');
+            const csrf = id => {
+                const el = document.getElementById(id);
+                return el ? el.getAttribute('content') : null;
+            };
             this.axios.interceptors.request.use(config => {
                 config.headers[csrf('_csrf_header')] = csrf('_csrf_token');
                 return config;

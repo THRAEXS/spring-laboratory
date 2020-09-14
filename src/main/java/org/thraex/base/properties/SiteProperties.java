@@ -16,6 +16,8 @@ import java.util.Set;
 @ConfigurationProperties("thraex.site")
 public class SiteProperties {
 
+    public static final String LOGO = "/AdminLTE/dist/img/AdminLTELogo.png";
+
     /**
      * Whether to enable portal mode
      */
@@ -82,12 +84,17 @@ public class SiteProperties {
         /**
          * Logo path
          */
-        private String logo = "/AdminLTE/dist/img/AdminLTELogo.png";
+        private String logo = LOGO;
 
         /**
          * Banner text behind the logo
          */
         private String brand = "THRAEX";
+
+        /**
+         * Dashboard url of Admin
+         */
+        private String dashboard = "/dashboard";
 
         /**
          * Default: admin.html
@@ -118,6 +125,10 @@ public class SiteProperties {
 
     @Data
     public static class Portal implements Mode {
+
+        private String title = "THRAEX | Index";
+
+        private String logo = LOGO;
 
         private String view = "index";
 
