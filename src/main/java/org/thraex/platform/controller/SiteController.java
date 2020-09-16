@@ -18,6 +18,7 @@ import org.thraex.security.SecurityHolder;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 /**
@@ -44,9 +45,9 @@ public class SiteController {
 
     @GetMapping
     public String index(Model model) {
-        if (!sitProperties.isEnabled()) {
-            admin(model);
-        }
+        Consumer<Model> c = sitProperties.isEnabled() ?
+                m -> m.addAttribute("site", sitProperties.getPortal()) : m -> admin(m);
+        c.accept(model);
 
         return sitProperties.index();
     }

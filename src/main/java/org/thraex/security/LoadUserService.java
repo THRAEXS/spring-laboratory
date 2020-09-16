@@ -22,6 +22,7 @@ import org.thraex.platform.service.UserService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -69,8 +70,10 @@ public class LoadUserService implements UserDetailsService {
                             List<String> roleIds = userRoleService.list(Wrappers.<UserRole>lambdaQuery()
                                     .eq(UserRole::getUid, it.getId())).parallelStream().map(UserRole::getRid)
                                     .collect(Collectors.toList());
-                            List<String> roleCodes = roleService.listByIds(roleIds)
-                                    .parallelStream().map(Role::getCode).collect(Collectors.toList());
+                            List<String> roleCodes = Optional.of(roleIds).filter(r -> !r.isEmpty())
+                                    .map(r -> roleService.listByIds(r))
+                                    .map(r -> r.parallelStream().map(Role::getCode).collect(Collectors.toList()))
+                                    .orElse(Collections.emptyList());
                             return it.setAuthorities(roleCodes);
                         }).orElseThrow(() -> new UsernameNotFoundException("The user does exist")));
     }

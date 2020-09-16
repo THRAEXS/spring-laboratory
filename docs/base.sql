@@ -13,7 +13,7 @@ CREATE TABLE `thraex-admin`.tbl_user (
     create_time DATETIME,
     update_by VARCHAR(36),
     update_time DATETIME
-);
+) ENGINE = InnoDB DEFAULT CHARSET = utf8;
 
 DROP TABLE IF EXISTS `thraex-admin`.tbl_menu;
 CREATE TABLE `thraex-admin`.tbl_menu (
@@ -24,12 +24,26 @@ CREATE TABLE `thraex-admin`.tbl_menu (
     pid VARCHAR(36),
     level_code VARCHAR(200),
     remark VARCHAR(200),
-    disabled boolean,
+    disabled BOOLEAN,
     create_by VARCHAR(36),
     create_time DATETIME,
     update_by VARCHAR(36),
     update_time DATETIME
-);
+) ENGINE = InnoDB DEFAULT CHARSET = utf8;
+
+DROP TABLE IF EXISTS `thraex-admin`.tbl_dict;
+CREATE TABLE `thraex-admin`.tbl_dict (
+    id VARCHAR(36) NOT NULL PRIMARY KEY,
+    name VARCHAR(100),
+    code VARCHAR(100),
+    pid VARCHAR(36),
+    level_code VARCHAR(200),
+    remark VARCHAR(200),
+    create_by VARCHAR(36),
+    create_time DATETIME,
+    update_by VARCHAR(36),
+    update_time DATETIME
+) ENGINE = InnoDB DEFAULT CHARSET = utf8;
 
 DROP TABLE IF EXISTS `thraex-admin`.tbl_role;
 CREATE TABLE `thraex-admin`.tbl_role (
@@ -41,21 +55,34 @@ CREATE TABLE `thraex-admin`.tbl_role (
     create_time DATETIME,
     update_by VARCHAR(36),
     update_time DATETIME
-);
+) ENGINE = InnoDB DEFAULT CHARSET = utf8;
 
 DROP TABLE IF EXISTS `thraex-admin`.tbl_user_role;
 CREATE TABLE `thraex-admin`.tbl_user_role (
     id VARCHAR(36) NOT NULL PRIMARY KEY,
     uid VARCHAR(36),
     rid VARCHAR(36)
-);
+) ENGINE = InnoDB DEFAULT CHARSET = utf8;
 
 DROP TABLE IF EXISTS `thraex-admin`.tbl_role_menu;
 CREATE TABLE `thraex-admin`.tbl_role_menu (
     id VARCHAR(36) NOT NULL PRIMARY KEY,
     rid VARCHAR(36),
     mid VARCHAR(36)
-);
+) ENGINE = InnoDB DEFAULT CHARSET = utf8;
+
+DROP TABLE IF EXISTS `thraex-admin`.tbl_file_descriptor;
+CREATE TABLE `thraex-admin`.tbl_file_descriptor (
+    id VARCHAR(36) NOT NULL PRIMARY KEY,
+    name VARCHAR(200),
+    path VARCHAR(500),
+    content_type VARCHAR(50),
+    size BIGINT,
+    create_by VARCHAR(36),
+    create_time DATETIME,
+    update_by VARCHAR(36),
+    update_time DATETIME
+) ENGINE = InnoDB DEFAULT CHARSET = utf8;
 
 -- Initialization data
 INSERT INTO `thraex-admin`.tbl_menu (id, name, code, url, pid, level_code, remark, disabled, create_by, create_time, update_by, update_time) VALUES ('a10a60d2a8e7fd120970efa28bc6883b', '系统设置', 'MENU_SETTING', '', null, '00000001', null, 0, 'admin', '2020-08-28 13:07:51', null, null);
@@ -68,3 +95,4 @@ INSERT INTO `thraex-admin`.tbl_role (id, name, code, remark, create_by, create_t
 INSERT INTO `thraex-admin`.tbl_role (id, name, code, remark, create_by, create_time, update_by, update_time) VALUES ('58ddea5881aa61470c3eef3b67922541', '维护人员', 'MAINTAINERS', '', 'admin', '2020-08-28 15:06:04', null, null);
 
 INSERT INTO `thraex-admin`.tbl_user (id, nickname, username, password, enabled, create_by, create_time, update_by, update_time) VALUES ('49803ceafc6124c50d908c08dba2d799', 'Editor', 'editor', '$2a$10$oO6CEpQ7ewnTbyh6y3FE5uyO.WgfE/BBftZplci4MWg/FQI3d9ScW', 1, 'admin', '2020-08-31 01:36:08', null, null);
+INSERT INTO `thraex-admin`.tbl_user (id, nickname, username, password, enabled, create_by, create_time, update_by, update_time) VALUES ('c071c91457d1e40dc1ad0c3f664d57c7', 'Administrator', 'administrator', '$2a$10$3GFBMXKzDLKqUpWJVh4qL.ATHJI0uNLmzo.Wi2VktHOSrJfkn3B3G', 1, 'admin', '2020-09-02 12:02:10', null, null);

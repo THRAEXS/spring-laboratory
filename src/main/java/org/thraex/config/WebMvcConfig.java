@@ -35,7 +35,8 @@ public class WebMvcConfig implements WebMvcConfigurer {
     @Override
     public void addViewControllers(final ViewControllerRegistry registry) {
         final Map<String, String> views = properties.getViews();
-        views.keySet().stream().forEach(k -> registry.addViewController(String.format("/%s", k))
+        views.keySet().stream().forEach(k -> registry
+                .addViewController(String.format("/%s", k.replace("-", "/")))
                 .setViewName(Optional.of(views.get(k)).filter(v -> !Strings.isBlank(v)).orElse(k)));
     }
 

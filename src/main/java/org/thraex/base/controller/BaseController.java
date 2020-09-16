@@ -2,7 +2,6 @@ package org.thraex.base.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,10 +18,7 @@ import java.util.List;
  * @author 鬼王
  * @date 2020/08/28 21:28
  */
-public class BaseController<E extends Entity<E>, S extends IService<E>> {
-
-    @Autowired
-    protected S service;
+public class BaseController<E extends Entity<E>, S extends IService<E>> extends Controller<S> {
 
     @GetMapping
     public ResponseEntity<List<E>> list() {

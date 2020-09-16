@@ -19,6 +19,10 @@ spring:
     url: jdbc:mysql://localhost:3306/thraex-admin
     username: root
     password: mysql
+  servlet:
+    multipart:
+      max-file-size: 200MB
+      max-request-size: 1024MB
 
 mybatis-plus:
   global-config:
@@ -34,10 +38,16 @@ thraex:
   mvc:
     webjars: classpath:/META-INF/resources/webjars
     resources:
-      - paths:
-          - /favicon.ico
-          - /assets/**
+      - paths: ${thraex.file.access-prefix}/**
+        locations: file://${thraex.file.directory}/
+#      - paths:
+#          - /favicon.ico
+#          - /assets/**
+#        locations: classpath:/templates/assets/
+      - paths: /assets/**
         locations: classpath:/templates/assets/
+      - paths: /favicon.ico
+        locations: ${thraex.favicon:classpath:/templates/assets/}
       - paths: /vue/**
         locations: ${thraex.mvc.webjars}/vue/2.6.11/
       - paths: /AdminLTE/**
@@ -51,9 +61,17 @@ thraex:
     views:
       dashboard: dashboard
       menu: menu
+      dict: dict
       user: user
       role: role
       grant: grant
       profile: profile
+      login: login
+  site:
+    permits:
+      - /AdminLTE/**
+  file:
+    directory: ${user.home}/thraex-files
+    access-prefix: /assets/files
   user:
     init-password: 111111
