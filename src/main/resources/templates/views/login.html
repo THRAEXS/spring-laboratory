@@ -116,5 +116,21 @@
     <script src="/AdminLTE/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
     <!-- AdminLTE App -->
     <script src="/AdminLTE/dist/js/adminlte.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/crypto-js@4.0.0/crypto-js.js"></script>
+    <script>
+        // console.log(CryptoJS)
+        // console.log(CryptoJS.AES)
+        const key = CryptoJS.enc.Utf8.parse('143127d371244133');
+        const iv = CryptoJS.enc.Utf8.parse('a21bc8ffeb3857c3');
+        const srcs = CryptoJS.enc.Utf8.parse('Guiwang');
+        const encrypted = CryptoJS.AES.encrypt(srcs, key, {
+            iv,
+            mode: CryptoJS.mode.CBC,
+            padding: CryptoJS.pad.Pkcs7
+        });
+        console.log(encrypted.ciphertext)
+        console.log(encrypted.ciphertext.toString())
+    </script>
 </body>
 </html>
