@@ -13,7 +13,6 @@ import java.nio.charset.Charset;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
-import java.util.UUID;
 
 /**
  * @author 鬼王
@@ -133,11 +132,11 @@ public class Test {
      */
     public static byte[] hexStringToBytes(String hexString) {
         hexString = hexString.toUpperCase();
-        char[] hexChars = hexString.toCharArray();
+        //char[] hexChars = hexString.toCharArray();
         byte[] b = new byte[hexString.length() / 2];
         for (int i = 0; i < b.length; i++) {
             int pos = i * 2;
-            char c = hexChars[pos];
+            //char c = hexChars[pos];
             //b[i] = (byte) (charToByte(hexChars[pos]) << 4 | (charToByte(hexChars[pos + 1]))& 0xff);
             int j = Integer.parseInt(hexString.substring(pos, pos + 2), 16);
             b[i] = (byte) j;
