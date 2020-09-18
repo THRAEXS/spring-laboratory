@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
-      th:replace="template :: app_template(~{::title}, ~{::div.content-wrapper}, ~{::script})">
+      th:replace="template-v3 :: app_template(~{::title}, ~{}, ~{}, ~{::div.container-item}, ~{::script})">
 <head>
     <title>Dashboard</title>
 </head>
 <body>
-    <div class="content-wrapper">
+    <div class="container-item">
         <el-tag sec:authentication="name"></el-tag>
         <el-tag type="success" sec:authentication="authorities"></el-tag>
     </div>
