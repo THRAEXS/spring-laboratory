@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-      th:replace="template :: app_template(~{::title}, ~{::div.content-wrapper}, ~{::script})">
+      th:replace="template-v3 :: app_template(~{::title}, ~{}, ~{}, ~{::div.container-item}, ~{::script})">
 <head>
     <title>User</title>
 </head>
 <body>
-    <div class="content-wrapper">
+    <div class="container-item">
         <el-row :gutter="page.gutter" :style="page.rowStyle">
             <el-col :span="24">
                 <el-card>
