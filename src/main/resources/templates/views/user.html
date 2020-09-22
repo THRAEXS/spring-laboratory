@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-      th:replace="template-v3 :: app_template(~{::title}, ~{}, ~{}, ~{::div.container-item}, ~{::script})">
+      th:replace="template/index :: app_template(~{::title}, ~{}, ~{}, ~{::div.container-item}, ~{::script})">
 <head>
     <title>User</title>
 </head>
@@ -43,8 +43,6 @@
                             <template slot-scope="scope">
                                 <el-switch
                                     v-model="scope.row.enabled"
-                                    active-color="#13ce66"
-                                    inactive-color="#ff4949"
                                     @change="handleEnable(scope.row.id, $event)">
                                 </el-switch>
                             </template>
@@ -107,11 +105,12 @@
                     <el-input v-model="form.password" show-password></el-input>
                 </el-form-item>-->
                 <el-form-item label="是否启用">
-                    <el-switch
+                    <el-switch v-model="form.enabled"></el-switch>
+                    <!--<el-switch
                         v-model="form.enabled"
                         active-color="#13ce66"
                         inactive-color="#ff4949">
-                    </el-switch>
+                    </el-switch>-->
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">

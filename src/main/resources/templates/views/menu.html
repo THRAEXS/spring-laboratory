@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-      th:replace="template-v3 :: app_template(~{::title}, ~{}, ~{}, ~{::div.container-item}, ~{::script})">
+      th:replace="template/index :: app_template(~{::title}, ~{}, ~{}, ~{::div.container-item}, ~{::script})">
 <head>
     <title>Menu</title>
 </head>
@@ -30,7 +30,7 @@
                                     type="text"
                                     size="mini"
                                     icon="el-icon-delete"
-                                    style="color: red;"
+                                    style="color: #F92472;"
                                     @click="handleRemove($event, data)">
                                 </el-button>
                             </span>
@@ -57,11 +57,12 @@
                             <el-input v-model.trim="form.levelCode" :disabled="true"></el-input>
                         </el-form-item>
                         <el-form-item label="是否禁用">
-                            <el-switch
+                            <el-switch v-model="form.disabled"></el-switch>
+                            <!--<el-switch
                                 v-model="form.disabled"
                                 active-color="#13ce66"
                                 inactive-color="#ff4949">
-                            </el-switch>
+                            </el-switch>-->
                         </el-form-item>
                         <el-form-item prop="remark" label="备注">
                             <el-input type="textarea" :rows="2" v-model.trim="form.remark"></el-input>
