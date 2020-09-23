@@ -11,76 +11,52 @@
     <link rel="stylesheet" href="/AdminLTE/plugins/fontawesome-free/css/all.min.css">
     <!-- Ionicons -->
     <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
-    <!-- icheck bootstrap -->
-    <link rel="stylesheet" href="/AdminLTE/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
     <!-- Theme style -->
     <link rel="stylesheet" href="/AdminLTE/dist/css/adminlte.min.css">
     <!-- Google Font: Source Sans Pro -->
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
     <style type="text/css">
         .login-page {
-            /*bg*/
             background-color: #282923!important;
-            /*bg-dialog*/
-            /*background-color: #181915!important;*/
-            /*bg-selected*/
-            /*#3a3b38*/
-            /*bg-tab*/
-            /*#20211c*/
-            /*color-font*/
-            /*#c6c6c5*/
-            /*color-font-unselected*/
-            /*#a9a9a7*/
-            /*bg-btn*/
-            /*#353533*/
-            /*btn-hover*/
-            /*#4b4b49*/
             height: 70vh;
         }
         .card .card-body {
             background-color: #181915!important;
+            border-radius: .25rem;
         }
-        /*.btn-primary {*/
-        /*  !*background-color: #353533!important;*!*/
-        /*  !*border-color: #353533;*!*/
-        /*}*/
-        /*.btn-primary {*/
-        /*  color: #fff;*/
-        /*  background-color: #353533;*/
-        /*  border-color: #353533;*/
-        /*  box-shadow: none;*/
-        /*}*/
 
         .btn-primary {
-            /*color: #ffffff;*/
             background-color: #353533;
             border-color: #353533;
-            /*box-shadow: none;*/
         }
 
         .btn-primary:hover {
-            /*color: #ffffff;*/
             background-color: #4b4b49;
             border-color: #4b4b49;
-            /*border-color: #0062cc;*/
         }
 
         .btn-primary:focus, .btn-primary.focus {
-            /*color: #ffffff;*/
             background-color: #4b4b49;
             border-color: #4b4b49;
-            /*border-color: #0062cc;*/
-            /*box-shadow: none, 0 0 0 0 rgba(38, 143, 255, 0.5);*/
         }
         .btn-primary:not(:disabled):not(.disabled):active, .btn-primary:not(:disabled):not(.disabled).active,
         .show > .btn-primary.dropdown-toggle {
-            /*color: #ffffff;*/
             background-color: #282923;
             border-color: #282923;
         }
         .btn-primary:not(:disabled):not(.disabled):active:focus, .btn-primary:not(:disabled):not(.disabled).active:focus,
         .show > .btn-primary.dropdown-toggle:focus {
             box-shadow: 0 0 0 0 rgba(40, 41, 35, 1);
+        }
+
+        .form-control, .form-control:focus {
+            background-color: #282923;
+            border-color: #282923;
+            color: #FFFFFF;
+        }
+        .input-group-append .input-group-text,
+        .login-card-body .input-group .form-control:focus ~ .input-group-append .input-group-text {
+            border-color: #282923;
         }
 
         .font-white { color: #FFFFFF; }
