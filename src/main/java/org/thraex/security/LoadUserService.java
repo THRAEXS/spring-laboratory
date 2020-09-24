@@ -25,6 +25,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Function;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 /**
@@ -60,22 +62,27 @@ public class LoadUserService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         SecurityProperties.User user = properties.getUser();
-        return Optional.of(username)
-                .filter(u -> u.equals(user.getName()))
-                .map(u -> User.withId(u).nickname(u.toUpperCase()).username(u)
-                        .password(user.getPassword()).passwordEncoder(p -> passwordEncoder.encode(p))
-                        .roles(StringUtils.toStringArray(user.getRoles())).build())
-                .orElseGet(() -> Optional.ofNullable(userService.findByUsername(username))
-                        .map(it -> {
-                            List<String> roleIds = userRoleService.list(Wrappers.<UserRole>lambdaQuery()
-                                    .eq(UserRole::getUid, it.getId())).parallelStream().map(UserRole::getRid)
-                                    .collect(Collectors.toList());
-                            List<String> roleCodes = Optional.of(roleIds).filter(r -> !r.isEmpty())
-                                    .map(r -> roleService.listByIds(r))
-                                    .map(r -> r.parallelStream().map(Role::getCode).collect(Collectors.toList()))
-                                    .orElse(Collections.emptyList());
-                            return it.setAuthorities(roleCodes);
-                        }).orElseThrow(() -> new UsernameNotFoundException("The user does exist")));
+        return Optional.of(username).filter(u -> u.equals(user.getName())).map(admin(user)).orElseGet(user(username));
+    }
+
+    private Function<String, UserDetails> admin(SecurityProperties.User user) {
+        return u -> User.withId(u).nickname(u.toUpperCase()).username(u)
+                .password(user.getPassword()).passwordEncoder(p -> passwordEncoder.encode(p))
+                .roles(StringUtils.toStringArray(user.getRoles())).build();
+    }
+
+    private Supplier<UserDetails> user(String username) {
+        return () -> Optional.ofNullable(userService.findByUsername(username))
+                .map(it -> {
+                    List<String> roleIds = userRoleService.list(Wrappers.<UserRole>lambdaQuery()
+                            .eq(UserRole::getUid, it.getId())).parallelStream().map(UserRole::getRid)
+                            .collect(Collectors.toList());
+                    List<String> roleCodes = Optional.of(roleIds).filter(r -> !r.isEmpty())
+                            .map(r -> roleService.listByIds(r))
+                            .map(r -> r.parallelStream().map(Role::getCode).collect(Collectors.toList()))
+                            .orElse(Collections.emptyList());
+                    return it.setAuthorities(roleCodes);
+                }).orElseThrow(() -> new UsernameNotFoundException("The user does exist"));
     }
 
 }
