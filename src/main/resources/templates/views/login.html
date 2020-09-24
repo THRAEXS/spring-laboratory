@@ -29,15 +29,17 @@
             background-color: #353533;
             border-color: #353533;
         }
-
         .btn-primary:hover {
             background-color: #4b4b49;
             border-color: #4b4b49;
         }
-
         .btn-primary:focus, .btn-primary.focus {
             background-color: #4b4b49;
             border-color: #4b4b49;
+        }
+        .btn-primary.disabled, .btn-primary:disabled {
+            background-color: #949491;
+            border-color: #949491;
         }
         .btn-primary:not(:disabled):not(.disabled):active, .btn-primary:not(:disabled):not(.disabled).active,
         .show > .btn-primary.dropdown-toggle {
@@ -73,11 +75,12 @@
         </div>
         <div class="card">
             <div class="card-body login-card-body">
-                <p class="login-box-msg font-red" th:if="${param.error}">用户名或密码错误</p>
-                <p class="login-box-msg font-red" th:if="${param.logout}">已退出</p>
+                <!--<p class="login-box-msg font-red" th:if="${param.error}">用户名或密码错误</p>-->
+                <!--<p class="login-box-msg font-red" th:if="${param.logout}">已退出</p>-->
 
-                <form role="form" id="login-form">
-                    <input name="_csrf" type="hidden" th:value="${_csrf}?${_csrf.token}"/>
+                <!--<form role="form" id="login-form" action="/login" method="post">-->
+                <form role="form" id="login-form" action="/login" method="post">
+                    <input type="hidden" name="_csrf" th:value="${_csrf}?${_csrf.token}"/>
                     <div class="input-group mb-3">
                         <input type="text" name="username" class="form-control" placeholder="Username">
                         <div class="input-group-append">
@@ -101,29 +104,52 @@
                     </div>
                 </form>
             </div>
+            <div class="overlay dark">
+                <i class="fas fa-2x fa-spinner"></i>
+            </div>
         </div>
     </div>
 
     <!-- jQuery -->
     <script src="/AdminLTE/plugins/jquery/jquery.min.js"></script>
     <script src="/AdminLTE/plugins/jquery-validation/jquery.validate.min.js"></script>
-    <script src="/AdminLTE/plugins/jquery-validation/additional-methods.min.js"></script>
     <!-- Bootstrap 4 -->
     <script src="/AdminLTE/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
     <!-- AdminLTE App -->
     <script src="/AdminLTE/dist/js/adminlte.min.js"></script>
 
-<!--    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>-->
     <script src="https://cdn.jsdelivr.net/npm/crypto-js@4.0.0/crypto-js.js"></script>
     <script type="text/javascript">
         $(document).ready(function() {
+            const lf = $('#login-form');
+
             $.validator.setDefaults({
-                submitHandler: function() {
-                    alert( "Form successful submitted!" );
+                submitHandler: function(form) {
+                    // form.submit();
+
+                    let data = {};
+                    lf.find('input').each((ind, el) => el.name && (data[el.name] = el.value));
+                    $.ajax({
+                        type: 'POST',
+                        url: '/login',
+                        dataType: 'json',
+                        data,
+                        success: function(result, status, xhr) {
+                            console.log('success', result, status, xhr)
+                        },
+                        error: function(xhr, status, error) {
+                            console.error('error', xhr)
+                            console.error('error', status, error)
+                            console.error('error', error)
+                        },
+                        complete: function(xhr, status) {
+                            console.log('complete', xhr, status)
+                        }
+                    });
                 }
             });
 
-            $('#login-form').validate({
+            lf.validate({
                 rules: {
                     username: { required: true },
                     password: { required: true }
@@ -132,15 +158,15 @@
                     username: 'Please provide a username',
                     password: 'Please provide a password'
                 },
-                errorElement: 'span',
-                errorPlacement: function (error, element) {
+                // errorElement: 'span',
+                errorPlacement: function(error, element) {
                     error.addClass('invalid-feedback');
                     element.closest('.input-group').append(error);
                 },
-                highlight: function (element, errorClass, validClass) {
+                highlight: function(element, errorClass, validClass) {
                     $(element).addClass('is-invalid');
                 },
-                unhighlight: function (element, errorClass, validClass) {
+                unhighlight: function(element, errorClass, validClass) {
                     $(element).removeClass('is-invalid');
                 }
             });
