@@ -58,6 +58,9 @@
         .login-card-body .input-group .form-control:focus ~ .input-group-append .input-group-text {
             border-color: #282923;
         }
+        .login-card-body .input-group .is-invalid:focus ~ .input-group-append .input-group-text {
+            border-color: #DC3545;
+        }
 
         .font-white { color: #FFFFFF; }
         .font-red { color: #FF0000; }
@@ -73,7 +76,7 @@
                 <p class="login-box-msg font-red" th:if="${param.error}">用户名或密码错误</p>
                 <p class="login-box-msg font-red" th:if="${param.logout}">已退出</p>
 
-                <form action="/login" method="post">
+                <form role="form" id="login-form">
                     <input name="_csrf" type="hidden" th:value="${_csrf}?${_csrf.token}"/>
                     <div class="input-group mb-3">
                         <input type="text" name="username" class="form-control" placeholder="Username">
@@ -103,13 +106,49 @@
 
     <!-- jQuery -->
     <script src="/AdminLTE/plugins/jquery/jquery.min.js"></script>
+    <script src="/AdminLTE/plugins/jquery-validation/jquery.validate.min.js"></script>
+    <script src="/AdminLTE/plugins/jquery-validation/additional-methods.min.js"></script>
     <!-- Bootstrap 4 -->
     <script src="/AdminLTE/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
     <!-- AdminLTE App -->
     <script src="/AdminLTE/dist/js/adminlte.min.js"></script>
 
+<!--    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>-->
     <script src="https://cdn.jsdelivr.net/npm/crypto-js@4.0.0/crypto-js.js"></script>
-    <script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $.validator.setDefaults({
+                submitHandler: function() {
+                    alert( "Form successful submitted!" );
+                }
+            });
+
+            $('#login-form').validate({
+                rules: {
+                    username: { required: true },
+                    password: { required: true }
+                },
+                messages: {
+                    username: 'Please provide a username',
+                    password: 'Please provide a password'
+                },
+                errorElement: 'span',
+                errorPlacement: function (error, element) {
+                    error.addClass('invalid-feedback');
+                    element.closest('.input-group').append(error);
+                },
+                highlight: function (element, errorClass, validClass) {
+                    $(element).addClass('is-invalid');
+                },
+                unhighlight: function (element, errorClass, validClass) {
+                    $(element).removeClass('is-invalid');
+                }
+            });
+        });
+    </script>
+    <!--<script>
+        console.log($)
+        console.log($.ajax)
         // console.log(CryptoJS)
         // console.log(CryptoJS.AES)
         const key = CryptoJS.enc.Utf8.parse('143127d371244133');
@@ -122,6 +161,6 @@
         });
         console.log(encrypted.ciphertext)
         console.log(encrypted.ciphertext.toString())
-    </script>
+    </script>-->
 </body>
 </html>
