@@ -70,6 +70,7 @@ thraex:
   site:
     permits:
       - /AdminLTE/**
+      - /assets/images/**
   file:
     directory: ${user.home}/thraex-files
     access-prefix: /assets/files
