@@ -104,7 +104,7 @@
                     </div>
                 </form>
             </div>
-            <div class="overlay dark">
+            <div id="loading" class="overlay dark d-none">
                 <!--<i class="fas fa-2x fa-spinner"></i>-->
                 <img width="30" height="30" src="/assets/images/loading.gif"/>
             </div>
@@ -120,21 +120,67 @@
     <script src="/AdminLTE/dist/js/adminlte.min.js"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/crypto-js@4.0.0/crypto-js.js"></script>
-    <script type="text/javascript">
+    <script type="text/javascript" th:inline="javascript">
         $(document).ready(function() {
+            class SecureLogin {
+
+                constructor() {
+                    this.crypto = CryptoJS;
+
+                    let nonce;
+                    this.nonce().then(data => (nonce = data));
+                    const { key, iv } = nonce;
+                    console.log(key, iv)
+
+                    this.key = this.parse(key);
+                    this.config = {
+                        iv: this.parse(iv),
+                        mode: this.crypto.mode.CBC,
+                        padding: this.crypto.pad.Pkcs7
+                    };
+                }
+
+                async nonce() {
+                    return await $.get('/auth/crypto');
+                }
+
+                parse(s) {
+                    return this.crypto.enc.Utf8.parse(s);
+                }
+
+                aes(k) {
+                    return this.crypto.AES.encrypt(this.parse(k), this.key, this.config).ciphertext.toString();
+                }
+
+                encrypt(data = {}) {
+                    let result = {};
+                    Object.keys(data).forEach(k => { result[this.aes(k)] = this.aes(data[k]); });
+
+                    return this.aes(JSON.stringify(result));
+                }
+
+            }
+
+            const sl = new SecureLogin();
+
             const lf = $('#login-form');
+            const loading = $('#loading');
 
             $.validator.setDefaults({
                 submitHandler: function(form) {
                     // form.submit();
 
+                    loading.removeClass('d-none');
+
                     let data = {};
                     lf.find('input').each((ind, el) => el.name && (data[el.name] = el.value));
+
                     $.ajax({
                         type: 'POST',
                         url: '/login',
-                        dataType: 'json',
-                        data,
+                        // dataType: 'json',
+                        // data: sl.encrypt(data),
+                        data: { 'Authentication-Param': sl.encrypt(data), _csrf: [[${_csrf}?${_csrf.token}]] },
                         success: function(result, status, xhr) {
                             console.log('success', result, status, xhr)
                         },
@@ -144,6 +190,7 @@
                             console.error('error', error)
                         },
                         complete: function(xhr, status) {
+                            loading.addClass('d-none');
                             console.log('complete', xhr, status)
                         }
                     });
