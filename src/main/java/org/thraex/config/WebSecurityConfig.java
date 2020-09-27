@@ -7,7 +7,9 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.thraex.base.properties.SiteProperties;
+import org.thraex.security.filter.CryptoAuthenticationFilter;
 
 /**
  * @author 鬼王
@@ -29,6 +31,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         return new BCryptPasswordEncoder();
     }
 
+    @Bean
+    public CryptoAuthenticationFilter authenticationFilter() throws Exception {
+        CryptoAuthenticationFilter filter = new CryptoAuthenticationFilter();
+        filter.setAuthenticationManager(authenticationManagerBean());
+        //filter.setRequiresAuthenticationRequestMatcher(new AntPathRequestMatcher("/login", "POST"));
+        return filter;
+    }
+
     @Override
     public void configure(HttpSecurity http) throws Exception {
         http.headers().frameOptions().disable()
@@ -37,7 +47,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     .anyRequest().authenticated()
                 .and().formLogin()
                     .loginPage("/login").permitAll()
-                    .defaultSuccessUrl(properties.redirect());
+                    .defaultSuccessUrl(properties.redirect())
+                .and()
+                    .addFilterBefore(authenticationFilter(), UsernamePasswordAuthenticationFilter.class);
     }
 
 }

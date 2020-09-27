@@ -69,6 +69,7 @@ thraex:
       login: login
   site:
     permits:
+      - /auth/crypto
       - /AdminLTE/**
       - /assets/images/**
   file:

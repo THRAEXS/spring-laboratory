@@ -9,7 +9,7 @@ import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
  * @date 2020/08/10 17:40
  */
 @SpringBootApplication
-@ConfigurationPropertiesScan("org.thraex.base.properties")
+@ConfigurationPropertiesScan("org.thraex.**.properties")
 public class Application {
 
     public static void main(String[] args) {
