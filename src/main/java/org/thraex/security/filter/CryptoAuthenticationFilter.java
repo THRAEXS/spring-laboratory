@@ -22,8 +22,6 @@ import java.util.Optional;
 @Log4j2
 public class CryptoAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
-    private static final String AUTHENTICATION_PARAM = "Authentication-Param";
-
     @Autowired
     private CryptoProperties crypto;
 
@@ -41,7 +39,7 @@ public class CryptoAuthenticationFilter extends UsernamePasswordAuthenticationFi
     }
 
     protected Map<String, String> obtainParam(HttpServletRequest request) {
-        return Optional.ofNullable(request.getParameter(AUTHENTICATION_PARAM))
+        return Optional.ofNullable(request.getParameter(crypto.getParameterName()))
                 .map(p -> crypto.decrypt(p))
                 .map(p -> JSON.parseObject(p, Map.class))
                 .map(p -> (Map<String, String>) p)

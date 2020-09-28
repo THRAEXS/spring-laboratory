@@ -122,18 +122,21 @@
     <script src="https://cdn.jsdelivr.net/npm/crypto-js@4.0.0/crypto-js.js"></script>
     <script type="text/javascript" th:inline="javascript">
         $(document).ready(function() {
+
             class SecureLogin {
 
                 constructor() {
                     this.crypto = CryptoJS;
 
-                    this.nonce().then(({ data: { key, iv } }) => {
+                    this.nonce().then(({ data: { key, iv, parameterName } }) => {
+                        console.log(key, iv, parameterName)
                         this.key = this.parse(key);
                         this.config = {
                             iv: this.parse(iv),
                             mode: this.crypto.mode.CBC,
                             padding: this.crypto.pad.Pkcs7
                         };
+                        this.parameterName = parameterName;
                     });
                 }
 
@@ -183,7 +186,7 @@
                         type: 'POST',
                         url: '/login',
                         // dataType: 'json',
-                        data: { 'Authentication-Param': sl.encrypt(data), _csrf: [[${_csrf}?${_csrf.token}]] },
+                        data: { [sl.parameterName]: sl.encrypt(data), _csrf: [[${_csrf}?${_csrf.token}]] },
                         success: function(result, status, xhr) {
                             console.log('success', result, status, xhr)
                         },

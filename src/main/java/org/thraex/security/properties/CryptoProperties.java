@@ -31,6 +31,8 @@ public class CryptoProperties {
 
     private String iv = "A539C0C928217AB2";
 
+    private String parameterName = "Authentication-Param";
+
     public String decrypt(String raw) {
         try {
             SecretKey secretKey = new SecretKeySpec(key.getBytes(CHARSET), "AES");
@@ -73,6 +75,14 @@ public class CryptoProperties {
 
     public void setIv(String iv) {
         this.iv = iv;
+    }
+
+    public String getParameterName() {
+        return parameterName;
+    }
+
+    public void setParameterName(String parameterName) {
+        this.parameterName = parameterName;
     }
 
     public static void main(String[] args) {
