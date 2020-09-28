@@ -80,7 +80,7 @@
 
                 <!--<form role="form" id="login-form" action="/login" method="post">-->
                 <form role="form" id="login-form" action="/login" method="post">
-                    <input type="hidden" name="_csrf" th:value="${_csrf}?${_csrf.token}"/>
+                    <!--<input type="hidden" name="_csrf" th:value="${_csrf}?${_csrf.token}"/>-->
                     <div class="input-group mb-3">
                         <input type="text" name="username" class="form-control" placeholder="Username">
                         <div class="input-group-append">
@@ -127,17 +127,14 @@
                 constructor() {
                     this.crypto = CryptoJS;
 
-                    let nonce;
-                    this.nonce().then(data => (nonce = data));
-                    const { key, iv } = nonce;
-                    console.log(key, iv)
-
-                    this.key = this.parse(key);
-                    this.config = {
-                        iv: this.parse(iv),
-                        mode: this.crypto.mode.CBC,
-                        padding: this.crypto.pad.Pkcs7
-                    };
+                    this.nonce().then(({ data: { key, iv } }) => {
+                        this.key = this.parse(key);
+                        this.config = {
+                            iv: this.parse(iv),
+                            mode: this.crypto.mode.CBC,
+                            padding: this.crypto.pad.Pkcs7
+                        };
+                    });
                 }
 
                 async nonce() {
@@ -156,7 +153,14 @@
                     let result = {};
                     Object.keys(data).forEach(k => { result[this.aes(k)] = this.aes(data[k]); });
 
+                    // let result = new Map();
+                    // Object.keys(data).forEach(k => result.set(this.aes(k), this.aes(data[k])));
+
                     return this.aes(JSON.stringify(result));
+                }
+
+                login() {
+
                 }
 
             }
@@ -179,7 +183,6 @@
                         type: 'POST',
                         url: '/login',
                         // dataType: 'json',
-                        // data: sl.encrypt(data),
                         data: { 'Authentication-Param': sl.encrypt(data), _csrf: [[${_csrf}?${_csrf.token}]] },
                         success: function(result, status, xhr) {
                             console.log('success', result, status, xhr)
@@ -220,21 +223,5 @@
             });
         });
     </script>
-    <!--<script>
-        console.log($)
-        console.log($.ajax)
-        // console.log(CryptoJS)
-        // console.log(CryptoJS.AES)
-        const key = CryptoJS.enc.Utf8.parse('143127d371244133');
-        const iv = CryptoJS.enc.Utf8.parse('a21bc8ffeb3857c3');
-        const srcs = CryptoJS.enc.Utf8.parse('Guiwang');
-        const encrypted = CryptoJS.AES.encrypt(srcs, key, {
-            iv,
-            mode: CryptoJS.mode.CBC,
-            padding: CryptoJS.pad.Pkcs7
-        });
-        console.log(encrypted.ciphertext)
-        console.log(encrypted.ciphertext.toString())
-    </script>-->
 </body>
 </html>
