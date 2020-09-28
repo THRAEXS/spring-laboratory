@@ -1,6 +1,7 @@
 package org.thraex.security.handler;
 
 import com.alibaba.fastjson.JSON;
+import com.google.common.base.Charsets;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -25,12 +26,14 @@ public class AuthenticationFailure implements AuthenticationFailureHandler {
     @Override
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
                                         AuthenticationException exception) throws IOException, ServletException {
-        log.debug("Authentication failed");
+        String message = exception.getMessage();
+        log.debug("Authentication failed: [{}]", message);
 
         int status = HttpStatus.UNAUTHORIZED.value();
         response.setStatus(status);
+        response.setCharacterEncoding(Charsets.UTF_8.displayName());
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-        response.getWriter().write(JSON.toJSONString(Result.fail(exception.getMessage(), status)));
+        response.getWriter().write(JSON.toJSONString(Result.fail(message, status)));
     }
 
 }

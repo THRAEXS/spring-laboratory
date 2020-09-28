@@ -1,6 +1,7 @@
 package org.thraex.security.handler;
 
 import com.alibaba.fastjson.JSON;
+import com.google.common.base.Charsets;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -29,6 +30,7 @@ public class AuthenticationSuccess extends SavedRequestAwareAuthenticationSucces
 
         int status = HttpStatus.OK.value();
         response.setStatus(status);
+        response.setCharacterEncoding(Charsets.UTF_8.displayName());
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.getWriter().write(JSON.toJSONString(Result.ok().setMessage("Authentication success")));
     }

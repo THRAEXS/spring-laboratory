@@ -161,31 +161,19 @@
                     return this.aes(JSON.stringify(result));
                 }
 
-                async login(data) {
-                     await $.ajax({
-                        type: 'POST',
-                        url: '/login',
-                        // dataType: 'json',
-                        data: { [this.parameterName]: this.encrypt(data), _csrf: [[${_csrf}?${_csrf.token}]] },
-                        success: function(result, status, xhr) {
-                            console.log('success', result, status, xhr)
-                        },
-                        error: function(xhr, status, error) {
-                            console.error('error', xhr)
-                            console.error('error', status, error)
-                            console.error('error', error)
-                        },
-                        complete: function(xhr, status) {
-                            // loading.addClass('d-none');
-                            console.log('complete', xhr, status)
-                        }
-                    });
+                async login(param) {
+                    const data = { [this.parameterName]: this.encrypt(param), _csrf: [[${_csrf}?${_csrf.token}]] };
+                    try {
+                        return await $.ajax({ type: 'POST', url: '/login', data });
+                    } catch ({ responseJSON }) {
+                        // throw new Error(responseJSON.message)
+                        await Promise.reject(responseJSON);
+                    }
                 }
 
             }
 
             const sl = new SecureLogin();
-
             const lf = $('#login-form');
             const loading = $('#loading');
 
@@ -193,11 +181,14 @@
                 submitHandler: function(form) {
                     // form.submit();
 
-                    loading.removeClass('d-none');
                     let data = {};
                     lf.find('input').each((ind, el) => el.name && (data[el.name] = el.value));
-                    sl.login(data);
-                    loading.addClass('d-none');
+
+                    loading.removeClass('d-none');
+                    sl.login(data)
+                        .then(d => console.log(d))
+                        .catch(e => console.error(e))
+                        .finally(() => loading.addClass('d-none'));
                 }
             });
 
