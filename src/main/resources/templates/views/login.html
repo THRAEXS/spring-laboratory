@@ -11,6 +11,8 @@
     <link rel="stylesheet" href="/AdminLTE/plugins/fontawesome-free/css/all.min.css">
     <!-- Ionicons -->
     <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <!-- Toastr -->
+    <link rel="stylesheet" href="/AdminLTE/plugins/toastr/toastr.min.css">
     <!-- Theme style -->
     <link rel="stylesheet" href="/AdminLTE/dist/css/adminlte.min.css">
     <!-- Google Font: Source Sans Pro -->
@@ -116,6 +118,8 @@
     <script src="/AdminLTE/plugins/jquery-validation/jquery.validate.min.js"></script>
     <!-- Bootstrap 4 -->
     <script src="/AdminLTE/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- Toastr -->
+    <script src="/AdminLTE/plugins/toastr/toastr.min.js"></script>
     <!-- AdminLTE App -->
     <script src="/AdminLTE/dist/js/adminlte.min.js"></script>
 
@@ -186,8 +190,8 @@
 
                     loading.removeClass('d-none');
                     sl.login(data)
-                        .then(d => console.log(d))
-                        .catch(e => console.error(e))
+                        .then(() => (window.location.href = '/'))
+                        .catch(e => toastr.error(e.message))
                         .finally(() => loading.addClass('d-none'));
                 }
             });
