@@ -10,6 +10,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.thraex.base.properties.SiteProperties;
 import org.thraex.security.filter.CryptoAuthenticationFilter;
+import org.thraex.security.handler.AuthenticationFailure;
+import org.thraex.security.handler.AuthenticationSuccess;
 
 /**
  * @author 鬼王
@@ -20,6 +22,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private SiteProperties properties;
+
+    @Autowired
+    private AuthenticationSuccess authenticationSuccess;
+
+    @Autowired
+    private AuthenticationFailure authenticationFailure;
 
     /**
      * Reference
@@ -36,6 +44,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         CryptoAuthenticationFilter filter = new CryptoAuthenticationFilter();
         filter.setAuthenticationManager(authenticationManagerBean());
         //filter.setRequiresAuthenticationRequestMatcher(new AntPathRequestMatcher("/login", "POST"));
+        filter.setAuthenticationSuccessHandler(authenticationSuccess);
+        filter.setAuthenticationFailureHandler(authenticationFailure);
+
         return filter;
     }
 
@@ -48,6 +59,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and().formLogin()
                     .loginPage("/login").permitAll()
                     .defaultSuccessUrl(properties.redirect())
+                    //.successHandler(authenticationSuccess)
+                    //.failureHandler(authenticationFailure)
                 .and()
                     .addFilterBefore(authenticationFilter(), UsernamePasswordAuthenticationFilter.class);
     }

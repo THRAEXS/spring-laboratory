@@ -129,7 +129,6 @@
                     this.crypto = CryptoJS;
 
                     this.nonce().then(({ data: { key, iv, parameterName } }) => {
-                        console.log(key, iv, parameterName)
                         this.key = this.parse(key);
                         this.config = {
                             iv: this.parse(iv),
@@ -162,8 +161,25 @@
                     return this.aes(JSON.stringify(result));
                 }
 
-                login() {
-
+                async login(data) {
+                     await $.ajax({
+                        type: 'POST',
+                        url: '/login',
+                        // dataType: 'json',
+                        data: { [this.parameterName]: this.encrypt(data), _csrf: [[${_csrf}?${_csrf.token}]] },
+                        success: function(result, status, xhr) {
+                            console.log('success', result, status, xhr)
+                        },
+                        error: function(xhr, status, error) {
+                            console.error('error', xhr)
+                            console.error('error', status, error)
+                            console.error('error', error)
+                        },
+                        complete: function(xhr, status) {
+                            // loading.addClass('d-none');
+                            console.log('complete', xhr, status)
+                        }
+                    });
                 }
 
             }
@@ -178,28 +194,10 @@
                     // form.submit();
 
                     loading.removeClass('d-none');
-
                     let data = {};
                     lf.find('input').each((ind, el) => el.name && (data[el.name] = el.value));
-
-                    $.ajax({
-                        type: 'POST',
-                        url: '/login',
-                        // dataType: 'json',
-                        data: { [sl.parameterName]: sl.encrypt(data), _csrf: [[${_csrf}?${_csrf.token}]] },
-                        success: function(result, status, xhr) {
-                            console.log('success', result, status, xhr)
-                        },
-                        error: function(xhr, status, error) {
-                            console.error('error', xhr)
-                            console.error('error', status, error)
-                            console.error('error', error)
-                        },
-                        complete: function(xhr, status) {
-                            loading.addClass('d-none');
-                            console.log('complete', xhr, status)
-                        }
-                    });
+                    sl.login(data);
+                    loading.addClass('d-none');
                 }
             });
 
