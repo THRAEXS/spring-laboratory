@@ -78,7 +78,8 @@
                     </div>
                     <div class="info">
                         <!--<a href="javascript: void(0"; class="d-block" sec:authentication="name">UNKNOWN</a>-->
-                        <a href="javascript: void(0);" class="d-block" th:text="${user.getNickname() ?: user.getUsername() }">UNKNOWN</a>
+                        <a href="javascript: void(0);" class="d-block" onclick="handleMenuClick(this)" data-url="/profile"
+                           th:text="${user.getNickname() ?: user.getUsername() }">UNKNOWN</a>
                     </div>
                 </div>
 

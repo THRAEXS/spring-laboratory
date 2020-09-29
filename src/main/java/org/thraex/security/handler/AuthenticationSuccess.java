@@ -1,10 +1,7 @@
 package org.thraex.security.handler;
 
-import com.alibaba.fastjson.JSON;
-import com.google.common.base.Charsets;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
@@ -28,11 +25,7 @@ public class AuthenticationSuccess extends SavedRequestAwareAuthenticationSucces
                                         Authentication authentication) throws ServletException, IOException {
         log.debug("Authentication success");
 
-        int status = HttpStatus.OK.value();
-        response.setStatus(status);
-        response.setCharacterEncoding(Charsets.UTF_8.displayName());
-        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-        response.getWriter().write(JSON.toJSONString(Result.ok().setMessage("Authentication success")));
+        JSONWriter.write(response, HttpStatus.OK, Result.ok().setMessage("Authentication success"));
     }
 
 }
