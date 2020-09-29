@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:fragment="app(title, links, styles, contents, scripts)">
+<head>
+    <th:block th:replace="template/head-csrf"/>
+
+    <title th:replace="${title}">Page Title</title>
+
+    <th:block th:replace="${links}"/>
+
+    <style type="text/css">
+        .monokai { background-color: #282923; }
+    </style>
+
+    <th:block th:replace="${styles}"/>
+</head>
+<body class="hold-transition monokai">
+    <div id="app" class="wrapper">
+        <section class="content">
+            <div class="container-fluid p-2">
+                <th:block th:replace="${contents}"/>
+            </div>
+        </section>
+    </div>
+
+    <th:block th:replace="template/script"/>
+    <th:block th:replace="${scripts}"/>
+</body>
+</html>

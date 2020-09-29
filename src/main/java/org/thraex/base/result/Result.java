@@ -1,5 +1,7 @@
 package org.thraex.base.result;
 
+import org.springframework.http.HttpStatus;
+
 import java.io.Serializable;
 
 /**
@@ -14,8 +16,12 @@ public class Result<T> implements Serializable {
 
     private T data;
 
+    public static Result ok() {
+        return new Result().setCode(HttpStatus.OK.value());
+    }
+
     public static <C> Result<C> ok(C data) {
-        return new Result<C>().setCode(2000).setData(data);
+        return new Result<C>().setCode(HttpStatus.OK.value()).setData(data);
     }
 
     public static <C> Result<C> ok(C data, Integer code) {
@@ -27,7 +33,7 @@ public class Result<T> implements Serializable {
     }
 
     public static Result fail(String message) {
-        return fail(message, 5000);
+        return fail(message, HttpStatus.INTERNAL_SERVER_ERROR.value());
     }
 
     public static Result fail(String message, Integer code) {
