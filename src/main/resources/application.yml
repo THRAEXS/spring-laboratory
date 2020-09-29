@@ -69,7 +69,9 @@ thraex:
       login: login
   site:
     permits:
+      - /auth/crypto
       - /AdminLTE/**
+      - /assets/images/**
   file:
     directory: ${user.home}/thraex-files
     access-prefix: /assets/files

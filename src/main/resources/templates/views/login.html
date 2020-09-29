@@ -1,91 +1,90 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>AdminLTE 3 | Log in</title>
-    <!-- Tell the browser to be responsive to screen width -->
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
+
+    <title>THRAEX | Log in</title>
 
     <!-- Font Awesome -->
     <link rel="stylesheet" href="/AdminLTE/plugins/fontawesome-free/css/all.min.css">
     <!-- Ionicons -->
     <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
-    <!-- icheck bootstrap -->
-    <link rel="stylesheet" href="/AdminLTE/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
+    <!-- Toastr -->
+    <link rel="stylesheet" href="/AdminLTE/plugins/toastr/toastr.min.css">
     <!-- Theme style -->
     <link rel="stylesheet" href="/AdminLTE/dist/css/adminlte.min.css">
     <!-- Google Font: Source Sans Pro -->
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
     <style type="text/css">
         .login-page {
-            /*bg*/
             background-color: #282923!important;
-            /*bg-dialog*/
-            /*background-color: #181915!important;*/
-            /*bg-selected*/
-            /*#3a3b38*/
-            /*bg-tab*/
-            /*#20211c*/
-            /*color-font*/
-            /*#c6c6c5*/
-            /*color-font-unselected*/
-            /*#a9a9a7*/
-            /*bg-btn*/
-            /*#353533*/
-            /*btn-hover*/
-            /*#4b4b49*/
             height: 70vh;
         }
         .card .card-body {
             background-color: #181915!important;
+            border-radius: .25rem;
         }
-        /*.btn-primary {*/
-        /*  !*background-color: #353533!important;*!*/
-        /*  !*border-color: #353533;*!*/
-        /*}*/
-        /*.btn-primary {*/
-        /*  color: #fff;*/
-        /*  background-color: #353533;*/
-        /*  border-color: #353533;*/
-        /*  box-shadow: none;*/
-        /*}*/
 
         .btn-primary {
-            /*color: #ffffff;*/
             background-color: #353533;
             border-color: #353533;
-            /*box-shadow: none;*/
         }
-
         .btn-primary:hover {
-            /*color: #ffffff;*/
             background-color: #4b4b49;
             border-color: #4b4b49;
-            /*border-color: #0062cc;*/
+        }
+        .btn-primary:focus, .btn-primary.focus {
+            background-color: #4b4b49;
+            border-color: #4b4b49;
+        }
+        .btn-primary.disabled, .btn-primary:disabled {
+            background-color: #949491;
+            border-color: #949491;
+        }
+        .btn-primary:not(:disabled):not(.disabled):active, .btn-primary:not(:disabled):not(.disabled).active,
+        .show > .btn-primary.dropdown-toggle {
+            background-color: #282923;
+            border-color: #282923;
+        }
+        .btn-primary:not(:disabled):not(.disabled):active:focus, .btn-primary:not(:disabled):not(.disabled).active:focus,
+        .show > .btn-primary.dropdown-toggle:focus {
+            box-shadow: 0 0 0 0 rgba(40, 41, 35, 1);
         }
 
-        .btn-primary:focus {
-            /*color: #ffffff;*/
-            background-color: #4b4b49;
-            border-color: #4b4b49;
-            /*border-color: #0062cc;*/
-            /*box-shadow: none, 0 0 0 0 rgba(38, 143, 255, 0.5);*/
+        .form-control, .form-control:focus {
+            background-color: #282923;
+            border-color: #282923;
+            color: #FFFFFF;
         }
+        .input-group-append .input-group-text,
+        .login-card-body .input-group .form-control:focus ~ .input-group-append .input-group-text {
+            border-color: #282923;
+        }
+        .login-card-body .input-group .is-invalid:focus ~ .input-group-append .input-group-text {
+            border-color: #DC3545;
+        }
+
+        .font-white { color: #FFFFFF; }
+        .font-red { color: #FF0000; }
     </style>
 </head>
 <body class="hold-transition login-page">
     <div class="login-box">
-        <div class="login-logo pace-progress-color-red">
+        <div class="login-logo font-white">
             <b class="mr-2">THRAEX</b>Admin
         </div>
         <div class="card">
             <div class="card-body login-card-body">
-                <p class="login-box-msg">Error</p>
+                <!--<p class="login-box-msg font-red" th:if="${param.error}">用户名或密码错误</p>-->
+                <!--<p class="login-box-msg font-red" th:if="${param.logout}">已退出</p>-->
 
-                <form action="/login" method="post">
+                <!--<form role="form" id="login-form" action="/login" method="post">-->
+                <form role="form" id="login-form" action="/login" method="post">
+                    <!--<input type="hidden" name="_csrf" th:value="${_csrf}?${_csrf.token}"/>-->
                     <div class="input-group mb-3">
-                        <input type="email" class="form-control" placeholder="Username">
+                        <input type="text" name="username" class="form-control" placeholder="Username">
                         <div class="input-group-append">
                             <div class="input-group-text">
                                 <span class="fas fa-user"></span>
@@ -93,7 +92,7 @@
                         </div>
                     </div>
                     <div class="input-group mb-3">
-                        <input type="password" class="form-control" placeholder="Password">
+                        <input type="password" name="password" class="form-control" placeholder="Password">
                         <div class="input-group-append">
                             <div class="input-group-text">
                                 <span class="fas fa-lock"></span>
@@ -107,14 +106,118 @@
                     </div>
                 </form>
             </div>
+            <div id="loading" class="overlay dark d-none">
+                <!--<i class="fas fa-2x fa-spinner"></i>-->
+                <img width="30" height="30" src="/assets/images/loading.gif"/>
+            </div>
         </div>
     </div>
 
     <!-- jQuery -->
     <script src="/AdminLTE/plugins/jquery/jquery.min.js"></script>
+    <script src="/AdminLTE/plugins/jquery-validation/jquery.validate.min.js"></script>
     <!-- Bootstrap 4 -->
     <script src="/AdminLTE/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- Toastr -->
+    <script src="/AdminLTE/plugins/toastr/toastr.min.js"></script>
     <!-- AdminLTE App -->
     <script src="/AdminLTE/dist/js/adminlte.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/crypto-js@4.0.0/crypto-js.js"></script>
+    <script type="text/javascript" th:inline="javascript">
+        $(document).ready(function() {
+
+            class SecureLogin {
+
+                constructor() {
+                    this.crypto = CryptoJS;
+
+                    this.nonce().then(({ data: { key, iv, parameterName } }) => {
+                        this.key = this.parse(key);
+                        this.config = {
+                            iv: this.parse(iv),
+                            mode: this.crypto.mode.CBC,
+                            padding: this.crypto.pad.Pkcs7
+                        };
+                        this.parameterName = parameterName;
+                    });
+                }
+
+                async nonce() {
+                    return await $.get('/auth/crypto');
+                }
+
+                parse(s) {
+                    return this.crypto.enc.Utf8.parse(s);
+                }
+
+                aes(k) {
+                    return this.crypto.AES.encrypt(this.parse(k), this.key, this.config).ciphertext.toString();
+                }
+
+                encrypt(data = {}) {
+                    let result = {};
+                    Object.keys(data).forEach(k => { result[this.aes(k)] = this.aes(data[k]); });
+
+                    // let result = new Map();
+                    // Object.keys(data).forEach(k => result.set(this.aes(k), this.aes(data[k])));
+
+                    return this.aes(JSON.stringify(result));
+                }
+
+                async login(param) {
+                    const data = { [this.parameterName]: this.encrypt(param), _csrf: [[${_csrf}?${_csrf.token}]] };
+                    try {
+                        return await $.ajax({ type: 'POST', url: '/login', data });
+                    } catch ({ responseJSON }) {
+                        // throw new Error(responseJSON.message)
+                        await Promise.reject(responseJSON);
+                    }
+                }
+
+            }
+
+            const sl = new SecureLogin();
+            const lf = $('#login-form');
+            const loading = $('#loading');
+
+            $.validator.setDefaults({
+                submitHandler: function(form) {
+                    // form.submit();
+
+                    let data = {};
+                    lf.find('input').each((ind, el) => el.name && (data[el.name] = el.value));
+
+                    loading.removeClass('d-none');
+                    sl.login(data)
+                        .then(() => (window.location.href = '/'))
+                        .catch(e => toastr.error(e.message))
+                        .finally(() => loading.addClass('d-none'));
+                }
+            });
+
+            lf.validate({
+                rules: {
+                    username: { required: true },
+                    password: { required: true }
+                },
+                messages: {
+                    username: 'Please provide a username',
+                    password: 'Please provide a password'
+                },
+                // errorElement: 'span',
+                errorPlacement: function(error, element) {
+                    error.addClass('invalid-feedback');
+                    element.closest('.input-group').append(error);
+                },
+                highlight: function(element, errorClass, validClass) {
+                    $(element).addClass('is-invalid');
+                },
+                unhighlight: function(element, errorClass, validClass) {
+                    $(element).removeClass('is-invalid');
+                }
+            });
+        });
+    </script>
 </body>
 </html>

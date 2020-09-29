@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:fragment="app_template(title, links, styles, contents, scripts)">
+<head>
+    <title th:replace="${title}">Page Title</title>
+
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
+
+    <!-- DefaultCsrfToken -->
+    <meta id="_csrf_token" th:content="${_csrf}?${_csrf.token}"/>
+    <meta id="_csrf_header" th:content="${_csrf}?${_csrf.headerName}"/>
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="/AdminLTE/plugins/fontawesome-free/css/all.min.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="/AdminLTE/dist/css/adminlte.min.css">
+    <!-- Google Font: Source Sans Pro -->
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+
+    <th:block th:replace="${links}" />
+
+    <link rel="stylesheet" href="/element-ui/lib/theme-chalk/index.css">
+
+    <style type="text/css">
+        .monokai { background-color: #282923; }
+    </style>
+
+    <th:block th:replace="${styles}" />
+</head>
+<body class="hold-transition monokai">
+    <div id="app" class="wrapper">
+        <section class="content">
+            <div class="container-fluid p-2">
+                <th:block th:replace="${contents}"/>
+            </div>
+        </section>
+    </div>
+
+    <!-- REQUIRED SCRIPTS -->
+    <!-- jQuery -->
+    <script src="/AdminLTE/plugins/jquery/jquery.min.js"></script>
+    <!-- Bootstrap 4 -->
+    <script src="/AdminLTE/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- AdminLTE App -->
+    <script src="/AdminLTE/dist/js/adminlte.js"></script>
+
+    <script type="text/javascript" src="/vue/vue.js"></script>
+    <script type="text/javascript" src="/element-ui/lib/index.js"></script>
+    <script type="text/javascript" src="/axios/dist/axios.min.js"></script>
+    <script type="text/javascript" src="/qs/dist/qs.js"></script>
+    <script type="text/javascript" src="/assets/js/factory.js"></script>
+
+    <th:block th:replace="${scripts}"/>
+</body>
+</html>
