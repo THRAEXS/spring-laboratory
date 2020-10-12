@@ -1,3 +1,6 @@
 thraex:
   site:
     enabled: true
+  mvc:
+    views:
+      config: config/index
