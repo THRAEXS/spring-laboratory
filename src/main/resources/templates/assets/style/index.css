@@ -1,16 +1,7 @@
-body {
-    margin: 15px!important;
-}
-
 .min-h-1 { min-height: 400px; }
 .min-h-2 { min-height: 500px; }
 .min-h-3 { min-height: 600px; }
 .max-h-1 { min-height: 600px; }
-
-.t-mt-0 { margin-top: 15px; }
-.t-mb-0 { margin-bottom: 15px; }
-
-.txt-r { text-align: right; }
 
 .custom-tree-node {
     flex: 1;

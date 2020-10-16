@@ -1,0 +1,4 @@
+thraex:
+  site:
+    admin:
+      view: leo/index

@@ -44,15 +44,17 @@ public class CryptoAuthenticationFilter extends UsernamePasswordAuthenticationFi
                 .map(p -> JSON.parseObject(p, Map.class))
                 .map(p -> (Map<String, String>) p)
                 .map(p -> {
-                    Map<String, String> map = new HashMap<>();
-                    p.keySet().parallelStream()
-                            .peek(k -> log.debug("Encrypted: [{}: {}]", k, p.get(k)))
-                            .forEach(k -> {
-                                String key = crypto.decrypt(k);
-                                String value = crypto.decrypt(p.get(k));
+                    Map<String, String> map = new HashMap<>(p.size());
+
+                    p.entrySet().parallelStream()
+                            .peek(it -> log.debug("Encrypted: [{}: {}]", it.getKey(), it.getValue()))
+                            .forEach(it -> {
+                                String key = crypto.decrypt(it.getKey());
+                                String value = crypto.decrypt(it.getValue());
                                 log.debug("Decrypted: [{}: {}]", key, value);
                                 map.put(key, value);
                             });
+
                     return map;
                 }).orElse(null);
     }

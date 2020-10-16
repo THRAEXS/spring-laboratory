@@ -190,7 +190,7 @@
 
                     loading.removeClass('d-none');
                     sl.login(data)
-                        .then(() => (window.location.href = '/'))
+                        .then(({ data }) => (window.location.href = data.redirect))
                         .catch(e => toastr.error(e.message))
                         .finally(() => loading.addClass('d-none'));
                 }
