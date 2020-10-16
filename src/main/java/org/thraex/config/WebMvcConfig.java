@@ -9,7 +9,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.thraex.base.properties.MvcProperties;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
 
@@ -34,10 +33,9 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
     @Override
     public void addViewControllers(final ViewControllerRegistry registry) {
-        final Map<String, String> views = properties.getViews();
-        views.keySet().stream().forEach(k -> registry
-                .addViewController(String.format("/%s", k.replace("-", "/")))
-                .setViewName(Optional.of(views.get(k)).filter(v -> !Strings.isBlank(v)).orElse(k)));
+        properties.getViews().entrySet().stream().forEach(it -> registry
+                .addViewController(String.format("/%s", it.getKey().replace("-", "/")))
+                .setViewName(Optional.of(it.getValue()).filter(v -> !Strings.isBlank(v)).orElse(it.getKey())));
     }
 
 }

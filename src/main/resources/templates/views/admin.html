@@ -78,7 +78,8 @@
                     </div>
                     <div class="info">
                         <!--<a href="javascript: void(0"; class="d-block" sec:authentication="name">UNKNOWN</a>-->
-                        <a href="javascript: void(0);" class="d-block" th:text="${user.getNickname() ?: user.getUsername() }">UNKNOWN</a>
+                        <a href="javascript: void(0);" class="d-block" onclick="handleMenuClick(this)" data-url="/profile"
+                           th:text="${user.getNickname() ?: user.getUsername() }">UNKNOWN</a>
                     </div>
                 </div>
 
@@ -123,6 +124,7 @@
         <div class="content-wrapper">
             <!-- Main content -->
             <div class="content px-0">
+                <!-- onload="handleOnload(this)" -->
                 <iframe id="page-container" width="100%" class="border-0" style="background-color: #282923;" th:src="${site.dashboard}"></iframe>
             </div>
             <!-- /.content -->
@@ -148,7 +150,7 @@
 
     <script src="/assets/js/util.js"></script>
     <script type="text/javascript">
-        let handleMenuClick, handleLogout;
+        let handleMenuClick, handleOnload, handleLogout;
 
         ($ => {
             const container = $('#page-container');
@@ -163,6 +165,12 @@
 
                 (newURL ? () => oldURL !== newURL && container.attr('src', newURL)
                     : () => Util.toast.fire({ icon: 'warning', title: 'Please check the menu url.' }))();
+            };
+
+            handleOnload = el => {
+                const body = el.contentWindow.document.body;
+                body.style.height = `${container.height()}px`;
+                body.style.border = '1px solid red';
             };
 
             handleLogout = () => Factory.Request.post('/logout').finally(() => window.location.reload());
